@@ -1,0 +1,4648 @@
+{
+  "schema_version": "1.0",
+  "datasets": {
+    "csi-bench": {
+      "status": "ok",
+      "note": "BreathingDetection sessions for both labels (empty and sleep) plus the official label mapping.",
+      "sample_zip": "samples/csi-bench.zip",
+      "sample_bytes": 1435000,
+      "zip_bytes": 1407995,
+      "file_count": 27,
+      "file_tree": [
+        {
+          "name": "BreathingDetection",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "label_mapping.json",
+                  "type": "file",
+                  "bytes": 138
+                }
+              ]
+            },
+            {
+              "name": "sub_Human",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "user_U06",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "env_E10",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "act_empty",
+                          "type": "dir",
+                          "children": [
+                            {
+                              "name": "Dpl_HC_near_Fridge",
+                              "type": "dir",
+                              "children": [
+                                {
+                                  "name": "device_Hex_1cd6be1df30d",
+                                  "type": "dir",
+                                  "children": [
+                                    {
+                                      "name": "Diff_hard",
+                                      "type": "dir",
+                                      "children": [
+                                        {
+                                          "name": "session_1002__freq208_5G.h5",
+                                          "type": "file",
+                                          "bytes": 95782
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "act_sleep",
+                          "type": "dir",
+                          "children": [
+                            {
+                              "name": "Dpl_HC_near_Faucet",
+                              "type": "dir",
+                              "children": [
+                                {
+                                  "name": "device_Hex_1cd6be1df323",
+                                  "type": "dir",
+                                  "children": [
+                                    {
+                                      "name": "Diff_easy",
+                                      "type": "dir",
+                                      "children": [
+                                        {
+                                          "name": "2023_01_17",
+                                          "type": "dir",
+                                          "children": [
+                                            {
+                                              "name": "session_6166008__freq208_5G.h5",
+                                              "type": "file",
+                                              "bytes": 103997
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "standardized",
+          "type": "dir",
+          "children": [
+            {
+              "name": "views",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_1002__freq208_5G.json",
+                  "type": "file",
+                  "bytes": 1536
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_1002__freq208_5G.npz",
+                  "type": "file",
+                  "bytes": 86106
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_102001__freq208_5G.json",
+                  "type": "file",
+                  "bytes": 1426
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_102001__freq208_5G.npz",
+                  "type": "file",
+                  "bytes": 83787
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_104000__freq208_5G.json",
+                  "type": "file",
+                  "bytes": 1426
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_104000__freq208_5G.npz",
+                  "type": "file",
+                  "bytes": 84482
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_sleep__Dpl_HC_near_Faucet__device_Hex_1cd6be1df323__Diff_easy__2023_01_17__session_6166008__freq208_5G.json",
+                  "type": "file",
+                  "bytes": 1554
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_sleep__Dpl_HC_near_Faucet__device_Hex_1cd6be1df323__Diff_easy__2023_01_17__session_6166008__freq208_5G.npz",
+                  "type": "file",
+                  "bytes": 102185
+                }
+              ]
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_1002__freq208_5G.json",
+              "type": "file",
+              "bytes": 891
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_1002__freq208_5G.npz",
+              "type": "file",
+              "bytes": 93878
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_102001__freq208_5G.json",
+              "type": "file",
+              "bytes": 901
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_102001__freq208_5G.npz",
+              "type": "file",
+              "bytes": 91602
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_104000__freq208_5G.json",
+              "type": "file",
+              "bytes": 901
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_104000__freq208_5G.npz",
+              "type": "file",
+              "bytes": 95335
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_sleep__Dpl_HC_near_Faucet__device_Hex_1cd6be1df323__Diff_easy__2023_01_17__session_6166008__freq208_5G.json",
+              "type": "file",
+              "bytes": 894
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_sleep__Dpl_HC_near_Faucet__device_Hex_1cd6be1df323__Diff_easy__2023_01_17__session_6166008__freq208_5G.npz",
+              "type": "file",
+              "bytes": 100774
+            },
+            {
+              "name": "session_1002__freq208_5G.json",
+              "type": "file",
+              "bytes": 712
+            },
+            {
+              "name": "session_1002__freq208_5G.npz",
+              "type": "file",
+              "bytes": 93750
+            }
+          ]
+        },
+        {
+          "name": "by_label",
+          "type": "dir",
+          "children": [
+            {
+              "name": "empty",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 360
+                },
+                {
+                  "name": "original.h5",
+                  "type": "file",
+                  "bytes": 95782
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 92771
+                }
+              ]
+            },
+            {
+              "name": "sleep",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 363
+                },
+                {
+                  "name": "original.h5",
+                  "type": "file",
+                  "bytes": 103997
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 99670
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": {
+        "before": "assets/previews/csi-bench/before.png",
+        "after": "assets/previews/csi-bench/after.png",
+        "by_label": [
+          "assets/previews/csi-bench/label_empty.png",
+          "assets/previews/csi-bench/label_sleep.png"
+        ]
+      },
+      "setup_figure": "assets/figures/csi-bench.png",
+      "figure_source": {
+        "label": "Figure 1 of the CSI-Bench paper (arXiv:2505.21866)",
+        "url": "https://arxiv.org/abs/2505.21866"
+      },
+      "preview_before_dims": {
+        "native_subcarriers": 208,
+        "native_time_steps": 300,
+        "display_subcarriers": 208,
+        "display_time_steps": 300
+      },
+      "preview_source_file": "session_1002__freq208_5G.h5",
+      "original": {
+        "profile": {
+          "source_file": "session_1002__freq208_5G.h5",
+          "sampling_rate": "not reported by the source file",
+          "duration": "300 packets",
+          "frequency_band": "2.4/5 GHz",
+          "wifi_standard": "802.11ac and device-dependent",
+          "setup_distance": "Device-dependent (this sample: hex device deployed near a fridge)",
+          "collection_setup": "In-the-wild home/office deployments across 26 environments.",
+          "tensor_shape": "208 subcarriers \u00d7 300 time steps"
+        },
+        "dimensions": [
+          {
+            "axis": "subcarrier",
+            "size": 208,
+            "meaning": "OFDM subcarrier / flattened channel index"
+          },
+          {
+            "axis": "time",
+            "size": 300,
+            "meaning": "T \u2014 time steps (packets)"
+          }
+        ]
+      },
+      "standardized": {
+        "arrays": [
+          {
+            "name": "amplitude",
+            "shape": [
+              600,
+              1,
+              208
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "activity_label",
+            "shape": [],
+            "dtype": "<U64"
+          },
+          {
+            "name": "packet_index",
+            "shape": [
+              600
+            ],
+            "dtype": "int32"
+          },
+          {
+            "name": "valid_mask",
+            "shape": [
+              600
+            ],
+            "dtype": "bool"
+          }
+        ],
+        "shape": [
+          600,
+          1,
+          208
+        ],
+        "axis_order": [
+          "time",
+          "link",
+          "subcarrier"
+        ],
+        "standard_representation": "amplitude",
+        "source_representation": "processed_amplitude",
+        "sample_rate_hz": 10.0
+      },
+      "dimensions": [
+        {
+          "axis": "time",
+          "size": 600,
+          "meaning": "T \u2014 time steps (packets)"
+        },
+        {
+          "axis": "link",
+          "size": 1,
+          "meaning": "L \u2014 Tx-Rx antenna link"
+        },
+        {
+          "axis": "subcarrier",
+          "size": 208,
+          "meaning": "S \u2014 OFDM subcarrier"
+        }
+      ],
+      "standardized_view": {
+        "profile": {
+          "task_profile": "vital-sign",
+          "representation": "amplitude",
+          "sampling_rate": "10 Hz",
+          "duration": "60.0 s (600 packets)",
+          "frequency_band": "2.4/5 GHz",
+          "wifi_standard": "802.11ac and device-dependent",
+          "setup_distance": "Device-dependent (this sample: hex device deployed near a fridge)",
+          "collection_setup": "Task-profile view: resample/crop/pad time; keep native links and subcarriers",
+          "tensor_shape": "1 link \u00d7 208 subcarriers \u00d7 600 time steps",
+          "view_grid": "208 subcarriers \u00d7 600 time steps @ 10 Hz",
+          "derived_from_shape": [
+            300,
+            1,
+            208
+          ]
+        },
+        "dimensions": [
+          {
+            "axis": "time",
+            "size": 600,
+            "meaning": "T \u2014 time steps (packets)"
+          },
+          {
+            "axis": "link",
+            "size": 1,
+            "meaning": "L \u2014 Tx-Rx antenna link"
+          },
+          {
+            "axis": "subcarrier",
+            "size": 208,
+            "meaning": "S \u2014 OFDM subcarrier"
+          }
+        ]
+      },
+      "native_output": "data/csi-bench/standardized/BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_1002__freq208_5G.npz",
+      "preview_after_dims": {
+        "native_subcarriers": 208,
+        "native_time_steps": 600,
+        "display_subcarriers": 208,
+        "display_time_steps": 600
+      },
+      "label_samples": [
+        {
+          "label": "empty",
+          "slug": "empty",
+          "kind": "clip",
+          "source_file": "session_1002__freq208_5G.h5",
+          "sample_dir": "samples/csi-bench/by_label/empty",
+          "files": [
+            "original.h5",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            300,
+            1,
+            208
+          ],
+          "sample_rate_hz": null,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        },
+        {
+          "label": "sleep",
+          "slug": "sleep",
+          "kind": "clip",
+          "source_file": "session_6166008__freq208_5G.h5",
+          "sample_dir": "samples/csi-bench/by_label/sleep",
+          "files": [
+            "original.h5",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            300,
+            1,
+            208
+          ],
+          "sample_rate_hz": null,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        }
+      ],
+      "label_coverage": {
+        "expected": 2,
+        "exported": 2,
+        "complete": true
+      },
+      "label_previews": [
+        {
+          "label": "empty",
+          "slug": "empty",
+          "image": "assets/previews/csi-bench/label_empty.png",
+          "kind": "clip",
+          "source_file": "session_1002__freq208_5G.h5",
+          "dims": {
+            "native_subcarriers": 208,
+            "native_time_steps": 300,
+            "display_subcarriers": 208,
+            "display_time_steps": 300
+          },
+          "sample_dir": "samples/csi-bench/by_label/empty",
+          "sample_files": [
+            "original.h5",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "sleep",
+          "slug": "sleep",
+          "image": "assets/previews/csi-bench/label_sleep.png",
+          "kind": "clip",
+          "source_file": "session_6166008__freq208_5G.h5",
+          "dims": {
+            "native_subcarriers": 208,
+            "native_time_steps": 300,
+            "display_subcarriers": 208,
+            "display_time_steps": 300
+          },
+          "sample_dir": "samples/csi-bench/by_label/sleep",
+          "sample_files": [
+            "original.h5",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        }
+      ],
+      "preview_window": {
+        "profile": null,
+        "time_steps": 600,
+        "subcarriers": 208,
+        "links": 1,
+        "sample_rate_hz": 10.0,
+        "axes": "y = subcarrier index, x = time",
+        "note": "Native files are preserved. Task-profile views resample/crop/pad time only; links and subcarriers stay native."
+      },
+      "original_file_tree": [
+        {
+          "name": "BreathingDetection",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "label_mapping.json",
+                  "type": "file",
+                  "bytes": 138
+                }
+              ]
+            },
+            {
+              "name": "sub_Human",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "user_U06",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "env_E10",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "act_empty",
+                          "type": "dir",
+                          "children": [
+                            {
+                              "name": "Dpl_HC_near_Fridge",
+                              "type": "dir",
+                              "children": [
+                                {
+                                  "name": "device_Hex_1cd6be1df30d",
+                                  "type": "dir",
+                                  "children": [
+                                    {
+                                      "name": "Diff_hard",
+                                      "type": "dir",
+                                      "children": [
+                                        {
+                                          "name": "session_1002__freq208_5G.h5",
+                                          "type": "file",
+                                          "bytes": 95782
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "act_sleep",
+                          "type": "dir",
+                          "children": [
+                            {
+                              "name": "Dpl_HC_near_Faucet",
+                              "type": "dir",
+                              "children": [
+                                {
+                                  "name": "device_Hex_1cd6be1df323",
+                                  "type": "dir",
+                                  "children": [
+                                    {
+                                      "name": "Diff_easy",
+                                      "type": "dir",
+                                      "children": [
+                                        {
+                                          "name": "2023_01_17",
+                                          "type": "dir",
+                                          "children": [
+                                            {
+                                              "name": "session_6166008__freq208_5G.h5",
+                                              "type": "file",
+                                              "bytes": 103997
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "standardized_file_tree": [
+        {
+          "name": "standardized",
+          "type": "dir",
+          "children": [
+            {
+              "name": "views",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_1002__freq208_5G.json",
+                  "type": "file",
+                  "bytes": 1536
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_1002__freq208_5G.npz",
+                  "type": "file",
+                  "bytes": 86106
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_102001__freq208_5G.json",
+                  "type": "file",
+                  "bytes": 1426
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_102001__freq208_5G.npz",
+                  "type": "file",
+                  "bytes": 83787
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_104000__freq208_5G.json",
+                  "type": "file",
+                  "bytes": 1426
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_104000__freq208_5G.npz",
+                  "type": "file",
+                  "bytes": 84482
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_sleep__Dpl_HC_near_Faucet__device_Hex_1cd6be1df323__Diff_easy__2023_01_17__session_6166008__freq208_5G.json",
+                  "type": "file",
+                  "bytes": 1554
+                },
+                {
+                  "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_sleep__Dpl_HC_near_Faucet__device_Hex_1cd6be1df323__Diff_easy__2023_01_17__session_6166008__freq208_5G.npz",
+                  "type": "file",
+                  "bytes": 102185
+                }
+              ]
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_1002__freq208_5G.json",
+              "type": "file",
+              "bytes": 891
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_1002__freq208_5G.npz",
+              "type": "file",
+              "bytes": 93878
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_102001__freq208_5G.json",
+              "type": "file",
+              "bytes": 901
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_102001__freq208_5G.npz",
+              "type": "file",
+              "bytes": 91602
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_104000__freq208_5G.json",
+              "type": "file",
+              "bytes": 901
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_empty__Dpl_HC_near_Fridge__device_Hex_1cd6be1df30d__Diff_hard__session_104000__freq208_5G.npz",
+              "type": "file",
+              "bytes": 95335
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_sleep__Dpl_HC_near_Faucet__device_Hex_1cd6be1df323__Diff_easy__2023_01_17__session_6166008__freq208_5G.json",
+              "type": "file",
+              "bytes": 894
+            },
+            {
+              "name": "BreathingDetection__sub_Human__user_U06__env_E10__act_sleep__Dpl_HC_near_Faucet__device_Hex_1cd6be1df323__Diff_easy__2023_01_17__session_6166008__freq208_5G.npz",
+              "type": "file",
+              "bytes": 100774
+            },
+            {
+              "name": "session_1002__freq208_5G.json",
+              "type": "file",
+              "bytes": 712
+            },
+            {
+              "name": "session_1002__freq208_5G.npz",
+              "type": "file",
+              "bytes": 93750
+            }
+          ]
+        }
+      ],
+      "original_file_count": 3,
+      "standardized_file_count": 18,
+      "usecase_file_tree": [
+        {
+          "name": "empty",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 360
+            },
+            {
+              "name": "original.h5",
+              "type": "file",
+              "bytes": 95782
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 92771
+            }
+          ]
+        },
+        {
+          "name": "sleep",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 363
+            },
+            {
+              "name": "original.h5",
+              "type": "file",
+              "bytes": 103997
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 99670
+            }
+          ]
+        }
+      ],
+      "usecase_file_count": 6
+    },
+    "figshare-csi-har": {
+      "status": "ok",
+      "note": "Session room_1/1 with all seven HAR labels from the official Figshare release (standing, walking, sitting, lying, get up/down, no person).",
+      "sample_zip": "samples/figshare-csi-har.zip",
+      "sample_bytes": 183821187,
+      "zip_bytes": 84851603,
+      "file_count": 34,
+      "file_tree": [
+        {
+          "name": "room_1",
+          "type": "dir",
+          "children": [
+            {
+              "name": "1",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "data.csv",
+                  "type": "file",
+                  "bytes": 90749002
+                },
+                {
+                  "name": "label.csv",
+                  "type": "file",
+                  "bytes": 66945
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "standardized",
+          "type": "dir",
+          "children": [
+            {
+              "name": "views",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "room_1__1__data.json",
+                  "type": "file",
+                  "bytes": 1508
+                },
+                {
+                  "name": "room_1__1__data.npz",
+                  "type": "file",
+                  "bytes": 842784
+                }
+              ]
+            },
+            {
+              "name": "room_1__1__data.json",
+              "type": "file",
+              "bytes": 3466
+            },
+            {
+              "name": "room_1__1__data.npz",
+              "type": "file",
+              "bytes": 14451187
+            }
+          ]
+        },
+        {
+          "name": "by_label",
+          "type": "dir",
+          "children": [
+            {
+              "name": "get_down",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "data.csv",
+                  "type": "file",
+                  "bytes": 3105549
+                },
+                {
+                  "name": "label.csv",
+                  "type": "file",
+                  "bytes": 1800
+                },
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 487
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 156434
+                }
+              ]
+            },
+            {
+              "name": "get_up",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "data.csv",
+                  "type": "file",
+                  "bytes": 3493426
+                },
+                {
+                  "name": "label.csv",
+                  "type": "file",
+                  "bytes": 1755
+                },
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 477
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 175665
+                }
+              ]
+            },
+            {
+              "name": "lying",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "data.csv",
+                  "type": "file",
+                  "bytes": 16172302
+                },
+                {
+                  "name": "label.csv",
+                  "type": "file",
+                  "bytes": 7500
+                },
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 472
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 797632
+                }
+              ]
+            },
+            {
+              "name": "no_person",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "data.csv",
+                  "type": "file",
+                  "bytes": 15526629
+                },
+                {
+                  "name": "label.csv",
+                  "type": "file",
+                  "bytes": 9600
+                },
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 492
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 763512
+                }
+              ]
+            },
+            {
+              "name": "sitting",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "data.csv",
+                  "type": "file",
+                  "bytes": 6986918
+                },
+                {
+                  "name": "label.csv",
+                  "type": "file",
+                  "bytes": 3780
+                },
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 482
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 345883
+                }
+              ]
+            },
+            {
+              "name": "standing",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "data.csv",
+                  "type": "file",
+                  "bytes": 6728612
+                },
+                {
+                  "name": "label.csv",
+                  "type": "file",
+                  "bytes": 3820
+                },
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 485
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 328839
+                }
+              ]
+            },
+            {
+              "name": "walking",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "data.csv",
+                  "type": "file",
+                  "bytes": 21996272
+                },
+                {
+                  "name": "label.csv",
+                  "type": "file",
+                  "bytes": 11020
+                },
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 476
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 1085976
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": {
+        "before": "assets/previews/figshare-csi-har/before.png",
+        "after": "assets/previews/figshare-csi-har/after.png",
+        "by_label": [
+          "assets/previews/figshare-csi-har/label_get_down.png",
+          "assets/previews/figshare-csi-har/label_get_up.png",
+          "assets/previews/figshare-csi-har/label_lying.png",
+          "assets/previews/figshare-csi-har/label_no_person.png",
+          "assets/previews/figshare-csi-har/label_sitting.png",
+          "assets/previews/figshare-csi-har/label_standing.png",
+          "assets/previews/figshare-csi-har/label_walking.png"
+        ]
+      },
+      "setup_figure": "assets/figures/figshare-csi-har.png",
+      "figure_source": {
+        "label": "Room plan (Figure 4.13) from the companion bachelor thesis by A. Zhuravchak",
+        "url": "https://github.com/Retsediv/WIFI_CSI_based_HAR"
+      },
+      "preview_before_dims": {
+        "native_subcarriers": 1026,
+        "native_time_steps": 5200,
+        "display_subcarriers": 1026,
+        "display_time_steps": 5200
+      },
+      "preview_source_file": "data.csv",
+      "original": {
+        "profile": {
+          "source_file": "data.csv",
+          "sampling_rate": "not reported by the source file",
+          "duration": "5200 packets",
+          "frequency_band": "5 GHz, 40 MHz",
+          "wifi_standard": "802.11n",
+          "setup_distance": "A few metres between transmitter and receiver inside one room",
+          "collection_setup": "Three furnished rooms at Ukrainian Catholic University; routers a few metres apart.",
+          "tensor_shape": "1026 subcarriers \u00d7 5200 time steps"
+        },
+        "dimensions": [
+          {
+            "axis": "subcarrier",
+            "size": 1026,
+            "meaning": "OFDM subcarrier / flattened channel index"
+          },
+          {
+            "axis": "time",
+            "size": 5200,
+            "meaning": "T \u2014 time steps (packets)"
+          }
+        ]
+      },
+      "standardized": {
+        "arrays": [
+          {
+            "name": "amplitude",
+            "shape": [
+              300,
+              4,
+              114
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "phase_rad",
+            "shape": [
+              300,
+              4,
+              114
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "source_label",
+            "shape": [
+              300
+            ],
+            "dtype": "<U64"
+          },
+          {
+            "name": "packet_index",
+            "shape": [
+              300
+            ],
+            "dtype": "int32"
+          },
+          {
+            "name": "valid_mask",
+            "shape": [
+              300
+            ],
+            "dtype": "bool"
+          }
+        ],
+        "shape": [
+          300,
+          4,
+          114
+        ],
+        "axis_order": [
+          "time",
+          "link",
+          "subcarrier"
+        ],
+        "standard_representation": "amplitude",
+        "source_representation": "amplitude_phase",
+        "sample_rate_hz": 100.0
+      },
+      "dimensions": [
+        {
+          "axis": "time",
+          "size": 300,
+          "meaning": "T \u2014 time steps (packets)"
+        },
+        {
+          "axis": "link",
+          "size": 4,
+          "meaning": "L \u2014 Tx-Rx antenna link"
+        },
+        {
+          "axis": "subcarrier",
+          "size": 114,
+          "meaning": "S \u2014 OFDM subcarrier"
+        }
+      ],
+      "standardized_view": {
+        "profile": {
+          "task_profile": "general-sensing",
+          "representation": "amplitude",
+          "sampling_rate": "100 Hz",
+          "duration": "3.0 s (300 packets)",
+          "frequency_band": "5 GHz, 40 MHz",
+          "wifi_standard": "802.11n",
+          "setup_distance": "A few metres between transmitter and receiver inside one room",
+          "collection_setup": "Task-profile view: resample/crop/pad time; keep native links and subcarriers",
+          "tensor_shape": "4 link \u00d7 114 subcarriers \u00d7 300 time steps",
+          "view_grid": "114 subcarriers \u00d7 300 time steps @ 100 Hz",
+          "derived_from_shape": [
+            5200,
+            4,
+            114
+          ]
+        },
+        "dimensions": [
+          {
+            "axis": "time",
+            "size": 300,
+            "meaning": "T \u2014 time steps (packets)"
+          },
+          {
+            "axis": "link",
+            "size": 4,
+            "meaning": "L \u2014 Tx-Rx antenna link"
+          },
+          {
+            "axis": "subcarrier",
+            "size": 114,
+            "meaning": "S \u2014 OFDM subcarrier"
+          }
+        ]
+      },
+      "native_output": "data/figshare-csi-har/standardized/room_1__1__data.npz",
+      "preview_after_dims": {
+        "native_subcarriers": 456,
+        "native_time_steps": 300,
+        "display_subcarriers": 456,
+        "display_time_steps": 300
+      },
+      "label_samples": [
+        {
+          "label": "get_down",
+          "slug": "get_down",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "sample_dir": "samples/figshare-csi-har/by_label/get_down",
+          "files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            120,
+            4,
+            114
+          ],
+          "sample_rate_hz": null,
+          "start_packet": 1990,
+          "end_packet": 2110,
+          "segment": {
+            "start_seconds": 1990.0,
+            "end_seconds": 2110.0,
+            "label": "get_down",
+            "source_label": "get_down"
+          }
+        },
+        {
+          "label": "get_up",
+          "slug": "get_up",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "sample_dir": "samples/figshare-csi-har/by_label/get_up",
+          "files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            135,
+            4,
+            114
+          ],
+          "sample_rate_hz": null,
+          "start_packet": 2735,
+          "end_packet": 2870,
+          "segment": {
+            "start_seconds": 2735.0,
+            "end_seconds": 2870.0,
+            "label": "get_up",
+            "source_label": "get_up"
+          }
+        },
+        {
+          "label": "lying",
+          "slug": "lying",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "sample_dir": "samples/figshare-csi-har/by_label/lying",
+          "files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            625,
+            4,
+            114
+          ],
+          "sample_rate_hz": null,
+          "start_packet": 2110,
+          "end_packet": 2735,
+          "segment": {
+            "start_seconds": 2110.0,
+            "end_seconds": 2735.0,
+            "label": "lying",
+            "source_label": "lying"
+          }
+        },
+        {
+          "label": "no_person",
+          "slug": "no_person",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "sample_dir": "samples/figshare-csi-har/by_label/no_person",
+          "files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            600,
+            4,
+            114
+          ],
+          "sample_rate_hz": null,
+          "start_packet": 3500,
+          "end_packet": 4100,
+          "segment": {
+            "start_seconds": 3500.0,
+            "end_seconds": 4100.0,
+            "label": "no_person",
+            "source_label": "no_person"
+          }
+        },
+        {
+          "label": "sitting",
+          "slug": "sitting",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "sample_dir": "samples/figshare-csi-har/by_label/sitting",
+          "files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            270,
+            4,
+            114
+          ],
+          "sample_rate_hz": null,
+          "start_packet": 1430,
+          "end_packet": 1700,
+          "segment": {
+            "start_seconds": 1430.0,
+            "end_seconds": 1700.0,
+            "label": "sitting",
+            "source_label": "sitting"
+          }
+        },
+        {
+          "label": "standing",
+          "slug": "standing",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "sample_dir": "samples/figshare-csi-har/by_label/standing",
+          "files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            260,
+            4,
+            114
+          ],
+          "sample_rate_hz": null,
+          "start_packet": 920,
+          "end_packet": 1180,
+          "segment": {
+            "start_seconds": 920.0,
+            "end_seconds": 1180.0,
+            "label": "standing",
+            "source_label": "standing"
+          }
+        },
+        {
+          "label": "walking",
+          "slug": "walking",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "sample_dir": "samples/figshare-csi-har/by_label/walking",
+          "files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            850,
+            4,
+            114
+          ],
+          "sample_rate_hz": null,
+          "start_packet": 70,
+          "end_packet": 920,
+          "segment": {
+            "start_seconds": 70.0,
+            "end_seconds": 920.0,
+            "label": "walking",
+            "source_label": "walking"
+          }
+        }
+      ],
+      "label_coverage": {
+        "expected": 7,
+        "exported": 7,
+        "complete": true
+      },
+      "label_previews": [
+        {
+          "label": "get_down",
+          "slug": "get_down",
+          "image": "assets/previews/figshare-csi-har/label_get_down.png",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "dims": {
+            "native_subcarriers": 456,
+            "native_time_steps": 120,
+            "display_subcarriers": 456,
+            "display_time_steps": 120
+          },
+          "sample_dir": "samples/figshare-csi-har/by_label/get_down",
+          "sample_files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "get_up",
+          "slug": "get_up",
+          "image": "assets/previews/figshare-csi-har/label_get_up.png",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "dims": {
+            "native_subcarriers": 456,
+            "native_time_steps": 135,
+            "display_subcarriers": 456,
+            "display_time_steps": 135
+          },
+          "sample_dir": "samples/figshare-csi-har/by_label/get_up",
+          "sample_files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "lying",
+          "slug": "lying",
+          "image": "assets/previews/figshare-csi-har/label_lying.png",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "dims": {
+            "native_subcarriers": 456,
+            "native_time_steps": 625,
+            "display_subcarriers": 456,
+            "display_time_steps": 625
+          },
+          "sample_dir": "samples/figshare-csi-har/by_label/lying",
+          "sample_files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "no_person",
+          "slug": "no_person",
+          "image": "assets/previews/figshare-csi-har/label_no_person.png",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "dims": {
+            "native_subcarriers": 456,
+            "native_time_steps": 600,
+            "display_subcarriers": 456,
+            "display_time_steps": 600
+          },
+          "sample_dir": "samples/figshare-csi-har/by_label/no_person",
+          "sample_files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "sitting",
+          "slug": "sitting",
+          "image": "assets/previews/figshare-csi-har/label_sitting.png",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "dims": {
+            "native_subcarriers": 456,
+            "native_time_steps": 270,
+            "display_subcarriers": 456,
+            "display_time_steps": 270
+          },
+          "sample_dir": "samples/figshare-csi-har/by_label/sitting",
+          "sample_files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "standing",
+          "slug": "standing",
+          "image": "assets/previews/figshare-csi-har/label_standing.png",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "dims": {
+            "native_subcarriers": 456,
+            "native_time_steps": 260,
+            "display_subcarriers": 456,
+            "display_time_steps": 260
+          },
+          "sample_dir": "samples/figshare-csi-har/by_label/standing",
+          "sample_files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "walking",
+          "slug": "walking",
+          "image": "assets/previews/figshare-csi-har/label_walking.png",
+          "kind": "segment",
+          "source_file": "data.csv",
+          "dims": {
+            "native_subcarriers": 456,
+            "native_time_steps": 850,
+            "display_subcarriers": 456,
+            "display_time_steps": 850
+          },
+          "sample_dir": "samples/figshare-csi-har/by_label/walking",
+          "sample_files": [
+            "data.csv",
+            "label.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        }
+      ],
+      "preview_window": {
+        "profile": null,
+        "time_steps": 300,
+        "subcarriers": 114,
+        "links": 4,
+        "sample_rate_hz": 100.0,
+        "axes": "y = subcarrier index, x = time",
+        "note": "Native files are preserved. Task-profile views resample/crop/pad time only; links and subcarriers stay native."
+      },
+      "original_file_tree": [
+        {
+          "name": "room_1",
+          "type": "dir",
+          "children": [
+            {
+              "name": "1",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "data.csv",
+                  "type": "file",
+                  "bytes": 90749002
+                },
+                {
+                  "name": "label.csv",
+                  "type": "file",
+                  "bytes": 66945
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "standardized_file_tree": [
+        {
+          "name": "standardized",
+          "type": "dir",
+          "children": [
+            {
+              "name": "views",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "room_1__1__data.json",
+                  "type": "file",
+                  "bytes": 1508
+                },
+                {
+                  "name": "room_1__1__data.npz",
+                  "type": "file",
+                  "bytes": 842784
+                }
+              ]
+            },
+            {
+              "name": "room_1__1__data.json",
+              "type": "file",
+              "bytes": 3466
+            },
+            {
+              "name": "room_1__1__data.npz",
+              "type": "file",
+              "bytes": 14451187
+            }
+          ]
+        }
+      ],
+      "original_file_count": 2,
+      "standardized_file_count": 4,
+      "usecase_file_tree": [
+        {
+          "name": "get_down",
+          "type": "dir",
+          "children": [
+            {
+              "name": "data.csv",
+              "type": "file",
+              "bytes": 3105549
+            },
+            {
+              "name": "label.csv",
+              "type": "file",
+              "bytes": 1800
+            },
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 487
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 156434
+            }
+          ]
+        },
+        {
+          "name": "get_up",
+          "type": "dir",
+          "children": [
+            {
+              "name": "data.csv",
+              "type": "file",
+              "bytes": 3493426
+            },
+            {
+              "name": "label.csv",
+              "type": "file",
+              "bytes": 1755
+            },
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 477
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 175665
+            }
+          ]
+        },
+        {
+          "name": "lying",
+          "type": "dir",
+          "children": [
+            {
+              "name": "data.csv",
+              "type": "file",
+              "bytes": 16172302
+            },
+            {
+              "name": "label.csv",
+              "type": "file",
+              "bytes": 7500
+            },
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 472
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 797632
+            }
+          ]
+        },
+        {
+          "name": "no_person",
+          "type": "dir",
+          "children": [
+            {
+              "name": "data.csv",
+              "type": "file",
+              "bytes": 15526629
+            },
+            {
+              "name": "label.csv",
+              "type": "file",
+              "bytes": 9600
+            },
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 492
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 763512
+            }
+          ]
+        },
+        {
+          "name": "sitting",
+          "type": "dir",
+          "children": [
+            {
+              "name": "data.csv",
+              "type": "file",
+              "bytes": 6986918
+            },
+            {
+              "name": "label.csv",
+              "type": "file",
+              "bytes": 3780
+            },
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 482
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 345883
+            }
+          ]
+        },
+        {
+          "name": "standing",
+          "type": "dir",
+          "children": [
+            {
+              "name": "data.csv",
+              "type": "file",
+              "bytes": 6728612
+            },
+            {
+              "name": "label.csv",
+              "type": "file",
+              "bytes": 3820
+            },
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 485
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 328839
+            }
+          ]
+        },
+        {
+          "name": "walking",
+          "type": "dir",
+          "children": [
+            {
+              "name": "data.csv",
+              "type": "file",
+              "bytes": 21996272
+            },
+            {
+              "name": "label.csv",
+              "type": "file",
+              "bytes": 11020
+            },
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 476
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 1085976
+            }
+          ]
+        }
+      ],
+      "usecase_file_count": 28
+    },
+    "nist-breathesmart": {
+      "status": "ok",
+      "note": "All nine FrameRate3 breathing patterns from the official NIST release (BreathingPattern1.tar, BreathingPattern2.tar, BreathingPattern3.tar, BreathingPattern4.tar, BreathingPattern5.tar, BreathingPattern6.tar, BreathingPattern7.tar, BreathingPattern8.tar, BreathingPattern9.tar).",
+      "sample_zip": "samples/nist-breathesmart.zip",
+      "sample_bytes": 22277624,
+      "zip_bytes": 11253367,
+      "file_count": 117,
+      "file_tree": [
+        {
+          "name": "Table 8",
+          "type": "dir",
+          "children": [
+            {
+              "name": "FrameRate3",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "BreathingPattern1",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 481108
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 484574
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17265
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern1.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern2",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 141
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 482235
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483129
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17260
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern2.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern3",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 482198
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 485389
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17260
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern3.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern4",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483026
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483866
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17260
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern4.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern5",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483047
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483984
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17262
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern5.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern6",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483227
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 481666
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17257
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern6.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern7",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483527
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 482886
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17257
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern7.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern8",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483513
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483674
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17260
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern8.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern9",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 484009
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483875
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17261
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern9.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "standardized",
+          "type": "dir",
+          "children": [
+            {
+              "name": "views",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern1__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern1__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 407138
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern2__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1571
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern2__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 407022
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern3__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern3__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 406773
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern4__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern4__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 406886
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern5__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern5__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 407567
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern6__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern6__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 406360
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern7__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern7__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 406941
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern8__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern8__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 407817
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern9__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern9__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 405867
+                }
+              ]
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern1__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern1__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397478
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern2__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1006
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern2__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397372
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern3__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern3__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397164
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern4__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern4__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397311
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern5__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern5__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397965
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern6__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern6__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 396796
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern7__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern7__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397321
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern8__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern8__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 398106
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern9__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern9__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 396478
+            }
+          ]
+        },
+        {
+          "name": "by_label",
+          "type": "dir",
+          "children": [
+            {
+              "name": "breathingpattern1",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 405
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 484574
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 200539
+                }
+              ]
+            },
+            {
+              "name": "breathingpattern2",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 405
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 483129
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 200429
+                }
+              ]
+            },
+            {
+              "name": "breathingpattern3",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 405
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 485389
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 200231
+                }
+              ]
+            },
+            {
+              "name": "breathingpattern4",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 405
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 483866
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 200004
+                }
+              ]
+            },
+            {
+              "name": "breathingpattern5",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 405
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 483984
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 200029
+                }
+              ]
+            },
+            {
+              "name": "breathingpattern6",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 405
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 481666
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 200372
+                }
+              ]
+            },
+            {
+              "name": "breathingpattern7",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 405
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 482886
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 200271
+                }
+              ]
+            },
+            {
+              "name": "breathingpattern8",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 405
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 483674
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 200450
+                }
+              ]
+            },
+            {
+              "name": "breathingpattern9",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 405
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 483875
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 199751
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": {
+        "before": "assets/previews/nist-breathesmart/before.png",
+        "after": "assets/previews/nist-breathesmart/after.png",
+        "by_label": [
+          "assets/previews/nist-breathesmart/label_breathingpattern1.png",
+          "assets/previews/nist-breathesmart/label_breathingpattern2.png",
+          "assets/previews/nist-breathesmart/label_breathingpattern3.png",
+          "assets/previews/nist-breathesmart/label_breathingpattern4.png",
+          "assets/previews/nist-breathesmart/label_breathingpattern5.png",
+          "assets/previews/nist-breathesmart/label_breathingpattern6.png",
+          "assets/previews/nist-breathesmart/label_breathingpattern7.png",
+          "assets/previews/nist-breathesmart/label_breathingpattern8.png",
+          "assets/previews/nist-breathesmart/label_breathingpattern9.png"
+        ]
+      },
+      "setup_figure": "assets/figures/nist-breathesmart.png",
+      "figure_source": {
+        "label": "Breathing patterns table from the official NIST ReadMe (v2)",
+        "url": "https://doi.org/10.18434/mds2-2963"
+      },
+      "preview_before_dims": {
+        "native_subcarriers": 1026,
+        "native_time_steps": 180,
+        "display_subcarriers": 1026,
+        "display_time_steps": 180
+      },
+      "preview_source_file": "config0001_csi_real_log.csv",
+      "original": {
+        "profile": {
+          "source_file": "config0001_csi_real_log.csv",
+          "sampling_rate": "10 Hz",
+          "duration": "18.0 s (180 packets)",
+          "setup_distance": "Phantom centred between transmitter and receiver (~1 m scale)",
+          "collection_setup": "Controlled NIST lab; robotic breathing phantom between a 3\u00d73 MIMO WiFi link.",
+          "tensor_shape": "1026 subcarriers \u00d7 180 time steps"
+        },
+        "dimensions": [
+          {
+            "axis": "subcarrier",
+            "size": 1026,
+            "meaning": "OFDM subcarrier / flattened channel index"
+          },
+          {
+            "axis": "time",
+            "size": 180,
+            "meaning": "T \u2014 time steps (packets)"
+          }
+        ]
+      },
+      "standardized": {
+        "arrays": [
+          {
+            "name": "csi_real",
+            "shape": [
+              600,
+              9,
+              114
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "csi_imag",
+            "shape": [
+              600,
+              9,
+              114
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "amplitude",
+            "shape": [
+              600,
+              9,
+              114
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "timestamp_s",
+            "shape": [
+              600
+            ],
+            "dtype": "float64"
+          },
+          {
+            "name": "config_var1",
+            "shape": [],
+            "dtype": "<U5"
+          },
+          {
+            "name": "config_mm",
+            "shape": [],
+            "dtype": "<U1"
+          },
+          {
+            "name": "config_bpm",
+            "shape": [],
+            "dtype": "<U2"
+          },
+          {
+            "name": "config_msgfreq",
+            "shape": [],
+            "dtype": "<U1"
+          },
+          {
+            "name": "config_motor_offset",
+            "shape": [],
+            "dtype": "<U6"
+          },
+          {
+            "name": "config_attn_left",
+            "shape": [],
+            "dtype": "<U1"
+          },
+          {
+            "name": "config_attn_middle",
+            "shape": [],
+            "dtype": "<U1"
+          },
+          {
+            "name": "config_attn_right",
+            "shape": [],
+            "dtype": "<U1"
+          },
+          {
+            "name": "config_txduration",
+            "shape": [],
+            "dtype": "<U2"
+          },
+          {
+            "name": "config_pattern",
+            "shape": [],
+            "dtype": "<U17"
+          },
+          {
+            "name": "packet_index",
+            "shape": [
+              600
+            ],
+            "dtype": "int32"
+          },
+          {
+            "name": "valid_mask",
+            "shape": [
+              600
+            ],
+            "dtype": "bool"
+          }
+        ],
+        "shape": [
+          600,
+          9,
+          114
+        ],
+        "axis_order": [
+          "time",
+          "link",
+          "subcarrier"
+        ],
+        "standard_representation": "amplitude",
+        "source_representation": "complex_csi",
+        "sample_rate_hz": 10.0
+      },
+      "dimensions": [
+        {
+          "axis": "time",
+          "size": 600,
+          "meaning": "T \u2014 time steps (packets)"
+        },
+        {
+          "axis": "link",
+          "size": 9,
+          "meaning": "L \u2014 Tx-Rx antenna link"
+        },
+        {
+          "axis": "subcarrier",
+          "size": 114,
+          "meaning": "S \u2014 OFDM subcarrier"
+        }
+      ],
+      "standardized_view": {
+        "profile": {
+          "task_profile": "vital-sign",
+          "representation": "amplitude",
+          "sampling_rate": "10 Hz",
+          "duration": "60.0 s (600 packets)",
+          "setup_distance": "Phantom centred between transmitter and receiver (~1 m scale)",
+          "collection_setup": "Task-profile view: resample/crop/pad time; keep native links and subcarriers",
+          "tensor_shape": "9 link \u00d7 114 subcarriers \u00d7 600 time steps",
+          "view_grid": "114 subcarriers \u00d7 600 time steps @ 10 Hz",
+          "derived_from_shape": [
+            180,
+            9,
+            114
+          ]
+        },
+        "dimensions": [
+          {
+            "axis": "time",
+            "size": 600,
+            "meaning": "T \u2014 time steps (packets)"
+          },
+          {
+            "axis": "link",
+            "size": 9,
+            "meaning": "L \u2014 Tx-Rx antenna link"
+          },
+          {
+            "axis": "subcarrier",
+            "size": 114,
+            "meaning": "S \u2014 OFDM subcarrier"
+          }
+        ]
+      },
+      "native_output": "data/nist-breathesmart/standardized/Table_8__FrameRate3__BreathingPattern1__config0001__config0001_csi_real_log.npz",
+      "preview_after_dims": {
+        "native_subcarriers": 1026,
+        "native_time_steps": 600,
+        "display_subcarriers": 1026,
+        "display_time_steps": 600
+      },
+      "label_samples": [
+        {
+          "label": "BreathingPattern1",
+          "slug": "breathingpattern1",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern1",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            180,
+            9,
+            114
+          ],
+          "sample_rate_hz": 10.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        },
+        {
+          "label": "BreathingPattern2",
+          "slug": "breathingpattern2",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern2",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            180,
+            9,
+            114
+          ],
+          "sample_rate_hz": 10.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        },
+        {
+          "label": "BreathingPattern3",
+          "slug": "breathingpattern3",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern3",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            180,
+            9,
+            114
+          ],
+          "sample_rate_hz": 10.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        },
+        {
+          "label": "BreathingPattern4",
+          "slug": "breathingpattern4",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern4",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            180,
+            9,
+            114
+          ],
+          "sample_rate_hz": 10.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        },
+        {
+          "label": "BreathingPattern5",
+          "slug": "breathingpattern5",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern5",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            180,
+            9,
+            114
+          ],
+          "sample_rate_hz": 10.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        },
+        {
+          "label": "BreathingPattern6",
+          "slug": "breathingpattern6",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern6",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            180,
+            9,
+            114
+          ],
+          "sample_rate_hz": 10.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        },
+        {
+          "label": "BreathingPattern7",
+          "slug": "breathingpattern7",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern7",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            180,
+            9,
+            114
+          ],
+          "sample_rate_hz": 10.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        },
+        {
+          "label": "BreathingPattern8",
+          "slug": "breathingpattern8",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern8",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            180,
+            9,
+            114
+          ],
+          "sample_rate_hz": 10.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        },
+        {
+          "label": "BreathingPattern9",
+          "slug": "breathingpattern9",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern9",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            180,
+            9,
+            114
+          ],
+          "sample_rate_hz": 10.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": null
+        }
+      ],
+      "label_coverage": {
+        "expected": 9,
+        "exported": 9,
+        "complete": true
+      },
+      "label_previews": [
+        {
+          "label": "BreathingPattern1",
+          "slug": "breathingpattern1",
+          "image": "assets/previews/nist-breathesmart/label_breathingpattern1.png",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "dims": {
+            "native_subcarriers": 1026,
+            "native_time_steps": 180,
+            "display_subcarriers": 1026,
+            "display_time_steps": 180
+          },
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern1",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "BreathingPattern2",
+          "slug": "breathingpattern2",
+          "image": "assets/previews/nist-breathesmart/label_breathingpattern2.png",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "dims": {
+            "native_subcarriers": 1026,
+            "native_time_steps": 180,
+            "display_subcarriers": 1026,
+            "display_time_steps": 180
+          },
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern2",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "BreathingPattern3",
+          "slug": "breathingpattern3",
+          "image": "assets/previews/nist-breathesmart/label_breathingpattern3.png",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "dims": {
+            "native_subcarriers": 1026,
+            "native_time_steps": 180,
+            "display_subcarriers": 1026,
+            "display_time_steps": 180
+          },
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern3",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "BreathingPattern4",
+          "slug": "breathingpattern4",
+          "image": "assets/previews/nist-breathesmart/label_breathingpattern4.png",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "dims": {
+            "native_subcarriers": 1026,
+            "native_time_steps": 180,
+            "display_subcarriers": 1026,
+            "display_time_steps": 180
+          },
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern4",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "BreathingPattern5",
+          "slug": "breathingpattern5",
+          "image": "assets/previews/nist-breathesmart/label_breathingpattern5.png",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "dims": {
+            "native_subcarriers": 1026,
+            "native_time_steps": 180,
+            "display_subcarriers": 1026,
+            "display_time_steps": 180
+          },
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern5",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "BreathingPattern6",
+          "slug": "breathingpattern6",
+          "image": "assets/previews/nist-breathesmart/label_breathingpattern6.png",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "dims": {
+            "native_subcarriers": 1026,
+            "native_time_steps": 180,
+            "display_subcarriers": 1026,
+            "display_time_steps": 180
+          },
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern6",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "BreathingPattern7",
+          "slug": "breathingpattern7",
+          "image": "assets/previews/nist-breathesmart/label_breathingpattern7.png",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "dims": {
+            "native_subcarriers": 1026,
+            "native_time_steps": 180,
+            "display_subcarriers": 1026,
+            "display_time_steps": 180
+          },
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern7",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "BreathingPattern8",
+          "slug": "breathingpattern8",
+          "image": "assets/previews/nist-breathesmart/label_breathingpattern8.png",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "dims": {
+            "native_subcarriers": 1026,
+            "native_time_steps": 180,
+            "display_subcarriers": 1026,
+            "display_time_steps": 180
+          },
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern8",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "BreathingPattern9",
+          "slug": "breathingpattern9",
+          "image": "assets/previews/nist-breathesmart/label_breathingpattern9.png",
+          "kind": "clip",
+          "source_file": "config0001_csi_real_log.csv",
+          "dims": {
+            "native_subcarriers": 1026,
+            "native_time_steps": 180,
+            "display_subcarriers": 1026,
+            "display_time_steps": 180
+          },
+          "sample_dir": "samples/nist-breathesmart/by_label/breathingpattern9",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        }
+      ],
+      "preview_window": {
+        "profile": null,
+        "time_steps": 600,
+        "subcarriers": 114,
+        "links": 9,
+        "sample_rate_hz": 10.0,
+        "axes": "y = subcarrier index, x = time",
+        "note": "Native files are preserved. Task-profile views resample/crop/pad time only; links and subcarriers stay native."
+      },
+      "original_file_tree": [
+        {
+          "name": "Table 8",
+          "type": "dir",
+          "children": [
+            {
+              "name": "FrameRate3",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "BreathingPattern1",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 481108
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 484574
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17265
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern1.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern2",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 141
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 482235
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483129
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17260
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern2.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern3",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 482198
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 485389
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17260
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern3.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern4",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483026
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483866
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17260
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern4.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern5",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483047
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483984
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17262
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern5.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern6",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483227
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 481666
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17257
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern6.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern7",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483527
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 482886
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17257
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern7.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern8",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 483513
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483674
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17260
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern8.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                },
+                {
+                  "name": "BreathingPattern9",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "config0001",
+                      "type": "dir",
+                      "children": [
+                        {
+                          "name": "config0001.csv",
+                          "type": "file",
+                          "bytes": 142
+                        },
+                        {
+                          "name": "config0001_csi_imag_log.csv",
+                          "type": "file",
+                          "bytes": 484009
+                        },
+                        {
+                          "name": "config0001_csi_real_log.csv",
+                          "type": "file",
+                          "bytes": 483875
+                        },
+                        {
+                          "name": "config0001_csi_status_log.csv",
+                          "type": "file",
+                          "bytes": 17261
+                        }
+                      ]
+                    },
+                    {
+                      "name": "BreathingPattern9.csv",
+                      "type": "file",
+                      "bytes": 95
+                    },
+                    {
+                      "name": "total_test_input_shuffled.csv",
+                      "type": "file",
+                      "bytes": 98
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "standardized_file_tree": [
+        {
+          "name": "standardized",
+          "type": "dir",
+          "children": [
+            {
+              "name": "views",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern1__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern1__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 407138
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern2__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1571
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern2__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 407022
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern3__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern3__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 406773
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern4__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern4__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 406886
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern5__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern5__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 407567
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern6__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern6__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 406360
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern7__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern7__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 406941
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern8__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern8__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 407817
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern9__config0001__config0001_csi_real_log.json",
+                  "type": "file",
+                  "bytes": 1572
+                },
+                {
+                  "name": "Table_8__FrameRate3__BreathingPattern9__config0001__config0001_csi_real_log.npz",
+                  "type": "file",
+                  "bytes": 405867
+                }
+              ]
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern1__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern1__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397478
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern2__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1006
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern2__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397372
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern3__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern3__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397164
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern4__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern4__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397311
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern5__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern5__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397965
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern6__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern6__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 396796
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern7__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern7__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 397321
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern8__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern8__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 398106
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern9__config0001__config0001_csi_real_log.json",
+              "type": "file",
+              "bytes": 1007
+            },
+            {
+              "name": "Table_8__FrameRate3__BreathingPattern9__config0001__config0001_csi_real_log.npz",
+              "type": "file",
+              "bytes": 396478
+            }
+          ]
+        }
+      ],
+      "original_file_count": 54,
+      "standardized_file_count": 36,
+      "usecase_file_tree": [
+        {
+          "name": "breathingpattern1",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 405
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 484574
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 200539
+            }
+          ]
+        },
+        {
+          "name": "breathingpattern2",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 405
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 483129
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 200429
+            }
+          ]
+        },
+        {
+          "name": "breathingpattern3",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 405
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 485389
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 200231
+            }
+          ]
+        },
+        {
+          "name": "breathingpattern4",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 405
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 483866
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 200004
+            }
+          ]
+        },
+        {
+          "name": "breathingpattern5",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 405
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 483984
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 200029
+            }
+          ]
+        },
+        {
+          "name": "breathingpattern6",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 405
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 481666
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 200372
+            }
+          ]
+        },
+        {
+          "name": "breathingpattern7",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 405
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 482886
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 200271
+            }
+          ]
+        },
+        {
+          "name": "breathingpattern8",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 405
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 483674
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 200450
+            }
+          ]
+        },
+        {
+          "name": "breathingpattern9",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 405
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 483875
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 199751
+            }
+          ]
+        }
+      ],
+      "usecase_file_count": 27
+    },
+    "operanet": {
+      "status": "skipped",
+      "reason": "NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py",
+      "setup_figure": "assets/figures/operanet.png",
+      "figure_source": {
+        "label": "Figure 1 of the OPERAnet data descriptor (Scientific Data, CC BY 4.0)",
+        "url": "https://doi.org/10.1038/s41597-022-01573-2"
+      }
+    },
+    "wallhack18k": {
+      "status": "ok",
+      "note": "One CSV per class from the official Zenodo archive (b1.csv, w1.csv, ww1.csv). Classes: no presence, walking, arm waving. Files truncated to the first 1000 packets to keep the sample small.",
+      "sample_zip": "samples/wallhack18k.zip",
+      "sample_bytes": 5996996,
+      "zip_bytes": 2120532,
+      "file_count": 24,
+      "file_tree": [
+        {
+          "name": "wallhack1.8k",
+          "type": "dir",
+          "children": [
+            {
+              "name": "LOS",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "BQ",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "b1.csv",
+                      "type": "file",
+                      "bytes": 833253
+                    },
+                    {
+                      "name": "w1.csv",
+                      "type": "file",
+                      "bytes": 847639
+                    },
+                    {
+                      "name": "ww1.csv",
+                      "type": "file",
+                      "bytes": 846840
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "standardized",
+          "type": "dir",
+          "children": [
+            {
+              "name": "views",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "wallhack1.8k__LOS__BQ__b1.json",
+                  "type": "file",
+                  "bytes": 1464
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__b1.npz",
+                  "type": "file",
+                  "bytes": 41245
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__w1.json",
+                  "type": "file",
+                  "bytes": 1460
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__w1.npz",
+                  "type": "file",
+                  "bytes": 43736
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__ww1.json",
+                  "type": "file",
+                  "bytes": 1465
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__ww1.npz",
+                  "type": "file",
+                  "bytes": 42950
+                }
+              ]
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__b1.json",
+              "type": "file",
+              "bytes": 943
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__b1.npz",
+              "type": "file",
+              "bytes": 189879
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__w1.json",
+              "type": "file",
+              "bytes": 939
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__w1.npz",
+              "type": "file",
+              "bytes": 218319
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__ww1.json",
+              "type": "file",
+              "bytes": 943
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__ww1.npz",
+              "type": "file",
+              "bytes": 221826
+            }
+          ]
+        },
+        {
+          "name": "by_label",
+          "type": "dir",
+          "children": [
+            {
+              "name": "arm_waving",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 473
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 846840
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 62480
+                }
+              ]
+            },
+            {
+              "name": "no_presence",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 477
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 833253
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 51407
+                }
+              ]
+            },
+            {
+              "name": "walking",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "metadata.json",
+                  "type": "file",
+                  "bytes": 457
+                },
+                {
+                  "name": "original.csv",
+                  "type": "file",
+                  "bytes": 847639
+                },
+                {
+                  "name": "standardized.npz",
+                  "type": "file",
+                  "bytes": 61069
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "previews": {
+        "before": "assets/previews/wallhack18k/before.png",
+        "after": "assets/previews/wallhack18k/after.png",
+        "by_label": [
+          "assets/previews/wallhack18k/label_arm_waving.png",
+          "assets/previews/wallhack18k/label_no_presence.png",
+          "assets/previews/wallhack18k/label_walking.png"
+        ]
+      },
+      "setup_figure": "assets/figures/wallhack18k.png",
+      "figure_source": {
+        "label": "Recording environment figure from the Wallhack1.8k paper (arXiv:2401.01388)",
+        "url": "https://arxiv.org/abs/2401.01388"
+      },
+      "preview_before_dims": {
+        "native_subcarriers": 128,
+        "native_time_steps": 999,
+        "display_subcarriers": 128,
+        "display_time_steps": 999
+      },
+      "preview_source_file": "b1.csv",
+      "original": {
+        "profile": {
+          "source_file": "b1.csv",
+          "sampling_rate": "100 Hz",
+          "duration": "10.0 s (999 packets)",
+          "frequency_band": "2.4 GHz",
+          "wifi_standard": "802.11n",
+          "setup_distance": "1.8\u201318 m along marked LoS/NLoS paths",
+          "collection_setup": "Five adjacent office rooms; LoS hallway path and through-wall NLoS path.",
+          "tensor_shape": "128 subcarriers \u00d7 999 time steps"
+        },
+        "dimensions": [
+          {
+            "axis": "subcarrier",
+            "size": 128,
+            "meaning": "OFDM subcarrier / flattened channel index"
+          },
+          {
+            "axis": "time",
+            "size": 999,
+            "meaning": "T \u2014 time steps (packets)"
+          }
+        ]
+      },
+      "standardized": {
+        "arrays": [
+          {
+            "name": "timestamp_s",
+            "shape": [
+              300
+            ],
+            "dtype": "float64"
+          },
+          {
+            "name": "csi_real",
+            "shape": [
+              300,
+              1,
+              52
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "csi_imag",
+            "shape": [
+              300,
+              1,
+              52
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "amplitude",
+            "shape": [
+              300,
+              1,
+              52
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "power_db_rel",
+            "shape": [
+              300,
+              1,
+              52
+            ],
+            "dtype": "float32"
+          },
+          {
+            "name": "valid_mask",
+            "shape": [
+              300
+            ],
+            "dtype": "bool"
+          },
+          {
+            "name": "source_label",
+            "shape": [
+              300
+            ],
+            "dtype": "<U64"
+          },
+          {
+            "name": "subcarrier_index",
+            "shape": [
+              52
+            ],
+            "dtype": "int64"
+          }
+        ],
+        "shape": [
+          300,
+          1,
+          52
+        ],
+        "axis_order": [
+          "time",
+          "link",
+          "subcarrier"
+        ],
+        "standard_representation": "amplitude",
+        "source_representation": "raw_iq",
+        "sample_rate_hz": 100.0
+      },
+      "dimensions": [
+        {
+          "axis": "time",
+          "size": 300,
+          "meaning": "T \u2014 time steps (packets)"
+        },
+        {
+          "axis": "link",
+          "size": 1,
+          "meaning": "L \u2014 Tx-Rx antenna link"
+        },
+        {
+          "axis": "subcarrier",
+          "size": 52,
+          "meaning": "S \u2014 OFDM subcarrier"
+        }
+      ],
+      "standardized_view": {
+        "profile": {
+          "task_profile": "general-sensing",
+          "representation": "amplitude",
+          "sampling_rate": "100 Hz",
+          "duration": "3.0 s (300 packets)",
+          "frequency_band": "2.4 GHz",
+          "wifi_standard": "802.11n",
+          "setup_distance": "1.8\u201318 m along marked LoS/NLoS paths",
+          "collection_setup": "Task-profile view: resample/crop/pad time; keep native links and subcarriers",
+          "tensor_shape": "1 link \u00d7 52 subcarriers \u00d7 300 time steps",
+          "view_grid": "52 subcarriers \u00d7 300 time steps @ 100 Hz",
+          "derived_from_shape": [
+            999,
+            1,
+            52
+          ]
+        },
+        "dimensions": [
+          {
+            "axis": "time",
+            "size": 300,
+            "meaning": "T \u2014 time steps (packets)"
+          },
+          {
+            "axis": "link",
+            "size": 1,
+            "meaning": "L \u2014 Tx-Rx antenna link"
+          },
+          {
+            "axis": "subcarrier",
+            "size": 52,
+            "meaning": "S \u2014 OFDM subcarrier"
+          }
+        ]
+      },
+      "native_output": "data/wallhack18k/standardized/wallhack1.8k__LOS__BQ__b1.npz",
+      "preview_after_dims": {
+        "native_subcarriers": 52,
+        "native_time_steps": 300,
+        "display_subcarriers": 52,
+        "display_time_steps": 300
+      },
+      "label_samples": [
+        {
+          "label": "arm_waving",
+          "slug": "arm_waving",
+          "kind": "segment",
+          "source_file": "ww1.csv",
+          "sample_dir": "samples/wallhack18k/by_label/arm_waving",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            999,
+            1,
+            52
+          ],
+          "sample_rate_hz": 100.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": {
+            "start_seconds": 0.0,
+            "end_seconds": 9.99,
+            "label": "arm_waving",
+            "source_label": "arm_waving"
+          }
+        },
+        {
+          "label": "no_presence",
+          "slug": "no_presence",
+          "kind": "segment",
+          "source_file": "b1.csv",
+          "sample_dir": "samples/wallhack18k/by_label/no_presence",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            999,
+            1,
+            52
+          ],
+          "sample_rate_hz": 100.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": {
+            "start_seconds": 0.0,
+            "end_seconds": 9.99,
+            "label": "no_presence",
+            "source_label": "no_presence"
+          }
+        },
+        {
+          "label": "walking",
+          "slug": "walking",
+          "kind": "segment",
+          "source_file": "w1.csv",
+          "sample_dir": "samples/wallhack18k/by_label/walking",
+          "files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ],
+          "tensor_shape": [
+            999,
+            1,
+            52
+          ],
+          "sample_rate_hz": 100.0,
+          "start_packet": null,
+          "end_packet": null,
+          "segment": {
+            "start_seconds": 0.0,
+            "end_seconds": 9.99,
+            "label": "walking",
+            "source_label": "walking"
+          }
+        }
+      ],
+      "label_coverage": {
+        "expected": 3,
+        "exported": 3,
+        "complete": true
+      },
+      "label_previews": [
+        {
+          "label": "arm_waving",
+          "slug": "arm_waving",
+          "image": "assets/previews/wallhack18k/label_arm_waving.png",
+          "kind": "segment",
+          "source_file": "ww1.csv",
+          "dims": {
+            "native_subcarriers": 52,
+            "native_time_steps": 999,
+            "display_subcarriers": 52,
+            "display_time_steps": 999
+          },
+          "sample_dir": "samples/wallhack18k/by_label/arm_waving",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "no_presence",
+          "slug": "no_presence",
+          "image": "assets/previews/wallhack18k/label_no_presence.png",
+          "kind": "segment",
+          "source_file": "b1.csv",
+          "dims": {
+            "native_subcarriers": 52,
+            "native_time_steps": 999,
+            "display_subcarriers": 52,
+            "display_time_steps": 999
+          },
+          "sample_dir": "samples/wallhack18k/by_label/no_presence",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        },
+        {
+          "label": "walking",
+          "slug": "walking",
+          "image": "assets/previews/wallhack18k/label_walking.png",
+          "kind": "segment",
+          "source_file": "w1.csv",
+          "dims": {
+            "native_subcarriers": 52,
+            "native_time_steps": 999,
+            "display_subcarriers": 52,
+            "display_time_steps": 999
+          },
+          "sample_dir": "samples/wallhack18k/by_label/walking",
+          "sample_files": [
+            "original.csv",
+            "standardized.npz",
+            "metadata.json"
+          ]
+        }
+      ],
+      "preview_window": {
+        "profile": null,
+        "time_steps": 300,
+        "subcarriers": 52,
+        "links": 1,
+        "sample_rate_hz": 100.0,
+        "axes": "y = subcarrier index, x = time",
+        "note": "Native files are preserved. Task-profile views resample/crop/pad time only; links and subcarriers stay native."
+      },
+      "original_file_tree": [
+        {
+          "name": "wallhack1.8k",
+          "type": "dir",
+          "children": [
+            {
+              "name": "LOS",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "BQ",
+                  "type": "dir",
+                  "children": [
+                    {
+                      "name": "b1.csv",
+                      "type": "file",
+                      "bytes": 833253
+                    },
+                    {
+                      "name": "w1.csv",
+                      "type": "file",
+                      "bytes": 847639
+                    },
+                    {
+                      "name": "ww1.csv",
+                      "type": "file",
+                      "bytes": 846840
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "standardized_file_tree": [
+        {
+          "name": "standardized",
+          "type": "dir",
+          "children": [
+            {
+              "name": "views",
+              "type": "dir",
+              "children": [
+                {
+                  "name": "wallhack1.8k__LOS__BQ__b1.json",
+                  "type": "file",
+                  "bytes": 1464
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__b1.npz",
+                  "type": "file",
+                  "bytes": 41245
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__w1.json",
+                  "type": "file",
+                  "bytes": 1460
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__w1.npz",
+                  "type": "file",
+                  "bytes": 43736
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__ww1.json",
+                  "type": "file",
+                  "bytes": 1465
+                },
+                {
+                  "name": "wallhack1.8k__LOS__BQ__ww1.npz",
+                  "type": "file",
+                  "bytes": 42950
+                }
+              ]
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__b1.json",
+              "type": "file",
+              "bytes": 943
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__b1.npz",
+              "type": "file",
+              "bytes": 189879
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__w1.json",
+              "type": "file",
+              "bytes": 939
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__w1.npz",
+              "type": "file",
+              "bytes": 218319
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__ww1.json",
+              "type": "file",
+              "bytes": 943
+            },
+            {
+              "name": "wallhack1.8k__LOS__BQ__ww1.npz",
+              "type": "file",
+              "bytes": 221826
+            }
+          ]
+        }
+      ],
+      "original_file_count": 3,
+      "standardized_file_count": 12,
+      "usecase_file_tree": [
+        {
+          "name": "arm_waving",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 473
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 846840
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 62480
+            }
+          ]
+        },
+        {
+          "name": "no_presence",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 477
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 833253
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 51407
+            }
+          ]
+        },
+        {
+          "name": "walking",
+          "type": "dir",
+          "children": [
+            {
+              "name": "metadata.json",
+              "type": "file",
+              "bytes": 457
+            },
+            {
+              "name": "original.csv",
+              "type": "file",
+              "bytes": 847639
+            },
+            {
+              "name": "standardized.npz",
+              "type": "file",
+              "bytes": 61069
+            }
+          ]
+        }
+      ],
+      "usecase_file_count": 9
+    }
+  }
+}

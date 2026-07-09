@@ -4,9 +4,24 @@
   "tasks": ["har", "occupancy"], "modalities": ["WiFi CSI", "CSI amplitude spectrogram"],
   "hardware": {"platform": "Two WiFi systems with BQ and PIFA antennas", "chipset": "Espressif-compatible CSI format", "wifi_standard": "802.11n", "band": "2.4 GHz"},
   "settings": {"environments": 6, "subjects": null, "scenario": "LoS and NLoS/through-wall; no presence, walking, walking plus arm waving"},
+  "collection": {
+    "device": "ESP32-S3 CSI (BQ biquad + PIFA antenna systems)",
+    "distance": "1.8–18 m (LoS hallway and through-wall NLoS)",
+    "subjects": "Not reported as subject IDs (single-person activity recordings)",
+    "labels": {
+      "activity": "0 = no presence; 1 = walking; 2 = walking + arm-waving"
+    },
+    "scenario_labels": "NLoS room: 0 = none; 1–5 = room index · LoS / NLoS hallway and through-wall paths",
+    "band": "2.4 GHz (802.11n)",
+    "subcarriers": 52,
+    "subcarrier_spacing": "312.5 kHz (standard 20 MHz OFDM L-LTF; inferred, not stored in release)",
+    "sampling_rate_hz": 100,
+    "clip_length": "~4 s (400 packets) in official spectrograms",
+    "scenario": "LoS hallway path and through-wall NLoS across adjacent offices"
+  },
   "scale": {"samples": 1806, "classes": 3, "nominal_sample_rate_hz": 100, "window_seconds": 4},
   "original": {"landing_page": "https://zenodo.org/records/8188999", "download_page": "https://zenodo.org/records/8188999", "access": "direct", "license": "Open Zenodo record; verify file license metadata", "redistribution": "unclear", "formats": ["CSV raw I/Q", "PNG spectrogram", "CSV labels"]},
-  "standardization": {"status": "adapter-ready", "profile": "clip-4s-100hz", "notes": "Parse interleaved imaginary/real values, select documented L-LTF or HT-LTF subcarriers, and retain scenario/antenna labels."},
+  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "Task profile: 100 Hz, 3 s. Parse interleaved imaginary/real values, select documented L-LTF or HT-LTF subcarriers, and retain scenario/antenna labels. Keep native link/subcarrier counts."},
   "sources": [{"type": "data", "url": "https://zenodo.org/records/8188999"}], "verified_at": "2026-06-28"
 }
 

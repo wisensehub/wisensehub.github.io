@@ -21,6 +21,24 @@
       "required": ["environments", "subjects", "scenario"],
       "properties": {"environments": {"type": ["integer", "null"]}, "subjects": {"type": ["integer", "null"]}, "scenario": {"type": "string"}}
     },
+    "collection": {
+      "type": "object",
+      "description": "Curated collection-setting table for the dataset page",
+      "properties": {
+        "device": {"type": "string"},
+        "distance": {"type": "string"},
+        "subjects": {"type": "string"},
+        "labels": {"type": "object", "additionalProperties": {"type": "string"}},
+        "scenario_labels": {"type": "string"},
+        "band": {"type": "string"},
+        "subcarriers": {"type": ["integer", "string"]},
+        "subcarrier_spacing": {"type": "string"},
+        "sampling_rate_hz": {"type": ["number", "string"]},
+        "clip_length": {"type": "string"},
+        "scenario": {"type": "string"}
+      },
+      "additionalProperties": true
+    },
     "scale": {"type": "object"},
     "original": {
       "type": "object",

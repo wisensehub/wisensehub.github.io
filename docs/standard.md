@@ -38,37 +38,47 @@ Dataset adapters first write a native standardized file under
 closely as possible after axis naming, dtype normalization, and provenance
 capture.
 
-For model input, users may request derived views:
+By default, `wisensehub prepare` also writes a **task-family derived view** under
+`standardized/views/`, selected from the dataset catalog
+`standardization.profile`:
+
+| Profile | Rate | Duration | Channel policy | Typical tasks |
+|---|---|---|---|---|
+| `general-sensing` | 100 Hz | 3 s (`T=300`) | keep native `L` and `S` | HAR, occupancy, fall, motion |
+| `vital-sign` | 10 Hz | 60 s (`T=600`) | keep native `L` and `S` | breathing / vital signs |
 
 ```bash
+wisensehub prepare <dataset-id> --profile vital-sign
 wisensehub prepare <dataset-id> \
   --target-rate 100 \
-  --duration 4 \
+  --duration 3 \
   --interpolation linear \
   --layout link-subcarrier
 ```
 
-Derived views are stored under `standardized/views/` and keep a `derived_from`
-pointer to the native NPZ. Supported policies are:
+Derived views keep a `derived_from` pointer to the native NPZ. Supported
+policies are:
 
 | Option | Purpose |
 |---|---|
+| `--profile` | Apply a task-family rate/duration policy |
 | `--target-rate` | Resample a timestamped or rate-known sequence to a fixed Hz |
 | `--duration` | Crop/pad/resample to a fixed time interval |
 | `--target-length` | Force an exact number of time steps when seconds are unknown |
 | `--interpolation` | Choose `none`, `nearest`, or `linear` |
 | `--layout canonical` | Keep `[T,L,S]` or `[N,T,L,S]` |
 | `--layout link-subcarrier` | Flatten link/subcarrier axes to `[T,F]` or `[N,T,F]` |
-| `--links`, `--subcarriers` | Validate expected channel dimensions before view export |
+| `--links`, `--subcarriers` | Optional force/pad of channel dims (off by default) |
 
 ## Time and sampling
 
-- Default clip profile: 4 seconds at 100 Hz (`T=400`).
-- Continuous profile: preserve full duration and resample to 100 Hz when the
-  source timestamps support it.
-- Vital-sign profile: preserve the raw rate and optionally derive a 20 Hz view.
+- General sensing: 3 seconds at 100 Hz (`T=300`).
+- Vital sign: 60 seconds at 10 Hz (`T=600`).
+- Link and subcarrier counts stay native unless `--links` / `--subcarriers` are set.
 - Interpolation is performed independently on real and imaginary components.
 - Samples outside the observed range are zero padded and marked invalid.
+- When the source does not report a rate, the task profile rate is assumed and
+  recorded in the sidecar.
 
 ## Power units
 

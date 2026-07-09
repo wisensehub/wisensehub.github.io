@@ -16,7 +16,39 @@ from .adapters.xrf_v2 import convert_xrf_v2_h5
 from .quality import write_quality_report
 from .registry import load_adapter_registry
 from .splits import generate_split
-from .views import ViewOptions, create_standard_view
+from .views import ViewOptions, resolve_task_profile, create_standard_view
+from .catalog import load_datasets
+
+
+def _catalog_view_options(dataset_id: str) -> ViewOptions:
+    for entry in load_datasets():
+        if entry.get("id") == dataset_id:
+            return resolve_task_profile((entry.get("standardization") or {}).get("profile"))
+    return resolve_task_profile(None)
+
+
+def _resolve_prepare_view(dataset_id: str, view_options: Optional[ViewOptions]) -> ViewOptions:
+    """Prefer explicit CLI view options; otherwise use the dataset's task profile."""
+    if view_options is None or not view_options.requested():
+        return _catalog_view_options(dataset_id)
+    if (
+        view_options.profile
+        and view_options.target_rate_hz is None
+        and view_options.duration_s is None
+        and view_options.target_length is None
+    ):
+        base = resolve_task_profile(view_options.profile)
+        return ViewOptions(
+            target_rate_hz=base.target_rate_hz,
+            duration_s=base.duration_s,
+            target_length=base.target_length,
+            interpolation=view_options.interpolation,
+            layout=view_options.layout,
+            links=view_options.links,
+            subcarriers=view_options.subcarriers,
+            profile=base.profile,
+        )
+    return view_options
 
 
 @dataclass
@@ -102,38 +134,38 @@ def prepare_dataset(
     if limit is not None:
         sources = sources[:limit]
     records: List[ConversionRecord] = []
+    effective_view = _resolve_prepare_view(dataset_id, view_options)
     for source in sources:
         stem = _safe_stem(source, original)
         native_output = standardized / f"{stem}.npz"
-        output = view_root / f"{stem}.npz" if view_options and view_options.requested() else native_output
-        report = reports / ("views" if output.parent.name == "views" else "") / f"{stem}.quality.json"
+        view_output = view_root / f"{stem}.npz"
+        output = view_output
+        report = reports / "views" / f"{stem}.quality.json"
         native_report = reports / f"{stem}.quality.json"
-        if output.exists() and not force:
+        if output.exists() and native_output.exists() and not force:
             records.append(ConversionRecord(
                 str(source), str(output), str(report) if report.exists() else None, "skipped",
-                native_output=str(native_output) if output != native_output else None,
+                native_output=str(native_output),
             ))
             continue
         try:
             if not native_output.exists() or force:
                 _convert(dataset_id, source, native_output)
                 write_quality_report(native_output, native_report)
-            if view_options and view_options.requested():
-                create_standard_view(native_output, output, view_options)
+            if not output.exists() or force:
+                create_standard_view(native_output, output, effective_view)
                 write_quality_report(output, report)
-                records.append(ConversionRecord(
-                    str(source), str(output), str(report), "converted",
-                    native_output=str(native_output), view_report=str(report),
-                ))
-            else:
-                records.append(ConversionRecord(str(source), str(native_output), str(native_report), "converted"))
+            records.append(ConversionRecord(
+                str(source), str(output), str(report), "converted",
+                native_output=str(native_output), view_report=str(report),
+            ))
         except Exception as exc:
             records.append(ConversionRecord(str(source), None, None, "failed", f"{type(exc).__name__}: {exc}"))
     summary = {
         "schema_version": "1.0", "dataset_id": dataset_id,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "directories": {"original": str(original), "standardized": str(standardized), "reports": str(reports)},
-        "view_options": asdict(view_options) if view_options and view_options.requested() else None,
+        "view_options": asdict(effective_view) if effective_view.requested() else None,
         "source_count": len(sources),
         "converted": sum(record.status == "converted" for record in records),
         "skipped": sum(record.status == "skipped" for record in records),

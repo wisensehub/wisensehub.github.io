@@ -11,7 +11,7 @@ from .quality import write_quality_report
 from .prepare import prepare_dataset, registered_datasets
 from .registry import load_adapter_registry, load_split_registry
 from .standardize import standardize_csv
-from .views import ViewOptions
+from .views import ViewOptions, TASK_PROFILES
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -51,14 +51,16 @@ def build_parser() -> argparse.ArgumentParser:
     prepare.add_argument("--seed", type=int, default=42)
     prepare.add_argument("--ratios", type=float, nargs=3, metavar=("TRAIN", "VAL", "TEST"))
     prepare.add_argument("--holdout", nargs="+", help="Group values assigned to test for a cross-group setting")
+    prepare.add_argument("--profile", choices=sorted(TASK_PROFILES),
+                         help="Task-family view profile (default: catalog standardization.profile)")
     prepare.add_argument("--target-rate", type=float, help="Generate a derived view at this sample rate in Hz")
     prepare.add_argument("--duration", type=float, help="Generate a derived view with this duration in seconds")
     prepare.add_argument("--target-length", type=int, help="Generate a derived view with this exact time length")
     prepare.add_argument("--interpolation", choices=["none", "nearest", "linear"], default="linear")
     prepare.add_argument("--layout", choices=["canonical", "flat", "link-subcarrier"], default="canonical",
                          help="Derived-view tensor layout; canonical keeps [N,]T,L,S, flat/link-subcarrier flatten non-time signal axes")
-    prepare.add_argument("--links", type=int, help="Expected link/channel count for validation in future view profiles")
-    prepare.add_argument("--subcarriers", type=int, help="Expected subcarrier count for validation in future view profiles")
+    prepare.add_argument("--links", type=int, help="Optional: force/validate link count (default: keep native)")
+    prepare.add_argument("--subcarriers", type=int, help="Optional: force/validate subcarrier count (default: keep native)")
     return parser
 
 
@@ -108,6 +110,7 @@ def main(argv=None) -> int:
                 args.dataset_id, args.data_root, args.limit, args.force,
                 args.setting, args.seed, args.ratios, args.holdout,
                 ViewOptions(
+                    profile=args.profile,
                     target_rate_hz=args.target_rate,
                     duration_s=args.duration,
                     target_length=args.target_length,
@@ -122,6 +125,12 @@ def main(argv=None) -> int:
             return 1
         counts = summary["split"]["partition_counts"]
         print(f"Prepared {args.dataset_id}: {summary['converted']} converted, {summary['skipped']} skipped")
+        view = summary.get("view_options") or {}
+        if view:
+            print(
+                f"View profile={view.get('profile')} rate={view.get('target_rate_hz')} Hz "
+                f"duration={view.get('duration_s')} s length={view.get('target_length')}"
+            )
         print(f"Split {summary['split']['setting']} ({summary['split']['provenance']}): {counts}")
         return 0
     return 2

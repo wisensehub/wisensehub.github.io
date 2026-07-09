@@ -7,7 +7,7 @@
   "settings": {"environments": 26, "subjects": 35, "scenario": "Homes, offices, and public indoor areas; in the wild"},
   "scale": {"hours": 461, "samples": 231600, "device_types": 16},
   "original": {"landing_page": "https://ai-iot-sensing.github.io/projects/project.html", "download_page": "https://www.kaggle.com/datasets/guozhenjennzhu/csi-bench", "access": "account", "license": "CC BY-NC 4.0 on Kaggle; repository text should be checked per release", "redistribution": "restricted", "formats": ["HDF5", "MAT", "CSV", "JSON"]},
-  "standardization": {"status": "adapter-ready", "profile": "continuous-100hz", "notes": "Keep official splits and multi-task labels; do not redistribute modified data until license terms are reconciled."},
+  "standardization": {"status": "adapter-ready", "profile": "vital-sign", "notes": "BreathingDetection samples use the vital-sign profile (10 Hz, 60 s; rate assumed when not reported). Other CSI-Bench tasks should use general-sensing when added. Keep official splits and multi-task labels."},
   "sources": [{"type": "paper", "url": "https://arxiv.org/abs/2505.21866"}, {"type": "repository", "url": "https://github.com/guozhen-jenn-zhu/CSI-Bench-Real-WiFi-Sensing-Benchmark"}],
   "verified_at": "2026-06-28"
 }

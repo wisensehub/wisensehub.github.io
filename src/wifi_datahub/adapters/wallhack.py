@@ -10,6 +10,12 @@ from typing import Iterable, Tuple
 
 import numpy as np
 
+WALLHACK_CLASS_NAMES = {
+    "0": "no_presence",
+    "1": "walking",
+    "2": "arm_waving",
+}
+
 
 def parse_interleaved_imag_real(value: str | Iterable[float]) -> np.ndarray:
     """Parse Wallhack's documented [I, R, I, R, ...] packet representation."""
@@ -64,9 +70,13 @@ def convert_wallhack_csv(input_path: Path, output_path: Path, include_ht_ltf: bo
         amplitude=amplitude,
         power_db_rel=power_db_rel,
         valid_mask=np.ones(complex_csi.shape[0], dtype=bool),
-        source_label=np.asarray(labels[:1] if labels else [], dtype="U64"),
+        source_label=np.asarray(
+            [WALLHACK_CLASS_NAMES.get(label, label) for label in labels] if labels else [],
+            dtype="U64",
+        ),
         subcarrier_index=indices,
     )
+    class_name = WALLHACK_CLASS_NAMES.get(labels[0], labels[0]) if labels else None
     sidecar = {
         "schema_version": "1.0", "dataset_id": "wallhack18k",
         "source_file": input_path.name,
@@ -76,7 +86,11 @@ def convert_wallhack_csv(input_path: Path, output_path: Path, include_ht_ltf: bo
         "sample_rate_hz": 100.0, "duration_s": complex_csi.shape[0] / 100.0,
         "time_unit": "s", "time_axis": "timestamp_s",
         "power_unit": "dB_relative_to_median_valid_sample_power", "valid_fraction": 1.0,
-        "labels": {"class": labels[0] if labels else None},
+        "labels": {
+            "class": labels[0] if labels else None,
+            "activity": class_name,
+            "vocabulary": WALLHACK_CLASS_NAMES,
+        },
         "transformations": ["parse interleaved imaginary/real", "select documented L-LTF/HT-LTF subcarriers", "relative-power conversion"],
         "created_at": datetime.now(timezone.utc).isoformat(), "tool": "wisensehub-0.6.0"
     }

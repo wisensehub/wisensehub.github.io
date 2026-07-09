@@ -11,3 +11,11 @@ examples/data/standardized/
 work/
 outputs/
 data/
+!site/data/
+site/data/*
+!site/data/catalog.json
+!site/data/samples.json
+# Hosted downloads are the zip archives; keep trees out of git (large / redundant).
+site/samples/*/
+!site/samples/*.zip
+!site/samples/fetch-report.json

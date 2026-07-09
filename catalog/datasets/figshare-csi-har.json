@@ -4,9 +4,24 @@
   "tasks": ["har", "spatial_localization"], "modalities": ["WiFi CSI", "activity intervals", "person bounding boxes"],
   "hardware": {"platform": "TP-Link TL-WDR4300 router", "chipset": "Atheros CSI Tool", "wifi_standard": "802.11n", "band": "5 GHz, 40 MHz"},
   "settings": {"environments": 3, "subjects": 1, "scenario": "Walking, sitting, standing, lying, getting up/down, and no activity across rooms"},
+  "collection": {
+    "device": "TP-Link TL-WDR4300 (Atheros CSI Tool), 2×2 MIMO Tx/Rx",
+    "distance": "A few metres between transmitter and receiver inside one room",
+    "subjects": "1 (subject: 1)",
+    "labels": {
+      "activity": "walking · sitting · standing · lying · get_up · get_down · no_person"
+    },
+    "scenario_labels": "Rooms: room_1 / room_2 / room_3 · multiple capture sessions per room",
+    "band": "5 GHz, channel 60, 40 MHz (802.11n)",
+    "subcarriers": 114,
+    "subcarrier_spacing": "312.5 kHz (standard 40 MHz OFDM; inferred, not stored in release)",
+    "sampling_rate_hz": "Not reported in release (general-sensing view assumes 100 Hz)",
+    "clip_length": "Continuous packet stream (hosted sample: 5200 packets); view clips to 3 s",
+    "scenario": "Three furnished rooms at Ukrainian Catholic University"
+  },
   "scale": {"activities": 7, "subcarriers": 114, "mimo": "2×2", "size_mb": 489},
   "original": {"landing_page": "https://figshare.com/articles/dataset/14386892", "download_page": "https://figshare.com/articles/dataset/14386892", "access": "direct", "license": "CC BY 4.0", "redistribution": "allowed", "formats": ["CSV CSI", "CSV labels", "CSV bounding boxes"]},
-  "standardization": {"status": "adapter-ready", "profile": "continuous-native", "notes": "Preserve room and session hierarchy and convert interval labels into canonical temporal segments."},
+  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "Task profile: 100 Hz, 3 s for HAR clips. Preserve room/session hierarchy, convert interval labels into temporal segments, and keep native MIMO link/subcarrier counts."},
   "sources": [{"type": "data", "url": "https://figshare.com/articles/dataset/14386892"}, {"type": "repository", "url": "https://github.com/retsediv/WIFI_CSI_based_HAR"}], "verified_at": "2026-07-01"
 }
 

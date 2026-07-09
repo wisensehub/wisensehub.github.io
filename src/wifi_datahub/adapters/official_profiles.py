@@ -56,6 +56,79 @@ def _largest_numeric(mapping: Dict[str, np.ndarray], minimum_ndim: int = 2) -> n
     return max(candidates, key=lambda value: value.size)
 
 
+def _path_metadata_labels(input_path: Path) -> Dict[str, str]:
+    labels: Dict[str, str] = {}
+    for part in input_path.parts:
+        if part.startswith("act_"):
+            labels["activity"] = part[len("act_") :]
+        elif part.startswith("user_"):
+            labels["subject"] = part[len("user_") :]
+        elif part.startswith("env_"):
+            labels["environment"] = part[len("env_") :]
+        elif part.startswith("sub_"):
+            labels["subject_type"] = part[len("sub_") :]
+        elif part.startswith("Diff_"):
+            labels["difficulty"] = part[len("Diff_") :]
+    return labels
+
+
+def _segments_from_packet_labels(labels: np.ndarray, sample_rate_hz: float | None) -> list[dict[str, object]]:
+    values = np.asarray(labels).reshape(-1)
+    if values.size <= 1:
+        return []
+    rate = float(sample_rate_hz) if sample_rate_hz else 1.0
+    segments: list[dict[str, object]] = []
+    start = 0
+    current = str(values[0])
+    for index in range(1, values.size):
+        label = str(values[index])
+        if label == current:
+            continue
+        segments.append({
+            "start_seconds": start / rate,
+            "end_seconds": index / rate,
+            "label": current,
+            "source_label": current,
+        })
+        start = index
+        current = label
+    segments.append({
+        "start_seconds": start / rate,
+        "end_seconds": values.size / rate,
+        "label": current,
+        "source_label": current,
+    })
+    return segments
+
+
+def _clip_labels_from_arrays(
+    arrays: Dict[str, np.ndarray], input_path: Path, dataset_id: str, sample_rate_hz: float | None,
+) -> tuple[Dict[str, object], list[dict[str, object]]]:
+    labels: Dict[str, object] = {}
+    if dataset_id == "csi-bench":
+        labels.update(_path_metadata_labels(input_path))
+    for key, value in arrays.items():
+        if key.startswith("config_") and np.asarray(value).ndim == 0:
+            labels[key[len("config_") :]] = str(np.asarray(value))
+    for name in ("activity_label", "subject", "environment", "experiment"):
+        if name in arrays:
+            item = np.asarray(arrays[name])
+            if item.ndim == 0 or item.size == 1:
+                labels[name.replace("_label", "")] = str(item.reshape(-1)[0])
+    if "source_label" in arrays:
+        source = np.asarray(arrays["source_label"]).reshape(-1)
+        if source.size == 1:
+            labels.setdefault("activity", str(source[0]))
+        elif source.size > 1 and len({str(item) for item in source}) == 1:
+            labels.setdefault("activity", str(source[0]))
+    segments: list[dict[str, object]] = []
+    if "source_label" in arrays:
+        source = np.asarray(arrays["source_label"]).reshape(-1)
+        if source.size > 1 and len({str(item) for item in source}) > 1:
+            segments = _segments_from_packet_labels(source, sample_rate_hz)
+    return labels, segments
+
+
 def _save(
     input_path: Path, output_path: Path, dataset_id: str, arrays: Dict[str, np.ndarray],
     primary: str, axes: list[str], source_representation: str, transformations: list[str],
@@ -75,6 +148,7 @@ def _save(
     arrays = {key: np.asarray(item) for key, item in arrays.items()}
     output_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(output_path, **arrays)
+    clip_labels, segments = _clip_labels_from_arrays(arrays, input_path, dataset_id, sample_rate_hz)
     sidecar = {
         "schema_version": "1.0", "dataset_id": dataset_id,
         "source_file": input_path.name, "source_sha256": _sha256(input_path),
@@ -84,6 +158,12 @@ def _save(
         "transformations": transformations, "created_at": datetime.now(timezone.utc).isoformat(),
         "tool": "wisensehub-0.6.0",
     }
+    if sample_rate_hz:
+        sidecar["duration_s"] = time_length / float(sample_rate_hz)
+    if clip_labels:
+        sidecar["labels"] = clip_labels
+    if segments:
+        sidecar["segments"] = segments
     sidecar_path = output_path.with_suffix(".json")
     sidecar_path.write_text(json.dumps(sidecar, indent=2) + "\n", encoding="utf-8")
     return sidecar_path
@@ -101,18 +181,37 @@ def _complex_arrays(value: np.ndarray) -> Dict[str, np.ndarray]:
     return {"amplitude": value.astype(np.float32)}
 
 
+def _canonical_csi_bench_tensor(data: np.ndarray) -> tuple[np.ndarray, list[str]]:
+    data = np.asarray(data)
+    if data.ndim == 4:
+        if data.shape[-1] in (56, 114, 208, 30, 52, 100) or data.shape[1] > data.shape[0]:
+            return data, ["sample", "time", "link", "subcarrier"]
+        raise ValueError(f"CSI-Bench 4-D tensor has unsupported shape {data.shape}")
+    if data.ndim != 3:
+        raise ValueError(f"CSI-Bench expects a 3-D or 4-D CSI tensor, got {data.shape}")
+    if data.shape[0] <= 32 and data.shape[1] > data.shape[0]:
+        return data[:, :, None, :], ["sample", "time", "link", "subcarrier"]
+    if data.shape[0] in (56, 114, 208) and data.shape[1] >= data.shape[0]:
+        return data.transpose(1, 2, 0), ["time", "link", "subcarrier"]
+    if data.shape[-1] in (56, 114, 208, 30, 52, 100) and data.shape[1] >= data.shape[0]:
+        return data, ["time", "link", "subcarrier"]
+    raise ValueError(f"CSI-Bench tensor layout is not recognized: {data.shape}")
+
+
 def convert_csi_bench_mat(input_path: Path, output_path: Path) -> Path:
     mapping = _load_mat(input_path)
-    data = _find(mapping, ("X", "csi", "CSI"))
-    data = data if data is not None else _largest_numeric(mapping, 3)
-    if data.ndim == 3:
-        data = data[:, :, None, :]
-    elif data.ndim != 4:
-        raise ValueError(f"CSI-Bench expects X as [sample,time,subcarrier] or 4-D, got {data.shape}")
-    arrays = _complex_arrays(data)
-    return _save(input_path, output_path, "csi-bench", arrays, "amplitude", ["sample", "time", "link", "subcarrier"],
-                 "complex_csi" if np.iscomplexobj(data) else "processed_amplitude",
-                 ["load official MAT key X", "insert/retain link axis", "cast float32"])
+    data = _find(mapping, ("CSI_amps", "X", "csi", "CSI"))
+    data = data if data is not None else _largest_numeric(mapping, 2)
+    data, axes = _canonical_csi_bench_tensor(data)
+    arrays = _complex_arrays(data) if np.iscomplexobj(data) else {"amplitude": data.astype(np.float32)}
+    path_labels = _path_metadata_labels(input_path)
+    if path_labels.get("activity"):
+        arrays["activity_label"] = np.asarray(path_labels["activity"], dtype="U64")
+    return _save(
+        input_path, output_path, "csi-bench", arrays, "amplitude", axes,
+        "complex_csi" if np.iscomplexobj(data) else "processed_amplitude",
+        ["load official CSI_amps/X tensor", "transpose to canonical axes", "attach path-derived activity label", "cast float32"],
+    )
 
 
 def convert_mmfi_directory(input_path: Path, output_path: Path) -> Path:

@@ -1,0 +1,2680 @@
+{
+  "generated_at": "2026-07-01",
+  "datasets": [
+    {
+      "id": "aril",
+      "name": "ARIL",
+      "year": 2019,
+      "summary": "Joint activity-recognition and indoor-localization benchmark with six gestures performed at sixteen positions in one room.",
+      "tasks": [
+        "gesture",
+        "spatial_localization",
+        "multitask"
+      ],
+      "modalities": [
+        "Wireless CSI"
+      ],
+      "hardware": {
+        "platform": "Ettus N210 radios with Ettus clock",
+        "chipset": "USRP N210",
+        "wifi_standard": "Custom OFDM",
+        "band": null
+      },
+      "settings": {
+        "environments": 1,
+        "subjects": 1,
+        "scenario": "Six hand gestures at sixteen labeled indoor locations"
+      },
+      "scale": {
+        "samples": 1394,
+        "gesture_classes": 6,
+        "locations": 16,
+        "shape": "1×52×192"
+      },
+      "original": {
+        "landing_page": "https://github.com/geekfeiw/ARIL",
+        "download_page": "https://drive.google.com/open?id=1SCxUHbl6rNWM3kT0c-D4s_kyAero9_-o",
+        "access": "account",
+        "license": "Repository terms require confirmation",
+        "redistribution": "unclear",
+        "formats": [
+          "NumPy processed data",
+          "raw unsegmented data",
+          "labels"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-native",
+        "notes": "MAT adapter preserves both gesture and location labels and uses packet index because a reliable sampling rate is not asserted."
+      },
+      "sources": [
+        {
+          "type": "repository",
+          "url": "https://github.com/geekfeiw/ARIL"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "aril",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*_data_split_amp.mat",
+          "**/*data*amp*.mat"
+        ],
+        "official_reference": "https://github.com/geekfeiw/ARIL/blob/master/train.py"
+      },
+      "split_settings": {
+        "default": "official",
+        "settings": [
+          {
+            "id": "official",
+            "kind": "predefined",
+            "provenance": "official",
+            "description": "Preserve the released 1116/324 train/test files.",
+            "source": "https://github.com/geekfeiw/ARIL"
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_location",
+            "kind": "group_holdout",
+            "group_by": "location",
+            "provenance": "paper",
+            "description": "Hold out labeled indoor locations."
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "data/train_data_split_amp.mat",
+        "primary_array": "amplitude",
+        "expected_shape": "[N, 192, 1, 52]",
+        "note": "The matching activity and location labels are stored in the same standardized NPZ."
+      }
+    },
+    {
+      "id": "csi-bench",
+      "name": "CSI-Bench",
+      "year": 2025,
+      "summary": "Large-scale in-the-wild benchmark spanning seven WiFi sensing tasks, commercial edge hardware, real homes, and continuous natural activity.",
+      "tasks": [
+        "fall",
+        "vital_sign",
+        "spatial_localization",
+        "motion_source",
+        "har",
+        "identity",
+        "multitask"
+      ],
+      "modalities": [
+        "WiFi CSI"
+      ],
+      "hardware": {
+        "platform": "Commercial routers and IoT edge devices",
+        "chipset": "Broadcom, Qualcomm, MediaTek, Espressif, NXP",
+        "wifi_standard": "802.11ac and device-dependent",
+        "band": "2.4/5 GHz"
+      },
+      "settings": {
+        "environments": 26,
+        "subjects": 35,
+        "scenario": "Homes, offices, and public indoor areas; in the wild"
+      },
+      "scale": {
+        "hours": 461,
+        "samples": 231600,
+        "device_types": 16
+      },
+      "original": {
+        "landing_page": "https://ai-iot-sensing.github.io/projects/project.html",
+        "download_page": "https://www.kaggle.com/datasets/guozhenjennzhu/csi-bench",
+        "access": "account",
+        "license": "CC BY-NC 4.0 on Kaggle; repository text should be checked per release",
+        "redistribution": "restricted",
+        "formats": [
+          "HDF5",
+          "MAT",
+          "CSV",
+          "JSON"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "vital-sign",
+        "notes": "BreathingDetection samples use the vital-sign profile (10 Hz, 60 s; rate assumed when not reported). Other CSI-Bench tasks should use general-sensing when added. Keep official splits and multi-task labels."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://arxiv.org/abs/2505.21866"
+        },
+        {
+          "type": "repository",
+          "url": "https://github.com/guozhen-jenn-zhu/CSI-Bench-Real-WiFi-Sensing-Benchmark"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "csi-bench",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.mat",
+          "**/*.h5",
+          "**/*.hdf5"
+        ],
+        "official_reference": "https://github.com/guozhen-jenn-zhu/CSI-Bench-Real-WiFi-Sensing-Benchmark/blob/main/data/datasets/csi/supervised.py"
+      },
+      "split_settings": {
+        "default": "official_id",
+        "settings": [
+          {
+            "id": "official_id",
+            "kind": "external_json",
+            "provenance": "official",
+            "pattern": "**/*_id*.json",
+            "description": "Official in-distribution train/val/test lists."
+          },
+          {
+            "id": "cross_subject",
+            "kind": "external_json",
+            "provenance": "official",
+            "pattern": "**/*cross_user*.json"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "external_json",
+            "provenance": "official",
+            "pattern": "**/*cross_env*.json"
+          },
+          {
+            "id": "cross_device",
+            "kind": "external_json",
+            "provenance": "official",
+            "pattern": "**/*cross_device*.json"
+          },
+          {
+            "id": "difficulty_easy",
+            "kind": "external_json",
+            "provenance": "official",
+            "pattern": "**/*easy*.json"
+          },
+          {
+            "id": "difficulty_medium",
+            "kind": "external_json",
+            "provenance": "official",
+            "pattern": "**/*medium*.json"
+          },
+          {
+            "id": "difficulty_hard",
+            "kind": "external_json",
+            "provenance": "official",
+            "pattern": "**/*hard*.json"
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "supervised/human_activity.mat",
+        "primary_array": "amplitude",
+        "expected_shape": "[N, T, L, S]",
+        "note": "The official MAT key X is retained and a link axis is inserted when needed."
+      }
+    },
+    {
+      "id": "csida",
+      "name": "CSIDA",
+      "year": 2021,
+      "summary": "Cross-domain gesture dataset providing original and processed CSI together with gesture, environment, location, and person labels.",
+      "tasks": [
+        "gesture",
+        "identity",
+        "spatial_localization",
+        "multitask"
+      ],
+      "modalities": [
+        "WiFi CSI"
+      ],
+      "hardware": {
+        "platform": "Two laptops with one transmit and three receive antennas",
+        "chipset": "Atheros AR9580",
+        "wifi_standard": "802.11n",
+        "band": "5 GHz, 40 MHz"
+      },
+      "settings": {
+        "environments": 2,
+        "subjects": 5,
+        "scenario": "Six gestures at five locations across two rooms"
+      },
+      "scale": {
+        "samples": 3000,
+        "gesture_classes": 6,
+        "locations": 5,
+        "nominal_sample_rate_hz": 1000,
+        "sample_seconds": 1.8,
+        "subcarriers": 114,
+        "links": 3
+      },
+      "original": {
+        "landing_page": "https://data.mendeley.com/datasets/gyr6c4nbsc",
+        "download_page": "https://data.mendeley.com/datasets/gyr6c4nbsc",
+        "access": "direct",
+        "license": "CC BY 4.0",
+        "redistribution": "allowed",
+        "formats": [
+          "Zarr original CSI",
+          "Zarr processed CSI",
+          "labels"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-1.8s-100hz",
+        "notes": "The original source reports Atheros AR9580; this corrects the Intel 5300 platform shown in CSI-Bench Table 1."
+      },
+      "sources": [
+        {
+          "type": "data",
+          "url": "https://data.mendeley.com/datasets/gyr6c4nbsc"
+        },
+        {
+          "type": "paper",
+          "url": "https://doi.org/10.3390/app11083329"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "csida",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/csi_data_amp"
+        ],
+        "official_reference": "https://github.com/Zhang-xie/WiGr/blob/master/DataSet/CSIDA.py",
+        "accept_directories": true
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_location",
+            "kind": "group_holdout",
+            "group_by": "location",
+            "provenance": "paper"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "CSIDA/csi_data_amp",
+        "primary_array": "amplitude",
+        "expected_shape": "[N, T, 3, 114]",
+        "note": "Keep csi_data_pha and all csi_label_* Zarr arrays beside csi_data_amp."
+      }
+    },
+    {
+      "id": "ehunam",
+      "name": "EHUNAM",
+      "year": 2025,
+      "summary": "Multi-campaign WiFi CSI dataset for people counting, human activity, identity, appliance recognition, and industrial machine activity across days and environments.",
+      "tasks": [
+        "har",
+        "occupancy",
+        "identity",
+        "machine_sensing",
+        "multitask"
+      ],
+      "modalities": [
+        "WiFi CSI"
+      ],
+      "hardware": {
+        "platform": "Raspberry Pi 4 transmitter and multi-receiver arrays",
+        "chipset": "Nexmon-compatible Broadcom",
+        "wifi_standard": "802.11ac",
+        "band": "5 GHz"
+      },
+      "settings": {
+        "environments": 8,
+        "subjects": 21,
+        "scenario": "Three campaigns over 23 days, including five human scenarios, appliances, and an industrial laboratory"
+      },
+      "scale": {
+        "measurement_days": 23,
+        "campaigns": 3,
+        "max_people_count": 8,
+        "machines": 9
+      },
+      "original": {
+        "landing_page": "https://doi.org/10.6084/m9.figshare.28541225",
+        "download_page": "https://doi.org/10.6084/m9.figshare.28541225",
+        "access": "direct",
+        "license": "CC BY 4.0",
+        "redistribution": "allowed",
+        "formats": [
+          "MAT",
+          "summary spreadsheet",
+          "MATLAB preprocessing"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "continuous-native",
+        "notes": "Preserve campaign, day, environment, receiver, person-count, and machine-state domains for cross-domain evaluation."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://doi.org/10.1038/s41597-025-06238-4"
+        },
+        {
+          "type": "data",
+          "url": "https://doi.org/10.6084/m9.figshare.28541225"
+        }
+      ],
+      "verified_at": "2026-07-01",
+      "conversion": {
+        "handler": "ehunam",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.mat"
+        ],
+        "official_reference": "https://github.com/GuillermoDiazSM/EHUNAM-dataset/blob/main/Subcarrier.m"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_device",
+            "kind": "group_holdout",
+            "group_by": "device",
+            "provenance": "hub"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "Office/MC1_01A_1_HAR_e_J_#_#_01.mat",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 1, 56 or 242]",
+        "note": "Null carriers are removed from the CSI/BW/Subcarriers metadata."
+      }
+    },
+    {
+      "id": "exposing-csi",
+      "name": "Exposing the CSI",
+      "year": 2023,
+      "summary": "Large modern-WiFi experimental collection designed to study how bandwidth, MIMO, spectral resolution, hardware, and environment affect sensing.",
+      "tasks": [
+        "har",
+        "occupancy"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "video-derived ground truth"
+      ],
+      "hardware": {
+        "platform": "Modern commercial WiFi collectors",
+        "chipset": null,
+        "wifi_standard": "802.11ac/ax experimental configurations",
+        "band": "Multiple bandwidths up to 160 MHz"
+      },
+      "settings": {
+        "environments": 1,
+        "subjects": null,
+        "scenario": "Multiple controlled experiments varying WiFi configuration, collectors, target positions, and sensing conditions"
+      },
+      "scale": {
+        "hours": 2,
+        "size_gb": 80,
+        "collectors": 3,
+        "archives": "one per experiment"
+      },
+      "original": {
+        "landing_page": "https://zenodo.org/records/7732595",
+        "download_page": "https://zenodo.org/records/7732595",
+        "access": "direct",
+        "license": "Zenodo record terms; verify per archive",
+        "redistribution": "unclear",
+        "formats": [
+          "Experiment archives",
+          "CSI",
+          "anonymized ground truth"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "continuous-native",
+        "notes": "Treat bandwidth, MIMO mode, collector, position, and experiment as explicit domain fields rather than collapsing them."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://arxiv.org/abs/2302.00992"
+        },
+        {
+          "type": "data",
+          "url": "https://zenodo.org/records/7732595"
+        }
+      ],
+      "verified_at": "2026-07-01",
+      "conversion": {
+        "handler": "exposing-csi",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.mat"
+        ],
+        "official_reference": "https://github.com/ansresearch/SHARP/blob/main/Python_code/CSI_phase_sanitization_signal_preprocessing.py"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_device",
+            "kind": "group_holdout",
+            "group_by": "device",
+            "provenance": "paper"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "S1_A.mat",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 4, 1990]",
+        "note": "The adapter FFT-shifts AX-CSI, removes official null bins, and deinterleaves four monitor streams."
+      }
+    },
+    {
+      "id": "figshare-csi-har",
+      "name": "WiFi CSI HAR (Three Rooms)",
+      "year": 2021,
+      "summary": "Packet-level CSI with activity intervals and person bounding-box labels collected across three rooms and multiple sessions.",
+      "tasks": [
+        "har",
+        "spatial_localization"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "activity intervals",
+        "person bounding boxes"
+      ],
+      "hardware": {
+        "platform": "TP-Link TL-WDR4300 router",
+        "chipset": "Atheros CSI Tool",
+        "wifi_standard": "802.11n",
+        "band": "5 GHz, 40 MHz"
+      },
+      "settings": {
+        "environments": 3,
+        "subjects": 1,
+        "scenario": "Walking, sitting, standing, lying, getting up/down, and no activity across rooms"
+      },
+      "collection": {
+        "device": "TP-Link TL-WDR4300 (Atheros CSI Tool), 2×2 MIMO Tx/Rx",
+        "distance": "A few metres between transmitter and receiver inside one room",
+        "subjects": "1 (subject: 1)",
+        "labels": {
+          "activity": "walking · sitting · standing · lying · get_up · get_down · no_person"
+        },
+        "scenario_labels": "Rooms: room_1 / room_2 / room_3 · multiple capture sessions per room",
+        "band": "5 GHz, channel 60, 40 MHz (802.11n)",
+        "subcarriers": 114,
+        "subcarrier_spacing": "312.5 kHz (standard 40 MHz OFDM; inferred, not stored in release)",
+        "sampling_rate_hz": "Not reported in release (general-sensing view assumes 100 Hz)",
+        "clip_length": "Continuous packet stream (hosted sample: 5200 packets); view clips to 3 s",
+        "scenario": "Three furnished rooms at Ukrainian Catholic University"
+      },
+      "scale": {
+        "activities": 7,
+        "subcarriers": 114,
+        "mimo": "2×2",
+        "size_mb": 489
+      },
+      "original": {
+        "landing_page": "https://figshare.com/articles/dataset/14386892",
+        "download_page": "https://figshare.com/articles/dataset/14386892",
+        "access": "direct",
+        "license": "CC BY 4.0",
+        "redistribution": "allowed",
+        "formats": [
+          "CSV CSI",
+          "CSV labels",
+          "CSV bounding boxes"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "general-sensing",
+        "notes": "Task profile: 100 Hz, 3 s for HAR clips. Preserve room/session hierarchy, convert interval labels into temporal segments, and keep native MIMO link/subcarrier counts."
+      },
+      "sources": [
+        {
+          "type": "data",
+          "url": "https://figshare.com/articles/dataset/14386892"
+        },
+        {
+          "type": "repository",
+          "url": "https://github.com/retsediv/WIFI_CSI_based_HAR"
+        }
+      ],
+      "verified_at": "2026-07-01",
+      "conversion": {
+        "handler": "figshare-csi-har",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/data.csv"
+        ],
+        "official_reference": "https://github.com/Retsediv/WIFI_CSI_based_HAR/blob/master/model/dataset.py"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper",
+            "description": "Hold out one of the three rooms."
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "room_1/session_1/data.csv",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 4, 114]",
+        "note": "Keep label.csv beside data.csv so activity labels are attached automatically."
+      }
+    },
+    {
+      "id": "glasgow-activity-localization",
+      "name": "Contactless Activity and Localization",
+      "year": 2022,
+      "summary": "Joint activity and zone-localization CSI amplitude dataset collected in a room divided into a three-by-three spatial grid.",
+      "tasks": [
+        "har",
+        "spatial_localization",
+        "multitask"
+      ],
+      "modalities": [
+        "Wireless CSI amplitude"
+      ],
+      "hardware": {
+        "platform": "Two USRP X300/X310 radios with VERT2450 antennas",
+        "chipset": "USRP",
+        "wifi_standard": "Custom OFDM",
+        "band": "3.75 GHz"
+      },
+      "settings": {
+        "environments": 1,
+        "subjects": null,
+        "scenario": "Empty, leaning, sitting, standing, and walking with zone labels in a 3×3 grid"
+      },
+      "scale": {
+        "zones": 9,
+        "subcarriers": 64,
+        "approx_seconds_per_sample": 3
+      },
+      "original": {
+        "landing_page": "https://researchdata.gla.ac.uk/1283/",
+        "download_page": "https://researchdata.gla.ac.uk/1283/",
+        "access": "direct",
+        "license": "University repository terms; verify record",
+        "redistribution": "unclear",
+        "formats": [
+          "CSV amplitude"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-3s-native",
+        "notes": "Preserve both activity and spatial-zone labels for joint and single-task protocols."
+      },
+      "sources": [
+        {
+          "type": "data",
+          "url": "https://researchdata.gla.ac.uk/1283/"
+        }
+      ],
+      "verified_at": "2026-07-01",
+      "conversion": {
+        "handler": "glasgow-activity-localization",
+        "implementation": "schema-implemented",
+        "patterns": [
+          "**/*.csv"
+        ],
+        "official_reference": "https://researchdata.gla.ac.uk/1283/4/ReadMe_Non-invasive_Localization_using_SDR.docx"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_location",
+            "kind": "group_holdout",
+            "group_by": "location",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "hub"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "Location1/Zone1/walking_01.csv",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 1, 52]",
+        "note": "The official CSV contains processed USRP-OFDM CSI amplitude."
+      }
+    },
+    {
+      "id": "glasgow-multiuser",
+      "name": "5G-enabled Multi-user Presence and Activity",
+      "year": 2021,
+      "summary": "Open SDR-based wireless CSI dataset covering sixteen combinations of occupancy and simultaneous activities for assisted living.",
+      "tasks": [
+        "occupancy",
+        "har",
+        "multitask"
+      ],
+      "modalities": [
+        "Wireless CSI amplitude"
+      ],
+      "hardware": {
+        "platform": "Two USRP X300/X310 software-defined radios",
+        "chipset": "USRP",
+        "wifi_standard": "Custom OFDM rather than commodity WiFi",
+        "band": "3.75 GHz"
+      },
+      "settings": {
+        "environments": 1,
+        "subjects": 4,
+        "scenario": "Empty room and activity combinations with up to four people"
+      },
+      "scale": {
+        "samples": 1777,
+        "classes": 16,
+        "archive_mb": 843
+      },
+      "original": {
+        "landing_page": "https://researchdata.gla.ac.uk/1151/",
+        "download_page": "https://researchdata.gla.ac.uk/1151/",
+        "access": "direct",
+        "license": "CC BY 4.0",
+        "redistribution": "allowed",
+        "formats": [
+          "CSV",
+          "7z",
+          "PDF"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-3s-100hz",
+        "notes": "Tag as SDR-OFDM CSI, not commodity WiFi CSI, while sharing the canonical tensor representation."
+      },
+      "sources": [
+        {
+          "type": "data",
+          "url": "https://researchdata.gla.ac.uk/1151/"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "glasgow-multiuser",
+        "implementation": "schema-implemented",
+        "patterns": [
+          "**/*.csv"
+        ],
+        "official_reference": "https://researchdata.gla.ac.uk/1151/2/ReadMe.pdf"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_occupancy",
+            "kind": "group_holdout",
+            "group_by": "occupancy",
+            "provenance": "hub"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "1_Subject_Sitting/1_Sitting_01.csv",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 1, 52]",
+        "note": "The class directory is retained as source-label provenance."
+      }
+    },
+    {
+      "id": "mm-fi",
+      "name": "MM-Fi",
+      "year": 2023,
+      "summary": "Synchronized WiFi, RGB-D, LiDAR, and mmWave data with action and pose annotations for daily and rehabilitation activities.",
+      "tasks": [
+        "har",
+        "pose",
+        "multitask"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "RGB-D",
+        "LiDAR",
+        "mmWave radar"
+      ],
+      "hardware": {
+        "platform": "TP-Link N750 access points and synchronized sensor platform",
+        "chipset": "Atheros CSI Tool",
+        "wifi_standard": "802.11n",
+        "band": "5 GHz, 40 MHz"
+      },
+      "settings": {
+        "environments": 4,
+        "subjects": 40,
+        "scenario": "Daily and rehabilitation actions in two rooms and four platform settings"
+      },
+      "scale": {
+        "sequences": 1080,
+        "synchronized_frames": 320760,
+        "activities": 27,
+        "released_sample_rate_hz": 10
+      },
+      "original": {
+        "landing_page": "https://ntu-aiot-lab.github.io/mm-fi",
+        "download_page": "https://github.com/ybhbingo/MMFi_dataset",
+        "access": "application",
+        "license": "Dataset agreement",
+        "redistribution": "restricted",
+        "formats": [
+          "MAT",
+          "NumPy",
+          "PNG",
+          "BIN"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "native-10hz",
+        "notes": "Do not upsample the released 10 Hz WiFi stream by default; retain 3×114 CSI dimensions."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://arxiv.org/abs/2305.10345"
+        },
+        {
+          "type": "repository",
+          "url": "https://github.com/ybhbingo/MMFi_dataset"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "mm-fi",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/wifi-csi"
+        ],
+        "official_reference": "https://github.com/ybhbingo/MMFi_dataset/blob/main/mmfi_lib/mmfi.py",
+        "accept_directories": true
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "official",
+            "ratios": [
+              0.8,
+              0.1,
+              0.1
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "official"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "official"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "E01/S01/A01/wifi-csi/",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, L, S]",
+        "note": "Place the complete frame*.mat directory; E/S/A identifiers drive environment, subject, and activity metadata."
+      }
+    },
+    {
+      "id": "nist-breathesmart",
+      "name": "NIST BreatheSmart CSI",
+      "year": 2023,
+      "summary": "Government open data containing raw real and imaginary WiFi CSI for controlled respiratory-motion experiments with a breathing manikin.",
+      "tasks": [
+        "vital_sign"
+      ],
+      "modalities": [
+        "WiFi CSI"
+      ],
+      "hardware": {
+        "platform": "MIMO-OFDM WiFi test system",
+        "chipset": null,
+        "wifi_standard": null,
+        "band": null
+      },
+      "settings": {
+        "environments": 1,
+        "subjects": 0,
+        "scenario": "Anatomically correct breathing manikin under controlled respiratory motion"
+      },
+      "scale": {
+        "human_subjects": 0,
+        "data_organization": "Files corresponding to publication figures"
+      },
+      "original": {
+        "landing_page": "https://doi.org/10.18434/mds2-2963",
+        "download_page": "https://data.nist.gov/od/ds/ark:/88434/mds2-2963/BreatheSmartv2.zip",
+        "access": "direct",
+        "license": "NIST open license",
+        "redistribution": "allowed",
+        "formats": [
+          "CSV",
+          "ZIP",
+          "DOCX documentation"
+        ]
+      },
+      "standardization": {
+        "status": "verified",
+        "profile": "vital-sign",
+        "notes": "Task profile: 10 Hz, 60 s. Verified on official BreatheSmartv2.zip. Adapter pairs real/imaginary CSI logs, reshapes 9 links × 114 subcarriers, preserves config metadata. Derived views keep native MIMO dimensions."
+      },
+      "sources": [
+        {
+          "type": "data",
+          "url": "https://data.nist.gov/od/id/mds2-2963"
+        }
+      ],
+      "verified_at": "2026-07-07",
+      "conversion": {
+        "handler": "nist-breathesmart",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*_csi_real_log.csv"
+        ],
+        "official_reference": "https://data.nist.gov/od/ds/mds2-2963/ReadMe%20v2.docx"
+      },
+      "split_settings": {
+        "default": "by_experiment",
+        "settings": [
+          {
+            "id": "by_experiment",
+            "kind": "group_holdout",
+            "group_by": "experiment",
+            "provenance": "hub",
+            "description": "Keep publication-figure experiments separate."
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "config0001_csi_real_log.csv",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 9, 114]",
+        "note": "Keep the matching imaginary log and config0001.csv in the same directory."
+      }
+    },
+    {
+      "id": "ntu-fi",
+      "name": "NTU-Fi HAR and Human-ID",
+      "year": 2022,
+      "summary": "Paired Atheros-platform benchmarks for six-class human activity recognition and gait-based identification of fourteen people.",
+      "tasks": [
+        "har",
+        "fall",
+        "identity"
+      ],
+      "modalities": [
+        "WiFi CSI amplitude"
+      ],
+      "hardware": {
+        "platform": "Embedded WiFi sensing system",
+        "chipset": "Atheros CSI Tool",
+        "wifi_standard": "802.11n",
+        "band": null
+      },
+      "settings": {
+        "environments": null,
+        "subjects": 14,
+        "scenario": "Segmented activities and gait identity recordings"
+      },
+      "scale": {
+        "har_samples": 1200,
+        "human_id_samples": 840,
+        "har_classes": 6,
+        "identity_classes": 14,
+        "shape": "3×114×500"
+      },
+      "original": {
+        "landing_page": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark",
+        "download_page": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark",
+        "access": "account",
+        "license": "Processed benchmark access via linked cloud storage; verify dataset terms",
+        "redistribution": "restricted",
+        "formats": [
+          "Processed amplitude arrays"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-500-packets",
+        "notes": "Published benchmark representation is amplitude-only; do not imply that raw complex CSI is available."
+      },
+      "sources": [
+        {
+          "type": "repository",
+          "url": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "ntu-fi",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/train_amp/**/*.mat",
+          "**/test_amp/**/*.mat",
+          "**/train_amp/*.mat",
+          "**/test_amp/*.mat"
+        ],
+        "official_reference": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark/blob/main/dataset.py"
+      },
+      "split_settings": {
+        "default": "official",
+        "settings": [
+          {
+            "id": "official",
+            "kind": "predefined",
+            "provenance": "official",
+            "description": "Preserve SenseFi train/test directories."
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.8,
+              0.1,
+              0.1
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "hub"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "train_amp/walk/sample_001.mat",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 3, 114]",
+        "note": "SenseFi's time-axis downsampling and canonical transpose are applied."
+      }
+    },
+    {
+      "id": "operanet",
+      "name": "OPERAnet",
+      "year": 2022,
+      "summary": "Synchronized complex WiFi CSI, UWB, passive WiFi radar, and Kinect dataset for activity recognition and localization.",
+      "tasks": [
+        "har",
+        "spatial_localization",
+        "multitask"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "UWB",
+        "passive WiFi radar",
+        "Kinect"
+      ],
+      "hardware": {
+        "platform": "Three Intel NUC devices plus RF and vision sensors",
+        "chipset": "Intel 5300",
+        "wifi_standard": "802.11n",
+        "band": "5 GHz"
+      },
+      "settings": {
+        "environments": 2,
+        "subjects": 6,
+        "scenario": "Daily activities and natural movement in two rooms"
+      },
+      "scale": {
+        "hours": 8,
+        "activities": 6
+      },
+      "original": {
+        "landing_page": "https://doi.org/10.1038/s41597-022-01573-2",
+        "download_page": "https://doi.org/10.6084/m9.figshare.c.5551209",
+        "access": "direct",
+        "license": "CC BY 4.0",
+        "redistribution": "allowed",
+        "formats": [
+          "MAT",
+          "CSV",
+          "video"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "general-sensing",
+        "notes": "Task profile: 100 Hz, 3 s. Retain complex CSI and synchronized timestamps; WiFi can be downloaded independently by modality."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://doi.org/10.1038/s41597-022-01573-2"
+        },
+        {
+          "type": "data",
+          "url": "https://doi.org/10.6084/m9.figshare.c.5551209"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "operanet",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.mat"
+        ],
+        "official_reference": "https://www.nature.com/articles/s41597-022-01573-2#Sec11"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "WiFi/exp001.mat",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 9, 30]",
+        "note": "The 270 tx/rx/subcarrier MATLAB-table fields are ordered deterministically."
+      }
+    },
+    {
+      "id": "signfi",
+      "name": "SignFi",
+      "year": 2018,
+      "summary": "Fine-grained sign-language recognition dataset collected from WiFi CSI in laboratory and home environments.",
+      "tasks": [
+        "gesture"
+      ],
+      "modalities": [
+        "WiFi CSI"
+      ],
+      "hardware": {
+        "platform": "WiFi transmitter and receiver",
+        "chipset": "Intel 5300",
+        "wifi_standard": "802.11n",
+        "band": "5 GHz"
+      },
+      "settings": {
+        "environments": 2,
+        "subjects": 5,
+        "scenario": "276 sign-language gestures in lab and home settings"
+      },
+      "scale": {
+        "samples_reported_by_csi_bench": 14300,
+        "gesture_classes": 276,
+        "approx_packets_per_gesture": 200
+      },
+      "original": {
+        "landing_page": "https://yongsen.github.io/SignFi/",
+        "download_page": "https://yongsen.github.io/SignFi/",
+        "access": "application",
+        "license": "SignFi Dataset Terms of Use",
+        "redistribution": "restricted",
+        "formats": [
+          "MAT complex CSI"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-native",
+        "notes": "Access requires accepting dataset terms; preserve lab/home domain and user splits."
+      },
+      "sources": [
+        {
+          "type": "project",
+          "url": "https://yongsen.github.io/SignFi/"
+        },
+        {
+          "type": "paper",
+          "url": "https://doi.org/10.1145/3191755"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "signfi",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/dataset_*.mat"
+        ],
+        "official_reference": "https://github.com/yongsen/SignFi/blob/master/README.md"
+      },
+      "split_settings": {
+        "default": "official_groups",
+        "settings": [
+          {
+            "id": "official_groups",
+            "kind": "source_groups",
+            "group_by": "release_group",
+            "provenance": "official",
+            "description": "Preserve Home276, Lab276, Lab+Home276, and Lab150 release groups.",
+            "source": "https://yongsen.github.io/SignFi/"
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "dataset_lab_276_dl.mat",
+        "primary_array": "amplitude",
+        "expected_shape": "[N, 200, 3, 30]",
+        "note": "Complex CSI and lab/home labels are retained."
+      }
+    },
+    {
+      "id": "ut-har",
+      "name": "UT-HAR",
+      "year": 2017,
+      "summary": "Widely used seven-class clip-level WiFi CSI benchmark containing daily activities and falls.",
+      "tasks": [
+        "har",
+        "fall"
+      ],
+      "modalities": [
+        "WiFi CSI amplitude"
+      ],
+      "hardware": {
+        "platform": "Laptop CSI receiver",
+        "chipset": "Intel 5300",
+        "wifi_standard": "802.11n",
+        "band": "5 GHz"
+      },
+      "settings": {
+        "environments": 1,
+        "subjects": null,
+        "scenario": "Controlled single-person indoor activities"
+      },
+      "scale": {
+        "samples": 4973,
+        "classes": 7,
+        "shape": "250×90"
+      },
+      "original": {
+        "landing_page": "https://github.com/ermongroup/Wifi_Activity_Recognition",
+        "download_page": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark",
+        "access": "account",
+        "license": "Dataset license not clearly stated",
+        "redistribution": "unclear",
+        "formats": [
+          "CSV processed amplitude"
+        ]
+      },
+      "standardization": {
+        "status": "verified",
+        "profile": "clip-250-packets",
+        "notes": "Verified on the official SenseFi X_test/y_test pair. Values are upstream processed amplitude features and can be negative; no phase, timestamp, or physical power is invented."
+      },
+      "sources": [
+        {
+          "type": "repository",
+          "url": "https://github.com/ermongroup/Wifi_Activity_Recognition"
+        },
+        {
+          "type": "repository",
+          "url": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark"
+        }
+      ],
+      "verified_at": "2026-07-02",
+      "conversion": {
+        "handler": "ut-har",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.npz",
+          "**/data/*.csv"
+        ],
+        "official_reference": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark/blob/main/dataset.py"
+      },
+      "split_settings": {
+        "default": "official",
+        "settings": [
+          {
+            "id": "official",
+            "kind": "predefined",
+            "provenance": "official",
+            "description": "Preserve released 3977/996 train/test split."
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.8,
+              0.1,
+              0.1
+            ]
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "UT_HAR/data/X_test.csv",
+        "primary_array": "amplitude",
+        "expected_shape": "[N, 250, 3, 30]",
+        "note": "Keep UT_HAR/label/y_test.csv beside the data/ tree; these .csv files contain NumPy binary payloads."
+      }
+    },
+    {
+      "id": "wallhack18k",
+      "name": "Wallhack1.8k",
+      "year": 2024,
+      "summary": "Open raw WiFi packet and spectrogram dataset for presence and activity recognition in line-of-sight and through-wall settings.",
+      "tasks": [
+        "har",
+        "occupancy"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "CSI amplitude spectrogram"
+      ],
+      "hardware": {
+        "platform": "Two WiFi systems with BQ and PIFA antennas",
+        "chipset": "Espressif-compatible CSI format",
+        "wifi_standard": "802.11n",
+        "band": "2.4 GHz"
+      },
+      "settings": {
+        "environments": 6,
+        "subjects": null,
+        "scenario": "LoS and NLoS/through-wall; no presence, walking, walking plus arm waving"
+      },
+      "collection": {
+        "device": "ESP32-S3 CSI (BQ biquad + PIFA antenna systems)",
+        "distance": "1.8–18 m (LoS hallway and through-wall NLoS)",
+        "subjects": "Not reported as subject IDs (single-person activity recordings)",
+        "labels": {
+          "activity": "0 = no presence; 1 = walking; 2 = walking + arm-waving"
+        },
+        "scenario_labels": "NLoS room: 0 = none; 1–5 = room index · LoS / NLoS hallway and through-wall paths",
+        "band": "2.4 GHz (802.11n)",
+        "subcarriers": 52,
+        "subcarrier_spacing": "312.5 kHz (standard 20 MHz OFDM L-LTF; inferred, not stored in release)",
+        "sampling_rate_hz": 100,
+        "clip_length": "~4 s (400 packets) in official spectrograms",
+        "scenario": "LoS hallway path and through-wall NLoS across adjacent offices"
+      },
+      "scale": {
+        "samples": 1806,
+        "classes": 3,
+        "nominal_sample_rate_hz": 100,
+        "window_seconds": 4
+      },
+      "original": {
+        "landing_page": "https://zenodo.org/records/8188999",
+        "download_page": "https://zenodo.org/records/8188999",
+        "access": "direct",
+        "license": "Open Zenodo record; verify file license metadata",
+        "redistribution": "unclear",
+        "formats": [
+          "CSV raw I/Q",
+          "PNG spectrogram",
+          "CSV labels"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "general-sensing",
+        "notes": "Task profile: 100 Hz, 3 s. Parse interleaved imaginary/real values, select documented L-LTF or HT-LTF subcarriers, and retain scenario/antenna labels. Keep native link/subcarrier counts."
+      },
+      "sources": [
+        {
+          "type": "data",
+          "url": "https://zenodo.org/records/8188999"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "wallhack18k",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.csv"
+        ],
+        "official_reference": "https://zenodo.org/records/8188999"
+      },
+      "split_settings": {
+        "default": "official",
+        "settings": [
+          {
+            "id": "official",
+            "kind": "predefined",
+            "provenance": "official",
+            "description": "Preserve trainLabels, validationLabels, and testLabels."
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "scenario",
+            "provenance": "official",
+            "description": "LoS versus NLoS/through-wall."
+          },
+          {
+            "id": "cross_device",
+            "kind": "group_holdout",
+            "group_by": "device",
+            "provenance": "official",
+            "description": "BQ versus PIFA WiFi systems."
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "LOS/BQ/w1.csv",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 1, 52]",
+        "note": "Interleaved imaginary/real samples are parsed and documented ESP32 subcarriers are selected."
+      }
+    },
+    {
+      "id": "wiar",
+      "name": "WiAR",
+      "year": 2019,
+      "summary": "Public cross-environment WiFi activity and gesture dataset with sixteen actions performed by ten volunteers in three indoor environments.",
+      "tasks": [
+        "har",
+        "gesture"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "RSSI"
+      ],
+      "hardware": {
+        "platform": "Router and laptop receiver",
+        "chipset": "Intel 5300",
+        "wifi_standard": "802.11n",
+        "band": null
+      },
+      "settings": {
+        "environments": 3,
+        "subjects": 10,
+        "scenario": "Empty room, meeting room, and office with activity and gesture classes"
+      },
+      "scale": {
+        "samples": 4800,
+        "activities": 16,
+        "trials_per_activity_per_subject": 50
+      },
+      "original": {
+        "landing_page": "https://doi.org/10.1109/ACCESS.2019.2947024",
+        "download_page": null,
+        "access": "unclear",
+        "license": "Dataset license and current official download require confirmation",
+        "redistribution": "unclear",
+        "formats": [
+          "CSI files",
+          "RSSI"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-4s-100hz",
+        "notes": "Intel 5300 beamforming-record parser is implemented from the official MATLAB/C reference; current release access still requires confirmation."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://doi.org/10.1109/ACCESS.2019.2947024"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "wiar-intel5300",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.dat"
+        ],
+        "official_reference": "https://github.com/linteresa/WiAR/blob/master/codes/read_bf_file.m"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "office/subject_01/walk_01.dat",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, Tx×Rx, 30]",
+        "note": "The Intel 5300 beamforming records are decoded directly from the official binary format."
+      }
+    },
+    {
+      "id": "widar3",
+      "name": "Widar3.0",
+      "year": 2021,
+      "summary": "Large cross-domain gesture dataset with raw CSI and body-coordinate velocity profile representations across users, rooms, positions, and orientations.",
+      "tasks": [
+        "gesture",
+        "har"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "body-coordinate velocity profile"
+      ],
+      "hardware": {
+        "platform": "One transmitter and six receivers",
+        "chipset": "Intel 5300",
+        "wifi_standard": "802.11n",
+        "band": "5 GHz"
+      },
+      "settings": {
+        "environments": 3,
+        "subjects": 16,
+        "scenario": "Gestures at multiple positions and orientations"
+      },
+      "scale": {
+        "samples_reported_by_csi_bench": 271100,
+        "processed_gesture_samples_in_sensefi": 43652,
+        "gesture_classes": 22
+      },
+      "original": {
+        "landing_page": "https://tns.thss.tsinghua.edu.cn/widar3.0/",
+        "download_page": "https://tns.thss.tsinghua.edu.cn/widar3.0/",
+        "access": "direct",
+        "license": "Research use; verify project terms",
+        "redistribution": "restricted",
+        "formats": [
+          "DAT",
+          "MAT",
+          "BVP"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-4s-100hz",
+        "notes": "Expose raw CSI and BVP as separate representations; never label BVP as raw CSI."
+      },
+      "sources": [
+        {
+          "type": "project",
+          "url": "https://tns.thss.tsinghua.edu.cn/widar3.0/"
+        },
+        {
+          "type": "repository",
+          "url": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "widar3",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/Widardata/train/**/*.csv",
+          "**/Widardata/test/**/*.csv",
+          "**/train/**/*.csv",
+          "**/test/**/*.csv"
+        ],
+        "official_reference": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark/blob/main/dataset.py"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "official"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "official"
+          },
+          {
+            "id": "cross_location",
+            "kind": "group_holdout",
+            "group_by": "location",
+            "provenance": "official"
+          },
+          {
+            "id": "cross_orientation",
+            "kind": "group_holdout",
+            "group_by": "orientation",
+            "provenance": "official"
+          },
+          {
+            "id": "cross_device",
+            "kind": "group_holdout",
+            "group_by": "device",
+            "provenance": "official",
+            "description": "Receiver/deployment holdout."
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "Widardata/train/user1/gesture1/sample.csv",
+        "primary_array": "bvp",
+        "expected_shape": "[22, 20, 20]",
+        "note": "This benchmark release stores processed BVP rather than raw CSI."
+      }
+    },
+    {
+      "id": "wifi-80mhz",
+      "name": "CSI Dataset for Wireless Human Sensing on 80 MHz Wi-Fi Channels",
+      "year": 2023,
+      "summary": "Modern 802.11ac CSI dataset designed for activity recognition, person identification, and people counting with hardware and environment diversity.",
+      "tasks": [
+        "har",
+        "identity",
+        "occupancy"
+      ],
+      "modalities": [
+        "WiFi CSI"
+      ],
+      "hardware": {
+        "platform": "Multiple commercial 802.11ac devices",
+        "chipset": null,
+        "wifi_standard": "802.11ac",
+        "band": "5 GHz, 80 MHz"
+      },
+      "settings": {
+        "environments": null,
+        "subjects": 13,
+        "scenario": "Multiple environments, days, hardware configurations, blocked direct path, and semi-anechoic chamber"
+      },
+      "scale": {
+        "hours": 13,
+        "size_gb": 23.6,
+        "subsets": 26
+      },
+      "original": {
+        "landing_page": "https://arxiv.org/abs/2305.03170",
+        "download_page": "https://doi.org/10.21227/0p2j-zy98",
+        "access": "account",
+        "license": "IEEE DataPort terms",
+        "redistribution": "restricted",
+        "formats": [
+          "Dataset-specific CSI files"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "continuous-100hz",
+        "notes": "CFR preprocessing and four-monitor deinterleaving are implemented; real-release verification still requires DataPort access."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://arxiv.org/abs/2305.03170"
+        },
+        {
+          "type": "data",
+          "url": "https://doi.org/10.21227/0p2j-zy98"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "wifi-80mhz",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.mat"
+        ],
+        "official_reference": "https://github.com/francescamen/SHARP/blob/main/Python_code/CSI_phase_sanitization_signal_preprocessing.py"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_device",
+            "kind": "group_holdout",
+            "group_by": "device",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_day",
+            "kind": "group_holdout",
+            "group_by": "day",
+            "provenance": "paper"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "AR1a_W.mat",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 4, 242]",
+        "note": "256/1024-bin CFR traces are converted to 242 carriers and four monitor links."
+      }
+    },
+    {
+      "id": "wifi-presence-movement",
+      "name": "WiFi CSI and RSS Presence/Movement",
+      "year": 2020,
+      "summary": "Long-form antenna-wise CSI and RSS collection with annotations for detecting human presence and movement.",
+      "tasks": [
+        "occupancy",
+        "har"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "RSS"
+      ],
+      "hardware": {
+        "platform": "Intel CSI Tool capture system",
+        "chipset": "Intel 5300",
+        "wifi_standard": "802.11n",
+        "band": null
+      },
+      "settings": {
+        "environments": null,
+        "subjects": null,
+        "scenario": "Ambient presence and movement monitoring over multiple capture files"
+      },
+      "scale": {
+        "size_gb": 28,
+        "example_csi_file_mb": 616
+      },
+      "original": {
+        "landing_page": "https://zenodo.org/records/3676058",
+        "download_page": "https://zenodo.org/records/3676058",
+        "access": "direct",
+        "license": "Check Zenodo record",
+        "redistribution": "unclear",
+        "formats": [
+          "Gzipped JSON CSI",
+          "Gzipped CSV RSS",
+          "CSV annotations"
+        ]
+      },
+      "standardization": {
+        "status": "verified",
+        "profile": "continuous-native",
+        "notes": "Verified on a 50-record official G19-10 CSI gzip byte-prefix sample. The adapter parses Zenodo JSON CSI records, preserves complex CSI, and can derive fixed-rate link-subcarrier views; full multi-GB release verification remains future work."
+      },
+      "sources": [
+        {
+          "type": "data",
+          "url": "https://zenodo.org/records/3676058"
+        }
+      ],
+      "verified_at": "2026-07-07",
+      "conversion": {
+        "handler": "wifi-presence-movement",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.json.gz",
+          "**/*csi*.json",
+          "**/*CSI*.json"
+        ],
+        "official_reference": "https://zenodo.org/records/3676058/files/README.txt"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_location",
+            "kind": "group_holdout",
+            "group_by": "location",
+            "provenance": "hub"
+          },
+          {
+            "id": "cross_day",
+            "kind": "group_holdout",
+            "group_by": "day",
+            "provenance": "hub"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "G19-10.csi.json.gz",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, L, 30]",
+        "note": "Gzip JSON Lines are streamed and r/i complex fields are preserved."
+      }
+    },
+    {
+      "id": "wifi-tad",
+      "name": "WiFiTAD",
+      "year": 2025,
+      "summary": "Continuous, untrimmed WiFi CSI recordings annotated with temporal boundaries for seven daily activities.",
+      "tasks": [
+        "tad_tal",
+        "fall"
+      ],
+      "modalities": [
+        "WiFi CSI"
+      ],
+      "hardware": {
+        "platform": "Two laptops",
+        "chipset": "Intel 5300",
+        "wifi_standard": "802.11n",
+        "band": null
+      },
+      "settings": {
+        "environments": 1,
+        "subjects": 3,
+        "scenario": "7 m × 12 m office; continuous random activity sequences"
+      },
+      "scale": {
+        "sequences": 553,
+        "activity_instances": 2114,
+        "activities": 7,
+        "nominal_sample_rate_hz": 100,
+        "approx_seconds_per_sequence": 85
+      },
+      "original": {
+        "landing_page": "https://arxiv.org/abs/2412.16233",
+        "download_page": null,
+        "access": "unclear",
+        "license": "Not stated for dataset",
+        "redistribution": "unclear",
+        "formats": []
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "continuous-100hz",
+        "notes": "Official NPY orientation, amplitude normalization, and temporal annotation mapping are implemented; release access is tracked separately."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://arxiv.org/abs/2412.16233"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "wifi-tad",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/smartwifi/**/*.npy",
+          "**/validation_npy/*.npy",
+          "**/test_npy/*.npy"
+        ],
+        "official_reference": "https://github.com/AVC2-UESTC/WiFiTAD/blob/main/TAD/dataset/load_csi.py"
+      },
+      "split_settings": {
+        "default": "official",
+        "settings": [
+          {
+            "id": "official",
+            "kind": "predefined",
+            "provenance": "official",
+            "description": "Released 70/30 train/test protocol."
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "paper"
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "smartwifi/validation_npy/video_01.npy",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 1, 60]",
+        "note": "Keep the annotations directory beside smartwifi to attach temporal activity segments."
+      }
+    },
+    {
+      "id": "wimans",
+      "name": "WiMANS",
+      "year": 2024,
+      "summary": "Dual-band WiFi CSI and synchronized video for simultaneous activities, identities, locations, and occupancy from zero to five users.",
+      "tasks": [
+        "har",
+        "occupancy",
+        "identity",
+        "spatial_localization",
+        "multitask"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "video"
+      ],
+      "hardware": {
+        "platform": "One transmitter-receiver pair",
+        "chipset": "Intel 5300",
+        "wifi_standard": "802.11n",
+        "band": "2.4/5 GHz"
+      },
+      "settings": {
+        "environments": 3,
+        "subjects": 6,
+        "scenario": "0–5 simultaneous users performing activities at labeled locations"
+      },
+      "scale": {
+        "samples": 11286,
+        "hours": 9.4,
+        "activities": 9,
+        "nominal_packets_per_sample": 3000
+      },
+      "original": {
+        "landing_page": "https://github.com/huangshk/WiMANS",
+        "download_page": "https://www.kaggle.com/datasets/shuokanghuang/wimans",
+        "access": "account",
+        "license": "Academic research terms; verify release",
+        "redistribution": "restricted",
+        "formats": [
+          "MAT",
+          "video",
+          "CSV annotations"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-3s-100hz",
+        "notes": "Represent packet loss explicitly; preserve dual-band identity and multi-label annotations."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://arxiv.org/abs/2402.09430"
+        },
+        {
+          "type": "repository",
+          "url": "https://github.com/huangshk/WiMANS"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "wimans",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/wifi_csi/amp/*.npy",
+          "**/wifi_csi/mat/*.mat"
+        ],
+        "official_reference": "https://github.com/huangshk/WiMANS/blob/main/benchmark/wifi_csi/load_data.py"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "paper",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "hub"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "hub"
+          },
+          {
+            "id": "cross_band",
+            "kind": "group_holdout",
+            "group_by": "band",
+            "provenance": "hub"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "wifi_csi/amp/act_1_1.npy",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, L, S]",
+        "note": "Both official amplitude NPY and raw MAT branches are recognized."
+      }
+    },
+    {
+      "id": "wipe-fall",
+      "name": "WiPE-FaLl",
+      "year": 2024,
+      "summary": "Wireless CSI amplitude dataset for estimating low, medium, and high fall likelihood from simulated timed up-and-go tests.",
+      "tasks": [
+        "fall"
+      ],
+      "modalities": [
+        "Wireless CSI amplitude"
+      ],
+      "hardware": {
+        "platform": "Two USRP X300 software-defined radios with VERT2450 antennas",
+        "chipset": "USRP X300",
+        "wifi_standard": "Custom OFDM",
+        "band": null
+      },
+      "settings": {
+        "environments": 1,
+        "subjects": null,
+        "scenario": "Timed up-and-go trials under three simulated balance-risk conditions"
+      },
+      "scale": {
+        "samples": 1500,
+        "risk_classes": 3
+      },
+      "original": {
+        "landing_page": "https://researchdata.gla.ac.uk/1623/",
+        "download_page": "https://researchdata.gla.ac.uk/1623/",
+        "access": "direct",
+        "license": "University repository terms; verify record",
+        "redistribution": "unclear",
+        "formats": [
+          "CSV amplitude"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-native",
+        "notes": "Keep fall-risk estimation distinct from binary fall-event detection and preserve trial/subject identifiers when available."
+      },
+      "sources": [
+        {
+          "type": "data",
+          "url": "https://researchdata.gla.ac.uk/1623/"
+        }
+      ],
+      "verified_at": "2026-07-01",
+      "conversion": {
+        "handler": "wipe-fall",
+        "implementation": "schema-implemented",
+        "patterns": [
+          "**/*.csv"
+        ],
+        "official_reference": "https://researchdata.gla.ac.uk/1623/1/ReadMe.docx"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "hub"
+          },
+          {
+            "id": "cross_location",
+            "kind": "group_holdout",
+            "group_by": "location",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "low_risk/trial_001.csv",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 1, 51]",
+        "note": "The requested release is amplitude-only; keep risk/trial directories for provenance."
+      }
+    },
+    {
+      "id": "wireless-har-wifi-uwb",
+      "name": "Wireless Sensing HAR (WiFi + UWB)",
+      "year": 2022,
+      "summary": "Multimodal human-activity dataset combining WiFi CSI across three rooms with UWB channel impulse responses.",
+      "tasks": [
+        "har",
+        "multitask"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "UWB CIR"
+      ],
+      "hardware": {
+        "platform": "WiFi CSI and commercial UWB sensing systems",
+        "chipset": "Intel 5300 for WiFi subset",
+        "wifi_standard": "802.11n",
+        "band": null
+      },
+      "settings": {
+        "environments": 3,
+        "subjects": null,
+        "scenario": "Human activities across three WiFi rooms and one UWB room"
+      },
+      "scale": {
+        "size_gb": 7.97,
+        "wifi_rooms": 3,
+        "uwb_rooms": 1
+      },
+      "original": {
+        "landing_page": "https://figshare.com/articles/dataset/20444538",
+        "download_page": "https://figshare.com/articles/dataset/20444538",
+        "access": "direct",
+        "license": "CC BY 4.0",
+        "redistribution": "allowed",
+        "formats": [
+          "MAT",
+          "dataset-specific RF files"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "continuous-native",
+        "notes": "Standardize WiFi independently while preserving synchronization and modality provenance when UWB is retained."
+      },
+      "sources": [
+        {
+          "type": "data",
+          "url": "https://figshare.com/articles/dataset/20444538"
+        }
+      ],
+      "verified_at": "2026-07-01",
+      "conversion": {
+        "handler": "wireless-har-wifi-uwb",
+        "implementation": "schema-implemented",
+        "patterns": [
+          "**/WiFi_CSI/**/*.csv",
+          "**/WiFi_CSI/**/*.mat",
+          "**/WiFi_CSI/**/*.h5",
+          "**/WiFi_CSI/**/*.hdf5",
+          "**/WiFi_CSI/**/*.npz",
+          "**/WiFi_CSI/**/*.npy"
+        ],
+        "official_reference": "https://figshare.com/articles/dataset/20444538"
+      },
+      "split_settings": {
+        "default": "random",
+        "settings": [
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_device",
+            "kind": "group_holdout",
+            "group_by": "device",
+            "provenance": "hub"
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "Wireless_sensing_human_activity_recognition/WiFi_CSI/Room_1/walk_01.mat",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, L, S]",
+        "note": "Only files below WiFi_CSI are converted; the sibling UWB branch is intentionally excluded."
+      }
+    },
+    {
+      "id": "xrf-v2",
+      "name": "XRF V2",
+      "year": 2025,
+      "summary": "Multimodal continuous daily-activity dataset for temporal action localization and action summarization in smart-home rooms.",
+      "tasks": [
+        "tad_tal",
+        "multitask"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "phone IMU",
+        "watch IMU",
+        "earbud IMU",
+        "glasses IMU",
+        "RGB-D video"
+      ],
+      "hardware": {
+        "platform": "WiFi array plus consumer-device IMU simulators and Azure Kinect",
+        "chipset": null,
+        "wifi_standard": null,
+        "band": null
+      },
+      "settings": {
+        "environments": 3,
+        "subjects": 16,
+        "scenario": "Dining room, study room, and bedroom; 7–10 actions per sequence"
+      },
+      "scale": {
+        "sequences": 853,
+        "hours": 16.27,
+        "train_sequences": 682,
+        "test_sequences": 171
+      },
+      "original": {
+        "landing_page": "https://github.com/aiotgroup/XRFV2",
+        "download_page": "https://www.kaggle.com/datasets/laptype/xrf-v2/data",
+        "access": "account",
+        "license": "Check repository and Kaggle release",
+        "redistribution": "unclear",
+        "formats": [
+          "NumPy",
+          "annotations"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "continuous-native",
+        "notes": "Official HDF5 WiFi adapter converts [time,3 receivers,3 channels,30 subcarriers] to [time,9 links,30 subcarriers] and preserves source labels."
+      },
+      "sources": [
+        {
+          "type": "paper",
+          "url": "https://arxiv.org/abs/2501.19034"
+        },
+        {
+          "type": "repository",
+          "url": "https://github.com/aiotgroup/XRFV2"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "xrf-v2",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/*.h5",
+          "**/*.hdf5"
+        ],
+        "official_reference": "https://github.com/aiotgroup/XRFV2/blob/main/dataset/modality/wifi.py"
+      },
+      "split_settings": {
+        "default": "official",
+        "settings": [
+          {
+            "id": "official",
+            "kind": "predefined",
+            "provenance": "official",
+            "description": "Preserve 682 training and 171 testing sequences."
+          },
+          {
+            "id": "leave_one_subject_out",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "official"
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.8,
+              0.1,
+              0.1
+            ]
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "WiFi/sequence_001.h5",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 9, 30]",
+        "note": "Three receivers and three channels are flattened into nine documented links."
+      }
+    },
+    {
+      "id": "xrf55",
+      "name": "XRF55",
+      "year": 2024,
+      "summary": "Large multimodal dataset of 55 segmented indoor actions for cross-modal and cross-domain human activity recognition.",
+      "tasks": [
+        "har",
+        "multitask"
+      ],
+      "modalities": [
+        "WiFi CSI",
+        "mmWave radar",
+        "RFID",
+        "RGB-D video"
+      ],
+      "hardware": {
+        "platform": "WiFi transmitter and three receivers plus RF sensors",
+        "chipset": "Intel 5300",
+        "wifi_standard": "802.11n",
+        "band": null
+      },
+      "settings": {
+        "environments": 4,
+        "subjects": 39,
+        "scenario": "Segmented indoor actions across people and scenes"
+      },
+      "scale": {
+        "samples": 42900,
+        "activities": 55
+      },
+      "original": {
+        "landing_page": "https://github.com/aiotgroup/XRF55-repo",
+        "download_page": null,
+        "access": "unclear",
+        "license": "Check repository release",
+        "redistribution": "unclear",
+        "formats": [
+          "DAT",
+          "MAT",
+          "NumPy"
+        ]
+      },
+      "standardization": {
+        "status": "adapter-ready",
+        "profile": "clip-4s-100hz",
+        "notes": "Keep XRF55 separate from XRF V2; flatten three WiFi receivers into a documented link dimension."
+      },
+      "sources": [
+        {
+          "type": "repository",
+          "url": "https://github.com/aiotgroup/XRF55-repo"
+        }
+      ],
+      "verified_at": "2026-06-28",
+      "conversion": {
+        "handler": "xrf55",
+        "implementation": "reference-implemented",
+        "patterns": [
+          "**/Raw_dataset/WiFi/*.npy",
+          "**/XRF_dataset/train_data/WiFi/*.npy",
+          "**/XRF_dataset/test_data/WiFi/*.npy",
+          "**/train_data/WiFi/*.npy",
+          "**/test_data/WiFi/*.npy"
+        ],
+        "official_reference": "https://github.com/aiotgroup/XRF55-repo/blob/main/XRFDataset.py"
+      },
+      "split_settings": {
+        "default": "official",
+        "settings": [
+          {
+            "id": "official",
+            "kind": "trial_order",
+            "provenance": "official",
+            "group_by": "trial",
+            "description": "First 14 repetitions train; last 6 test.",
+            "source": "https://aiotgroup.github.io/XRF55/"
+          },
+          {
+            "id": "cross_subject",
+            "kind": "group_holdout",
+            "group_by": "subject",
+            "provenance": "paper"
+          },
+          {
+            "id": "cross_environment",
+            "kind": "group_holdout",
+            "group_by": "environment",
+            "provenance": "paper"
+          },
+          {
+            "id": "random",
+            "kind": "random",
+            "provenance": "hub",
+            "ratios": [
+              0.7,
+              0.15,
+              0.15
+            ]
+          }
+        ]
+      },
+      "conversion_example": {
+        "source_path": "Raw_dataset/WiFi/sample_001.npy",
+        "primary_array": "amplitude",
+        "expected_shape": "[T, 9, 30]",
+        "note": "Only the WiFi modality branch is discovered by this adapter."
+      }
+    }
+  ],
+  "tasks": [
+    {
+      "id": "har",
+      "name": "Human Activity Recognition",
+      "description": "Classify a pre-segmented CSI clip into an activity.",
+      "dataset_count": 18
+    },
+    {
+      "id": "tad_tal",
+      "name": "Temporal Activity Detection / Localization",
+      "description": "Find activity classes and their temporal boundaries in continuous, untrimmed CSI.",
+      "dataset_count": 2
+    },
+    {
+      "id": "fall",
+      "name": "Fall Detection and Risk",
+      "description": "Detect falls or estimate fall risk.",
+      "dataset_count": 5
+    },
+    {
+      "id": "vital_sign",
+      "name": "Vital-sign Monitoring",
+      "description": "Estimate respiration, heartbeat, or related physiological signals.",
+      "dataset_count": 2
+    },
+    {
+      "id": "occupancy",
+      "name": "People Counting and Occupancy",
+      "description": "Estimate presence or the number of people.",
+      "dataset_count": 7
+    },
+    {
+      "id": "gesture",
+      "name": "Gesture and Sign Language",
+      "description": "Recognize fine-grained hand, arm, or sign-language gestures.",
+      "dataset_count": 5
+    },
+    {
+      "id": "identity",
+      "name": "Human Identification",
+      "description": "Identify a person from gait or body-induced CSI.",
+      "dataset_count": 6
+    },
+    {
+      "id": "spatial_localization",
+      "name": "Indoor Spatial Localization",
+      "description": "Estimate a room, zone, or physical position; distinct from TAL.",
+      "dataset_count": 7
+    },
+    {
+      "id": "pose",
+      "name": "Pose Estimation",
+      "description": "Recover body pose or keypoints from WiFi signals.",
+      "dataset_count": 1
+    },
+    {
+      "id": "motion_source",
+      "name": "Motion-source Recognition",
+      "description": "Distinguish humans, pets, fans, robots, and other moving sources.",
+      "dataset_count": 1
+    },
+    {
+      "id": "multitask",
+      "name": "Multi-task and Multimodal",
+      "description": "Joint labels or synchronized sensing modalities.",
+      "dataset_count": 12
+    },
+    {
+      "id": "machine_sensing",
+      "name": "Machine and Industrial Sensing",
+      "description": "Recognize machines, operating states, and human-machine activity in industrial settings.",
+      "dataset_count": 1
+    }
+  ],
+  "stats": {
+    "datasets": 25,
+    "tasks": 12,
+    "hardware_platforms": 25,
+    "open_or_direct": 13
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "csi-bench": {
+    "label": "Figure 1 of the CSI-Bench paper (arXiv:2505.21866)",
+    "url": "https://arxiv.org/abs/2505.21866"
+  },
+  "wallhack18k": {
+    "label": "Recording environment figure from the Wallhack1.8k paper (arXiv:2401.01388)",
+    "url": "https://arxiv.org/abs/2401.01388"
+  },
+  "operanet": {
+    "label": "Figure 1 of the OPERAnet data descriptor (Scientific Data, CC BY 4.0)",
+    "url": "https://doi.org/10.1038/s41597-022-01573-2"
+  },
+  "figshare-csi-har": {
+    "label": "Room plan (Figure 4.13) from the companion bachelor thesis by A. Zhuravchak",
+    "url": "https://github.com/Retsediv/WIFI_CSI_based_HAR"
+  },
+  "nist-breathesmart": {
+    "label": "Breathing patterns table from the official NIST ReadMe (v2)",
+    "url": "https://doi.org/10.18434/mds2-2963"
+  }
+}

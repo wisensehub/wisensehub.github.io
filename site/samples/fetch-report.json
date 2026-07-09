@@ -1,0 +1,34 @@
+{
+  "csi-bench": {
+    "status": "ok",
+    "note": "BreathingDetection sessions for both labels (empty and sleep) plus the official label mapping.",
+    "files": 3,
+    "bytes": 199917,
+    "zip_bytes": 191448
+  },
+  "wallhack18k": {
+    "status": "ok",
+    "note": "One CSV per class from the official Zenodo archive (b1.csv, w1.csv, ww1.csv). Classes: no presence, walking, arm waving. Files truncated to the first 1000 packets to keep the sample small.",
+    "files": 3,
+    "bytes": 2527732,
+    "zip_bytes": 604136
+  },
+  "nist-breathesmart": {
+    "status": "ok",
+    "note": "All nine FrameRate3 breathing patterns from the official NIST release (BreathingPattern1.tar, BreathingPattern2.tar, BreathingPattern3.tar, BreathingPattern4.tar, BreathingPattern5.tar, BreathingPattern6.tar, BreathingPattern7.tar, BreathingPattern8.tar, BreathingPattern9.tar).",
+    "files": 54,
+    "bytes": 8857289,
+    "zip_bytes": 1557866
+  },
+  "figshare-csi-har": {
+    "status": "ok",
+    "note": "Session room_1/1 with all seven HAR labels from the official Figshare release (standing, walking, sitting, lying, get up/down, no person).",
+    "files": 2,
+    "bytes": 90815947,
+    "zip_bytes": 39518335
+  },
+  "operanet": {
+    "status": "skipped",
+    "reason": "NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py"
+  }
+}

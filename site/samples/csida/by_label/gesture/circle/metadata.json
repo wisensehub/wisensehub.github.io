@@ -1,0 +1,22 @@
+{
+  "label": "Gesture/circle",
+  "slug": "gesture/circle",
+  "kind": "clip",
+  "source_file": "csi_data_amp",
+  "sample_dir": "samples/csida/by_label/gesture/circle",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    114,
+    1,
+    3
+  ],
+  "sample_rate_hz": 1000.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": 4
+}

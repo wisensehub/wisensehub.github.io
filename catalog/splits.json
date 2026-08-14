@@ -118,11 +118,9 @@
       {"id": "cross_environment", "kind": "group_holdout", "group_by": "environment", "provenance": "hub"},
       {"id": "cross_band", "kind": "group_holdout", "group_by": "band", "provenance": "hub"}
     ]},
-    "wipe-fall": {"default": "random", "settings": [
-      {"id": "random", "kind": "random", "provenance": "hub", "ratios": [0.7, 0.15, 0.15]},
-      {"id": "cross_subject", "kind": "group_holdout", "group_by": "subject", "provenance": "hub"},
-      {"id": "cross_location", "kind": "group_holdout", "group_by": "location", "provenance": "paper"},
-      {"id": "cross_environment", "kind": "group_holdout", "group_by": "environment", "provenance": "paper"}
+    "wipe-fall": {"default": "official_unseen", "settings": [
+      {"id": "official_unseen", "kind": "predefined", "provenance": "official", "description": "Use low/med/high for training and *_unseen for the held-out test set."},
+      {"id": "random", "kind": "random", "provenance": "hub", "ratios": [0.7, 0.15, 0.15]}
     ]},
     "wireless-har-wifi-uwb": {"default": "random", "settings": [
       {"id": "random", "kind": "random", "provenance": "hub", "ratios": [0.7, 0.15, 0.15]},

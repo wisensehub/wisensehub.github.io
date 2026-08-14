@@ -1,17 +1,22 @@
 {
   "csi-bench": {
     "status": "ok",
-    "note": "BreathingDetection sessions for both labels (empty and sleep) plus the official label mapping.",
-    "files": 3,
-    "bytes": 199917,
-    "zip_bytes": 191448
+    "kind": "official-mini-sample",
+    "note": "CSI-Bench mini sample: one recording per official label across all seven tasks, plus easy/medium/hard difficulty coverage where those settings exist, and each task label_mapping.json.",
+    "source_url": "https://ai-iot-sensing.github.io/projects/project.html",
+    "license": "CC BY-NC 4.0 on Kaggle; repository text should be checked per release",
+    "redistribution": "restricted",
+    "files": 51,
+    "bytes": 6683538,
+    "zip_bytes": 6476472
   },
   "wallhack18k": {
     "status": "ok",
-    "note": "One CSV per class from the official Zenodo archive (b1.csv, w1.csv, ww1.csv). Classes: no presence, walking, arm waving. Files truncated to the first 1000 packets to keep the sample small.",
-    "files": 3,
-    "bytes": 2527732,
-    "zip_bytes": 604136
+    "kind": "official-fetch-preview",
+    "delivery": "official-fetch",
+    "note": "All 44 raw CSV combinations from the official Zenodo archive: three activities across LOS/NLOS, BQ/PIFA, and rooms 1\u20135 where released. Each file is shortened to its first 1000 authentic packets.",
+    "files": 44,
+    "bytes": 37297275
   },
   "nist-breathesmart": {
     "status": "ok",
@@ -22,13 +27,197 @@
   },
   "figshare-csi-har": {
     "status": "ok",
-    "note": "Session room_1/1 with all seven HAR labels from the official Figshare release (standing, walking, sitting, lying, get up/down, no person).",
-    "files": 2,
-    "bytes": 90815947,
-    "zip_bytes": 39518335
+    "note": "Authentic sessions from all three rooms, each retaining real labels; together they cover all seven HAR labels. Licensed CC BY 4.0.",
+    "files": 9,
+    "bytes": 272713838,
+    "zip_bytes": 118147677
   },
   "operanet": {
+    "status": "ok",
+    "note": "Eight authentic, contiguous OPERAnet CSI excerpts from one receiver, covering background, noactivity, and all six released HAR activities. Figshare marks the data CC0.",
+    "files": 9,
+    "bytes": 20335659,
+    "zip_bytes": 19837484
+  },
+  "aril": {
+    "status": "ok",
+    "kind": "official-fetch-preview",
+    "delivery": "official-fetch",
+    "note": "Authentic processed CSI from the official ARIL archive: one real sample per location with all six gestures represented (16 samples total). The official repository does not state data redistribution terms, so raw files remain local.",
+    "source_url": "https://github.com/geekfeiw/ARIL",
+    "license": "Repository terms require confirmation",
+    "redistribution": "unclear",
+    "files": 2,
+    "bytes": 1206854
+  },
+  "csida": {
+    "status": "ok",
+    "kind": "official-mini-sample",
+    "note": "6 authentic processed CSIDA clips from the official Mendeley release, covering all six gestures, both rooms, all released position IDs, and all five users. Licensed CC BY 4.0.",
+    "source_url": "https://data.mendeley.com/datasets/gyr6c4nbsc/1",
+    "license": "CC BY 4.0",
+    "redistribution": "allowed",
+    "files": 34,
+    "bytes": 11185621,
+    "zip_bytes": 11190479
+  },
+  "ehunam": {
+    "status": "ok",
+    "kind": "official-mini-sample",
+    "delivery": "hosted-sample",
+    "note": "Thirty-four authentic EHUNAM recordings selected from the official Figshare release to cover every published label value available in the deposited files. Licensed CC BY 4.0.",
+    "source_url": "https://doi.org/10.6084/m9.figshare.28541225",
+    "license": "CC BY 4.0",
+    "redistribution": "allowed",
+    "files": 35,
+    "bytes": 371607182,
+    "zip_bytes": 371658574
+  },
+  "exposing-csi": {
+    "status": "ok",
+    "note": "Twelve authentic AX-CSI captures from the same S1a receiver, one for every activity A-L, each shortened to its first 600 packets. Licensed CC BY-SA 4.0.",
+    "files": 13,
+    "bytes": 239086374,
+    "zip_bytes": 232906743
+  },
+  "glasgow-activity-localization": {
+    "status": "ok",
+    "note": "Thirty-seven authentic recordings covering every activity/location class actually present in the three official archives. Six documented Location-1 classes are absent upstream and are reported, not fabricated. Licensed CC BY 4.0.",
+    "files": 38,
+    "bytes": 38065676,
+    "zip_bytes": 17285485
+  },
+  "glasgow-multiuser": {
+    "status": "ok",
+    "note": "Sixteen authentic recordings, one for every released occupancy/activity combination in the official Glasgow release. Licensed CC BY 4.0.",
+    "files": 17,
+    "bytes": 16655878,
+    "zip_bytes": 7674814
+  },
+  "mm-fi": {
+    "status": "ok",
+    "note": "Authentic 30-frame WiFi sequences for all 27 MM-Fi activities, fetched directly from the public official archive. Licensed CC BY-NC 4.0.",
+    "files": 811,
+    "bytes": 44579606,
+    "zip_bytes": 36084926
+  },
+  "ntu-fi": {
+    "status": "ok",
+    "kind": "official-fetch-preview",
+    "delivery": "official-fetch",
+    "note": "Twenty authentic NTU-Fi clips: all six HAR activities and all fourteen released identity folders, fetched from the public official SenseFi links. Raw files remain local because the dataset license is not stated.",
+    "files": 21,
+    "bytes": 109445506
+  },
+  "signfi": {
     "status": "skipped",
-    "reason": "NotImplementedError: Please use HDF reader for matlab v7.3 files, e.g. h5py"
+    "kind": "real-sample-unavailable",
+    "reason": "Download requires accepting the SignFi Terms of Use. Those terms allow non-commercial research, but prohibit publishing or making any constituent part public and prohibit redistribution without prior written approval. WiSenseHub can process your authorized copy locally, but cannot host a CSI sample or public preview.",
+    "source_url": "https://yongsen.github.io/SignFi/",
+    "license": "SignFi Dataset Terms of Use",
+    "redistribution": "restricted"
+  },
+  "ut-har": {
+    "status": "ok",
+    "kind": "official-fetch-preview",
+    "delivery": "official-fetch",
+    "note": "Seven authentic UT-HAR validation clips, one for every class, fetched from the public official SenseFi link. Raw files remain local.",
+    "files": 3,
+    "bytes": 630989
+  },
+  "wiar": {
+    "status": "ok",
+    "kind": "official-fetch-preview",
+    "delivery": "official-fetch",
+    "note": "Sixteen authentic WiAR Intel 5300 captures, one for every activity. Raw files stay local because the official repository does not state a dataset license.",
+    "files": 17,
+    "bytes": 830052,
+    "source_url": "https://github.com/linteresa/WiAR",
+    "license": "Dataset license not stated",
+    "redistribution": "unclear"
+  },
+  "widar3": {
+    "status": "ok",
+    "kind": "official-mini-sample",
+    "delivery": "hosted-sample",
+    "note": "Twenty-two authentic Widar BVP clips, one for every released gesture. Licensed CC BY 4.0.",
+    "files": 23,
+    "bytes": 4842453,
+    "zip_bytes": 240123,
+    "source_url": "https://doi.org/10.21227/jzp9-2a29",
+    "license": "CC BY 4.0",
+    "redistribution": "allowed"
+  },
+  "wifi-80mhz": {
+    "status": "skipped",
+    "kind": "account-gated-source",
+    "reason": "The official archive is CC BY 4.0, but downloading its 22.02 GB of source data requires a signed-in IEEE DataPort subscription. No authentic MAT file is present in this workspace, so WiSenseHub will not publish a generated signal as a real preview.",
+    "source_url": "https://doi.org/10.21227/xbhv-f125",
+    "license": "CC BY 4.0",
+    "redistribution": "allowed after lawful acquisition with attribution"
+  },
+  "wifi-presence-movement": {
+    "status": "ok",
+    "kind": "official-mini-sample",
+    "delivery": "hosted-sample",
+    "note": "Authentic interval-aligned CSI from all seven official states\u2014Gone, Approach, Enter, Mobile, Stationary, Exit, and Departure\u2014with the official annotations. Licensed CC BY 4.0.",
+    "source_url": "https://zenodo.org/records/3676058",
+    "license": "CC BY 4.0",
+    "redistribution": "allowed",
+    "files": 9,
+    "bytes": 557964,
+    "zip_bytes": 528499
+  },
+  "wifi-tad": {
+    "status": "ok",
+    "kind": "official-fetch-preview",
+    "delivery": "official-fetch",
+    "note": "Two authentic WiFiTAD continuous feature sequences whose official interval annotations cover all seven activities. Raw files stay local because the data license is unstated.",
+    "source_url": "https://github.com/aiotgroup/WiFiTAD",
+    "license": "Not stated for dataset",
+    "redistribution": "unclear",
+    "files": 9,
+    "bytes": 4207637
+  },
+  "wimans": {
+    "status": "ok",
+    "kind": "official-mini-sample",
+    "delivery": "hosted-sample",
+    "note": "Fourteen authentic WiMANS CSI amplitude clips: all nine activities plus five clips selected to cover all environments, bands, occupancy counts, and locations, joined to the official annotation table. Licensed CC BY-NC-SA 4.0.",
+    "source_url": "https://github.com/huangshk/WiMANS",
+    "license": "CC BY-NC-SA 4.0",
+    "redistribution": "allowed",
+    "files": 16,
+    "bytes": 43049367,
+    "zip_bytes": 22650193
+  },
+  "wipe-fall": {
+    "status": "skipped",
+    "kind": "request-only-source",
+    "reason": "The CC BY 4.0 University of Glasgow release is supplied only through its Request Data form. After the owner sends it, keep the six official folders under data/wipe-fall/original/; WiSenseHub will prepare the real 51-subcarrier files locally.",
+    "source_url": "https://researchdata.gla.ac.uk/1623/",
+    "license": "CC BY 4.0; files supplied on request",
+    "redistribution": "allowed"
+  },
+  "wireless-har-wifi-uwb": {
+    "status": "ok",
+    "note": "Eight authentic Room 2 WiFi CSI recordings, one per released activity label, plus the official Room 1 and Room 3 activity summaries. The compact sample is WiFi-only; the full release also contains UWB CIR. Licensed CC BY 4.0.",
+    "files": 11,
+    "bytes": 93888149,
+    "zip_bytes": 91396545
+  },
+  "xrf-v2": {
+    "status": "ok",
+    "note": "Seven authentic XRFV2 continuous WiFi sequences whose official interval tables cover all 34 raw action labels. The derived benchmark merges five walking destinations into one class and therefore has 30 classes. Licensed MIT.",
+    "files": 12,
+    "bytes": 97907527,
+    "zip_bytes": 86925838
+  },
+  "xrf55": {
+    "status": "ok",
+    "note": "Fifty-five authentic XRF55 WiFi clips, one per official action label, at fixed Scene 1, subject 1, repetition 1. Licensed CC BY-NC 4.0.",
+    "files": 56,
+    "bytes": 118821737,
+    "zip_bytes": 109292897
   }
 }

@@ -1,0 +1,29 @@
+{
+  "label": "Activity/turning on/off eye protection lamp",
+  "slug": "activity/turning_on_off_eye_protection_lamp",
+  "kind": "segment",
+  "source_file": "3_2_6.h5",
+  "sample_dir": "samples/xrf-v2/by_label/activity/turning_on_off_eye_protection_lamp",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 50.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 19.02,
+    "end_seconds": 27.02,
+    "start_index": 951,
+    "end_index": 1351,
+    "label_id": 8,
+    "label": "turning on/off eye protection lamp"
+  },
+  "source_sample_index": null
+}

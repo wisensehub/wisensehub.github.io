@@ -1,0 +1,22 @@
+{
+  "label": "Occupancy/0 people",
+  "slug": "occupancy/0_people",
+  "kind": "clip",
+  "source_file": "MC1_01A_1_E_#_#_#_#_03.mat",
+  "sample_dir": "samples/ehunam/by_label/occupancy/0_people",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    56,
+    1,
+    1
+  ],
+  "sample_rate_hz": 9.970641084207944,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

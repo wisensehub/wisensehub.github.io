@@ -1,0 +1,22 @@
+{
+  "label": "Activity combination/sitting",
+  "slug": "activity_combination/sitting",
+  "kind": "clip",
+  "source_file": "MC1_06_4_HAR_c_T_#_#_01.mat",
+  "sample_dir": "samples/ehunam/by_label/activity_combination/sitting",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    241,
+    1,
+    1
+  ],
+  "sample_rate_hz": 156.69722796855413,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

@@ -1,0 +1,22 @@
+{
+  "label": "Activity/rotation",
+  "slug": "activity/rotation",
+  "kind": "clip",
+  "source_file": "act_1_3.npy",
+  "sample_dir": "samples/wimans/by_label/activity/rotation",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 909.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

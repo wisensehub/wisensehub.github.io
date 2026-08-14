@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="How WiSenseHub standardizes, preprocesses, splits, and exposes WiFi sensing datasets.">
+  <title>How WiSenseHub works</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css?v=20260809-guide-axes">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="index.html"><span class="brand-mark">W</span> WiSenseHub</a>
+    <nav aria-label="Primary navigation"><a href="index.html#datasets">Datasets</a><a href="guide.html" aria-current="page">How it works</a><a href="tutorial.html">Tutorial</a><a href="https://github.com/hanqingguo/WiSenseHub">GitHub</a></nav>
+  </header>
+
+  <main class="detail-shell tutorial-shell guide-shell">
+    <a class="back-link" href="index.html#datasets">← All datasets</a>
+    <section class="detail-hero guide-hero">
+      <p class="eyebrow">ONE SHARED GUIDE</p>
+      <h1>How WiSenseHub works</h1>
+      <p>Dataset pages show only what is unique. This guide explains the shared axes, task-based time rules, data splits, masks, and Python workflow once.</p>
+      <div class="hero-actions"><a class="button primary" href="#preprocessing">See preprocessing</a><a class="button secondary" href="#schema">See the output schema</a></div>
+    </section>
+
+    <nav class="guide-index" aria-label="Guide sections">
+      <a href="#workflow"><span>01</span>Workflow</a>
+      <a href="#preprocessing"><span>02</span>Preprocessing</a>
+      <a href="#setting"><span>03</span>Data splits</a>
+      <a href="#schema"><span>04</span>Output schema</a>
+      <a href="#python"><span>05</span>Use in Python</a>
+    </nav>
+
+    <section id="workflow" class="tutorial-step">
+      <div class="section-heading"><div><p class="eyebrow">THE CORE IDEA</p><h2>Name the axes, then prepare time for the task</h2></div><p>The original release remains intact. WiSenseHub creates auditable outputs next to it.</p></div>
+      <div class="standard-jobs guide-jobs">
+        <article><span>01 · Structure</span><h3>Standardize the file contract</h3><p>A dataset adapter reads the native layout and writes paired NPZ and JSON files with named arrays, axes, labels, and provenance.</p><div class="schema-line compact"><code>source files</code><span>→</span><code>NPZ + JSON</code></div></article>
+        <article><span>02 · Signal view</span><h3>Prepare time for the task</h3><p>The task chooses the time rate and window length. Subcarriers, Tx, and Rx stay at their original sizes unless you ask for different sizes.</p><div class="schema-line compact"><code>CSI [T, S, Tx, Rx]</code><span>·</span><code>T = time</code></div></article>
+      </div>
+    </section>
+
+    <section id="preprocessing" class="tutorial-step">
+      <div class="section-heading"><div><p class="eyebrow">TIME BY TASK</p><h2>Time changes; S, Tx, and Rx stay native</h2></div><p>WiSenseHub chooses a time rate and a flexible window length for each task.</p></div>
+      <div class="preprocess-profiles">
+        <article><span class="profile-pill vital">Breathing</span><strong>10 Hz · flexible T</strong><code>[T, S, Tx, Rx]</code><small>Up to 30 seconds; native S, Tx, and Rx</small></article>
+        <article><span class="profile-pill general">Other tasks</span><strong>100 Hz · flexible T</strong><code>[T, S, Tx, Rx]</code><small>Up to 3 seconds; fall, activity, location, identity, motion, and proximity</small></article>
+      </div>
+      <p><strong>T</strong> = time · <strong>S</strong> = subcarriers · <strong>Tx</strong> = <code>tx_link</code> · <strong>Rx</strong> = <code>rx_link</code>.</p>
+      <p class="assumption-note"><strong>Missing source rate:</strong> when a source file does not report its measured sampling rate, WiSenseHub records the chosen time grid as an assumption in the JSON metadata.</p>
+      <details class="guide-details"><summary>Advanced preprocessing options</summary>
+        <div class="table-scroll"><table class="preprocess-table"><thead><tr><th>Option</th><th>You can choose</th><th>What it changes</th></tr></thead><tbody>
+          <tr><th><code>--target-rate</code></th><td>Any positive Hz</td><td>Resamples time when the source rate is known.</td></tr>
+          <tr><th><code>--duration</code></th><td>Any positive seconds</td><td>Overrides the automatic time window.</td></tr>
+          <tr><th><code>--target-length</code></th><td>Any positive integer</td><td>Sets the exact steps per window; longer recordings create more windows.</td></tr>
+          <tr><th><code>--interpolation</code></th><td><code>linear</code>, <code>nearest</code>, or <code>none</code></td><td>Chooses how time steps are resized.</td></tr>
+          <tr><th><code>--layout</code></th><td><code>canonical</code> or <code>flat</code></td><td>Keeps <code>[T, S, Tx, Rx]</code> or flattens the signal axes.</td></tr>
+          <tr><th><code>--subcarriers</code></th><td>Any positive integer</td><td>Selects or zero-pads S. Omit it to keep the original size.</td></tr>
+          <tr><th><code>--tx-links</code></th><td>Any positive integer</td><td>Selects or zero-pads Tx. Omit it to keep the original size.</td></tr>
+          <tr><th><code>--rx-links</code></th><td>Any positive integer</td><td>Selects or zero-pads Rx. Omit it to keep the original size.</td></tr>
+        </tbody></table></div>
+      </details>
+      <div class="honesty-note"><strong>No hidden overwrite or data drop</strong><p>Prepared views are derived files under <code>standardized/views/</code>. Longer recordings become consecutive windows. Only the final remainder is padded. Time and dimension masks identify every padded value, and native standardized files stay unchanged.</p></div>
+    </section>
+
+    <section id="setting" class="tutorial-step">
+      <div class="section-heading"><div><p class="eyebrow">DATA SPLITS</p><h2><code>--setting</code> does not change the signal</h2></div><p>It only decides which samples belong to training, validation, and testing.</p></div>
+      <div class="tutorial-choice">
+        <article><h3><code>random</code></h3><p>A repeatable hub-generated split. Use it for small demos when official split files are unavailable.</p></article>
+        <article><h3><code>official</code> or dataset-specific settings</h3><p>Reproduce a published protocol when the complete release includes the required subject, room, or ID information.</p></article>
+      </div>
+      <pre><code>wisensehub prepare DATASET_ID \
+  --data-root data \
+  --setting random</code></pre>
+      <p>The saved split is written to <code>data/DATASET_ID/splits/random.json</code>.</p>
+    </section>
+
+    <section id="schema" class="tutorial-step">
+      <div class="section-heading"><div><p class="eyebrow">OUTPUT CONTRACT</p><h2>One predictable folder and named axes</h2></div><p>Time length and native signal sizes can differ, but the axis names and provenance rules stay stable.</p></div>
+      <div class="tutorial-choice">
+        <article><h3>Folder structure</h3><pre><code>data/DATASET_ID/
+├── original/
+├── standardized/
+│   ├── clip.npz
+│   ├── clip.json
+│   └── views/
+├── splits/
+├── reports/
+└── prepare-manifest.json</code></pre></article>
+        <article><h3>CSI arrays</h3><pre><code>amplitude        [T, S, Tx, Rx]
+phase            [T, S, Tx, Rx]  optional
+valid_mask       [T]
+subcarrier_mask  [S]
+tx_link_mask     [Tx]
+rx_link_mask     [Rx]</code></pre><p><strong>T</strong> is time, <strong>S</strong> is subcarrier, and <strong>Tx/Rx</strong> are antenna or device links.</p></article>
+      </div>
+      <div class="honesty-note"><strong>What do the masks mean?</strong><p><code>valid_mask</code> marks real time steps. <code>subcarrier_mask</code>, <code>tx_link_mask</code>, and <code>rx_link_mask</code> mark original signal positions. <code>False</code> means WiSenseHub added zero padding to meet a requested size.</p></div>
+    </section>
+
+    <section id="python" class="tutorial-step">
+      <div class="section-heading"><div><p class="eyebrow">USE THE RESULT</p><h2>Open one training sample</h2></div><p>The split manifest points to standardized files, so model code does not need to understand the original dataset layout.</p></div>
+      <pre><code>import json
+from pathlib import Path
+import numpy as np
+
+root = Path("data/DATASET_ID")
+split = json.loads((root / "splits/random.json").read_text())
+sample_id = split["partitions"]["train"][0]
+relative_path, separator, window = sample_id.partition("::")
+path = root / relative_path
+
+with np.load(path) as sample:
+    signal = sample["amplitude"]
+    mask = sample["valid_mask"]
+    dimension_masks = {
+        name: (sample[name].shape, int(sample[name].sum()))
+        for name in ("subcarrier_mask", "tx_link_mask", "rx_link_mask")
+        if name in sample
+    }
+    if separator:
+        signal = signal[int(window)]
+        mask = mask[int(window)]
+
+print("shape:", signal.shape)
+print("valid steps:", int(mask.sum()))
+for name, (shape, real_count) in dimension_masks.items():
+    print(name, shape, "original positions:", real_count)</code></pre>
+      <div class="shared-guide-callout"><div><span>Ready to try it?</span><strong>Choose a dataset and ask the agent to prepare its sample.</strong></div><a class="button primary" href="index.html#datasets">Browse datasets</a></div>
+    </section>
+  </main>
+
+  <footer><p>Dataset-specific pages contain the facts; this guide contains the shared workflow.</p><p><a href="tutorial.html">Open the full tutorial</a></p></footer>
+</body>
+</html>

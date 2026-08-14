@@ -1,0 +1,22 @@
+{
+  "label": "Activity state/Exit",
+  "slug": "activity_state/exit",
+  "kind": "clip",
+  "source_file": "260-4.csi.json.gz",
+  "sample_dir": "samples/wifi-presence-movement/by_label/activity_state/exit",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    1,
+    3
+  ],
+  "sample_rate_hz": 205.13053259646892,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

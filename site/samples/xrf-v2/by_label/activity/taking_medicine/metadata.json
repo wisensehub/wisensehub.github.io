@@ -1,0 +1,29 @@
+{
+  "label": "Activity/taking medicine",
+  "slug": "activity/taking_medicine",
+  "kind": "segment",
+  "source_file": "3_3_14.h5",
+  "sample_dir": "samples/xrf-v2/by_label/activity/taking_medicine",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 50.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 5.0,
+    "end_seconds": 13.0,
+    "start_index": 250,
+    "end_index": 650,
+    "label_id": 5,
+    "label": "taking medicine"
+  },
+  "source_sample_index": null
+}

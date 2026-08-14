@@ -5,8 +5,7 @@
   "hardware": {"platform": "Three Intel NUC devices plus RF and vision sensors", "chipset": "Intel 5300", "wifi_standard": "802.11n", "band": "5 GHz"},
   "settings": {"environments": 2, "subjects": 6, "scenario": "Daily activities and natural movement in two rooms"},
   "scale": {"hours": 8, "activities": 6},
-  "original": {"landing_page": "https://doi.org/10.1038/s41597-022-01573-2", "download_page": "https://doi.org/10.6084/m9.figshare.c.5551209", "access": "direct", "license": "CC BY 4.0", "redistribution": "allowed", "formats": ["MAT", "CSV", "video"]},
-  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "Task profile: 100 Hz, 3 s. Retain complex CSI and synchronized timestamps; WiFi can be downloaded independently by modality."},
+  "original": {"landing_page": "https://doi.org/10.1038/s41597-022-01573-2", "download_page": "https://doi.org/10.6084/m9.figshare.c.5551209", "access": "direct", "license": "CC0", "redistribution": "allowed", "formats": ["MAT", "CSV", "video"]},
+  "standardization": {"status": "verified", "profile": "general-sensing", "notes": "Preserve complex CSI, all 30 subcarriers, and the documented 3 Tx × 3 Rx layout. Infer each excerpt's effective rate from its full millisecond timestamp span (nominal 1600 Hz), then create complete 100 Hz task windows without dropping the remainder."},
   "sources": [{"type": "paper", "url": "https://doi.org/10.1038/s41597-022-01573-2"}, {"type": "data", "url": "https://doi.org/10.6084/m9.figshare.c.5551209"}], "verified_at": "2026-06-28"
 }
-

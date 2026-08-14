@@ -1,0 +1,22 @@
+{
+  "label": "Activity/run",
+  "slug": "activity/run",
+  "kind": "clip",
+  "source_file": "S1a_B.mat",
+  "sample_dir": "samples/exposing-csi/by_label/activity/run",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    1990,
+    1,
+    4
+  ],
+  "sample_rate_hz": 166.66666666666666,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

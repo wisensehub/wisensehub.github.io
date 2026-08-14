@@ -1,12 +1,11 @@
 {
   "id": "wimans", "name": "WiMANS", "year": 2024,
-  "summary": "Dual-band WiFi CSI and synchronized video for simultaneous activities, identities, locations, and occupancy from zero to five users.",
-  "tasks": ["har", "occupancy", "identity", "spatial_localization", "multitask"], "modalities": ["WiFi CSI", "video"],
+  "summary": "Dual-band WiFi CSI and synchronized video for simultaneous activities, locations, and occupancy from zero to five users.",
+  "tasks": ["har", "occupancy", "spatial_localization", "multitask"], "modalities": ["WiFi CSI", "video"],
   "hardware": {"platform": "One transmitter-receiver pair", "chipset": "Intel 5300", "wifi_standard": "802.11n", "band": "2.4/5 GHz"},
-  "settings": {"environments": 3, "subjects": 6, "scenario": "0–5 simultaneous users performing activities at labeled locations"},
+  "settings": {"environments": 3, "subjects": null, "scenario": "0–5 simultaneous occupants performing activities at labeled locations; user_1…user_6 are annotation slots, not identity classes"},
   "scale": {"samples": 11286, "hours": 9.4, "activities": 9, "nominal_packets_per_sample": 3000},
-  "original": {"landing_page": "https://github.com/huangshk/WiMANS", "download_page": "https://www.kaggle.com/datasets/shuokanghuang/wimans", "access": "account", "license": "Academic research terms; verify release", "redistribution": "restricted", "formats": ["MAT", "video", "CSV annotations"]},
-  "standardization": {"status": "adapter-ready", "profile": "clip-3s-100hz", "notes": "Represent packet loss explicitly; preserve dual-band identity and multi-label annotations."},
+  "original": {"landing_page": "https://github.com/huangshk/WiMANS", "download_page": "https://www.kaggle.com/datasets/shuokanghuang/wimans", "access": "account", "license": "CC BY-NC-SA 4.0", "redistribution": "allowed", "formats": ["MAT", "video", "CSV annotations"]},
+  "standardization": {"status": "verified", "profile": "clip-3s-100hz", "native_shape": {"subcarriers": 30, "tx_links": 3, "rx_links": 3}, "notes": "The official [T, 3 Tx, 3 Rx, 30 subcarriers] amplitude clip is transposed to [T, S, Tx, Rx]. Activity uses the 100 Hz, 3 s task view; all 30 subcarriers and all 3 × 3 antenna links stay native. The source sends at 1000 packets/s, and packet loss explains clips shorter than 3000 packets."},
   "sources": [{"type": "paper", "url": "https://arxiv.org/abs/2402.09430"}, {"type": "repository", "url": "https://github.com/huangshk/WiMANS"}], "verified_at": "2026-06-28"
 }
-

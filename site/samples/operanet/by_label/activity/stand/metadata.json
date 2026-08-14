@@ -1,0 +1,26 @@
+{
+  "label": "Activity/stand",
+  "slug": "activity/stand",
+  "kind": "segment",
+  "source_file": "wificsi1_exp003__rows_583507_586507.mat",
+  "sample_dir": "samples/operanet/by_label/activity/stand",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 1574.278215223097,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 0.0,
+    "end_seconds": 1.905635211737246,
+    "label": "stand"
+  },
+  "source_sample_index": null
+}

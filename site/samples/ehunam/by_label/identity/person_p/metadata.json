@@ -1,0 +1,22 @@
+{
+  "label": "Identity/person p",
+  "slug": "identity/person_p",
+  "kind": "clip",
+  "source_file": "MC3_02B_2_PC_lop_#_#_#_02.mat",
+  "sample_dir": "samples/ehunam/by_label/identity/person_p",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    208,
+    1,
+    1
+  ],
+  "sample_rate_hz": 644.1552376317746,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

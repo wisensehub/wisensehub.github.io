@@ -1,0 +1,29 @@
+{
+  "label": "Activity/picking up items",
+  "slug": "activity/picking_up_items",
+  "kind": "segment",
+  "source_file": "0_3_3.h5",
+  "sample_dir": "samples/xrf-v2/by_label/activity/picking_up_items",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 50.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 0.0,
+    "end_seconds": 10.0,
+    "start_index": 0,
+    "end_index": 500,
+    "label_id": 15,
+    "label": "picking up items"
+  },
+  "source_sample_index": null
+}

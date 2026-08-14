@@ -13,16 +13,17 @@ CLASS_NAMES = ["lie_down", "fall", "walk", "pickup", "run", "sit_down", "stand_u
 
 
 def normalize_ut_har_arrays(data: np.ndarray, labels: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-    """Normalize SenseFi UT-HAR amplitude to [sample, packet, link, subcarrier]."""
+    """Normalize SenseFi UT-HAR features to [sample,time,subcarrier,tx,rx]."""
     data = np.asarray(data)
     if data.ndim == 3 and data.shape[1:] == (250, 90):
-        canonical = data.reshape(data.shape[0], 250, 3, 30)
+        links_first = data.reshape(data.shape[0], 250, 3, 30)
     elif data.ndim == 4 and data.shape[1:] == (250, 3, 30):
-        canonical = data
+        links_first = data
     elif data.ndim == 4 and data.shape[1:] == (3, 30, 250):
-        canonical = data.transpose(0, 3, 1, 2)
+        links_first = data.transpose(0, 3, 1, 2)
     else:
         raise ValueError(f"unsupported UT-HAR shape {data.shape}")
+    canonical = links_first.transpose(0, 1, 3, 2)[:, :, :, None, :]
     labels = np.asarray(labels).reshape(-1).astype(np.int16)
     if labels.size != canonical.shape[0]:
         raise ValueError("UT-HAR data and label counts differ")
@@ -53,6 +54,7 @@ def convert_ut_har_npz(input_path: Path, output_path: Path) -> Path:
         if not label_path.exists():
             raise ValueError(f"matching UT-HAR label file not found; tried: {', '.join(str(label_root / name) for name in names)}")
         data, label = source, np.load(label_path, allow_pickle=False)
+    source_shape = list(np.asarray(data).shape)
     amplitude, labels = normalize_ut_har_arrays(data, label)
     output_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(
@@ -66,10 +68,20 @@ def convert_ut_har_npz(input_path: Path, output_path: Path) -> Path:
         "schema_version": "1.0", "dataset_id": "ut-har", "source_file": input_path.name,
         "source_sha256": hashlib.sha256(input_path.read_bytes()).hexdigest(),
         "source_representation": "processed_amplitude", "standard_representation": "amplitude",
-        "shape": list(amplitude.shape), "axis_order": ["sample", "packet", "link", "subcarrier"],
+        "shape": list(amplitude.shape), "axis_order": ["sample", "time", "subcarrier", "tx_link", "rx_link"],
+        "source_shape": source_shape,
+        "source_axis_order": ["sample", "time", "flattened_rx_link_subcarrier"],
         "sample_rate_hz": None, "time_axis": "packet_index", "power_unit": "source_amplitude_arbitrary_unit",
         "labels": {"activity": CLASS_NAMES},
-        "transformations": ["reshape 90 channels to 3 links × 30 subcarriers", "cast float32"],
+        "label_sets": {"Activity": CLASS_NAMES},
+        "antenna_layout": {"tx_links": 1, "rx_links": 3},
+        "antenna_mapping_evidence": "SenseFi UT-HAR documents 90 channels as 3 antenna streams × 30 subcarriers",
+        "source_rate_status": "not reported in the processed SenseFi files",
+        "transformations": [
+            "reshape 90 flattened channels to 30 subcarriers × 1 Tx × 3 Rx",
+            "preserve signed processed feature values",
+            "cast float32",
+        ],
         "created_at": datetime.now(timezone.utc).isoformat(), "tool": "wisensehub-0.6.0"
     }
     sidecar_path = output_path.with_suffix(".json")

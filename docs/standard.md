@@ -17,19 +17,21 @@ arrays are included when supported by the source:
 | Array | Shape | Unit | Description |
 |---|---|---|---|
 | `timestamp_s` | `[T]` | seconds | Monotonic time, starting at zero |
-| `csi_real` | `[T, L, S]` | source-native | Real CSI component |
-| `csi_imag` | `[T, L, S]` | source-native | Imaginary CSI component |
-| `amplitude` | `[T, L, S]` | linear | `sqrt(real² + imag²)` |
-| `power_db_rel` | `[T, L, S]` | dB relative | `10 log10(power / reference_power)` |
+| `csi_real` | `[T, S, Tx, Rx]` | source-native | Real CSI component |
+| `csi_imag` | `[T, S, Tx, Rx]` | source-native | Imaginary CSI component |
+| `amplitude` | `[T, S, Tx, Rx]` | linear | `sqrt(real² + imag²)` |
+| `power_db_rel` | `[T, S, Tx, Rx]` | dB relative | `10 log10(power / reference_power)` |
 | `valid_mask` | `[T]` | boolean | True when supported by an observed packet |
 | `packet_index` | `[T]` | index | Original or generated packet position |
 
-Clip collections may add a leading sample axis, producing `[N,T,L,S]` and a
-mask of shape `[N,T]`. Processed task representations such as Widar3 BVP retain
-their documented axes rather than being mislabeled as raw CSI.
+The shape shown to users is always per sample: `[T,S,Tx,Rx]`. A file may store
+several samples internally, but the sample index is not part of the signal
+schema. Processed task representations such as Widar3 BVP retain their
+documented axes rather than being mislabeled as raw CSI.
 
-`L` is the flattened transmit-receive link dimension and `S` is subcarrier.
-Original antenna dimensions remain in the JSON sidecar.
+`S` is subcarrier. `Tx` and `Rx` keep the source antenna/device layout. When a
+release exposes streams but no trustworthy factorization, WiSenseHub records
+the evidence and preserves them as one Tx by all source streams.
 
 ## Native files and derived views
 
@@ -44,8 +46,8 @@ By default, `wisensehub prepare` also writes a **task-family derived view** unde
 
 | Profile | Rate | Duration | Channel policy | Typical tasks |
 |---|---|---|---|---|
-| `general-sensing` | 100 Hz | 3 s (`T=300`) | keep native `L` and `S` | HAR, occupancy, fall, motion |
-| `vital-sign` | 10 Hz | 60 s (`T=600`) | keep native `L` and `S` | breathing / vital signs |
+| `general-sensing` | 100 Hz | flexible, up to 3 s | keep native `S`, `Tx`, `Rx` | HAR, occupancy, fall, motion |
+| `vital-sign` | 10 Hz | flexible, up to 30 s | keep native `S`, `Tx`, `Rx` | breathing / vital signs |
 
 ```bash
 wisensehub prepare <dataset-id> --profile vital-sign
@@ -66,15 +68,15 @@ policies are:
 | `--duration` | Crop/pad/resample to a fixed time interval |
 | `--target-length` | Force an exact number of time steps when seconds are unknown |
 | `--interpolation` | Choose `none`, `nearest`, or `linear` |
-| `--layout canonical` | Keep `[T,L,S]` or `[N,T,L,S]` |
-| `--layout link-subcarrier` | Flatten link/subcarrier axes to `[T,F]` or `[N,T,F]` |
-| `--links`, `--subcarriers` | Optional force/pad of channel dims (off by default) |
+| `--layout canonical` | Keep `[T,S,Tx,Rx]` per sample |
+| `--layout link-subcarrier` | Flatten `S × Tx × Rx` to `[T,F]` for a model view |
+| `--subcarriers`, `--tx-links`, `--rx-links` | Optional crop/pad of signal dims (off by default) |
 
 ## Time and sampling
 
-- General sensing: 3 seconds at 100 Hz (`T=300`).
-- Vital sign: 60 seconds at 10 Hz (`T=600`).
-- Link and subcarrier counts stay native unless `--links` / `--subcarriers` are set.
+- General sensing: 100 Hz, with task-length windows up to 3 seconds.
+- Vital sign: 10 Hz, with task-length windows up to 30 seconds.
+- Subcarrier, Tx, and Rx counts stay native unless their explicit options are set.
 - Interpolation is performed independently on real and imaginary components.
 - Samples outside the observed range are zero padded and marked invalid.
 - When the source does not report a rate, the task profile rate is assumed and

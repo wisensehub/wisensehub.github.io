@@ -1,0 +1,22 @@
+{
+  "label": "Occupancy/2 people",
+  "slug": "occupancy/2_people",
+  "kind": "clip",
+  "source_file": "MC1_05_2_HAR_cd_WF_#_#_01.mat",
+  "sample_dir": "samples/ehunam/by_label/occupancy/2_people",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    241,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

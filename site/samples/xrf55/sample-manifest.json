@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "xrf55",
+  "kind": "compact-real-sample",
+  "description": "Contiguous real signal windows selected from authentic released recordings. Values are unchanged; only the time span is capped for compact hosting.",
+  "canonical_axes": [
+    "time",
+    "subcarrier",
+    "tx_link",
+    "rx_link"
+  ],
+  "max_time_steps": 200,
+  "source": "https://www.kaggle.com/datasets/xrfdataset/xrf55",
+  "license": "CC BY-NC 4.0",
+  "redistribution": "allowed",
+  "files": 110
+}

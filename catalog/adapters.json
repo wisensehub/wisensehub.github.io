@@ -198,7 +198,6 @@
       "handler": "wireless-har-wifi-uwb",
       "implementation": "schema-implemented",
       "patterns": [
-        "**/WiFi_CSI/**/*.csv",
         "**/WiFi_CSI/**/*.mat",
         "**/WiFi_CSI/**/*.h5",
         "**/WiFi_CSI/**/*.hdf5",
@@ -220,6 +219,7 @@
       "handler": "xrf55",
       "implementation": "reference-implemented",
       "patterns": [
+        "**/Scene*/Scene*/WiFi/*.npy",
         "**/Raw_dataset/WiFi/*.npy",
         "**/XRF_dataset/train_data/WiFi/*.npy",
         "**/XRF_dataset/test_data/WiFi/*.npy",

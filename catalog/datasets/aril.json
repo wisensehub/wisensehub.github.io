@@ -4,8 +4,8 @@
   "tasks": ["gesture", "spatial_localization", "multitask"], "modalities": ["Wireless CSI"],
   "hardware": {"platform": "Ettus N210 radios with Ettus clock", "chipset": "USRP N210", "wifi_standard": "Custom OFDM", "band": null},
   "settings": {"environments": 1, "subjects": 1, "scenario": "Six hand gestures at sixteen labeled indoor locations"},
-  "scale": {"samples": 1394, "gesture_classes": 6, "locations": 16, "shape": "1×52×192"},
-  "original": {"landing_page": "https://github.com/geekfeiw/ARIL", "download_page": "https://drive.google.com/open?id=1SCxUHbl6rNWM3kT0c-D4s_kyAero9_-o", "access": "account", "license": "Repository terms require confirmation", "redistribution": "unclear", "formats": ["NumPy processed data", "raw unsegmented data", "labels"]},
-  "standardization": {"status": "adapter-ready", "profile": "clip-native", "notes": "MAT adapter preserves both gesture and location labels and uses packet index because a reliable sampling rate is not asserted."},
+  "scale": {"samples": 1394, "gesture_classes": 6, "locations": 16, "shape": "192 time × 52 subcarriers"},
+  "original": {"landing_page": "https://github.com/geekfeiw/ARIL", "download_page": "https://drive.google.com/open?id=1SCxUHbl6rNWM3kT0c-D4s_kyAero9_-o", "access": "direct", "license": "Repository terms require confirmation", "redistribution": "unclear", "formats": ["MAT processed amplitude/phase", "raw unsegmented data", "labels"]},
+  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "Gesture and location use the 100 Hz task time rule. Each sample keeps all 192 source packets, 52 subcarriers, one Tx, and one Rx. The target time grid is recorded as an assumption because the processed release does not report a reliable sampling rate."},
   "sources": [{"type": "repository", "url": "https://github.com/geekfeiw/ARIL"}], "verified_at": "2026-06-28"
 }

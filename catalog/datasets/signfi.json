@@ -5,8 +5,7 @@
   "hardware": {"platform": "WiFi transmitter and receiver", "chipset": "Intel 5300", "wifi_standard": "802.11n", "band": "5 GHz"},
   "settings": {"environments": 2, "subjects": 5, "scenario": "276 sign-language gestures in lab and home settings"},
   "scale": {"samples_reported_by_csi_bench": 14300, "gesture_classes": 276, "approx_packets_per_gesture": 200},
-  "original": {"landing_page": "https://yongsen.github.io/SignFi/", "download_page": "https://yongsen.github.io/SignFi/", "access": "application", "license": "SignFi Dataset Terms of Use", "redistribution": "restricted", "formats": ["MAT complex CSI"]},
-  "standardization": {"status": "adapter-ready", "profile": "clip-native", "notes": "Access requires accepting dataset terms; preserve lab/home domain and user splits."},
-  "sources": [{"type": "project", "url": "https://yongsen.github.io/SignFi/"}, {"type": "paper", "url": "https://doi.org/10.1145/3191755"}], "verified_at": "2026-06-28"
+  "original": {"landing_page": "https://yongsen.github.io/SignFi/", "download_page": "https://yongsen.github.io/SignFi/", "access": "direct", "license": "SignFi Dataset Terms of Use", "redistribution": "restricted", "formats": ["MAT complex CSI"]},
+  "standardization": {"status": "adapter-ready", "profile": "clip-native", "native_shape": {"subcarriers": 30, "tx_links": 1, "rx_links": 3}, "notes": "Authorized local copy required. WiSenseHub can process it locally, but cannot host CSI or publish previews. The source is [200 time, 30 subcarriers, 3 Rx, samples]; each local output is [T, S, 1 Tx, 3 Rx]. The source packet rate is not reported, so any 100 Hz task view is recorded as a target-grid assumption."},
+  "sources": [{"type": "project", "url": "https://yongsen.github.io/SignFi/#terms-of-use-for-signfi-dataset"}, {"type": "repository", "url": "https://github.com/yongsen/SignFi/blob/master/sign_labels.csv"}, {"type": "paper", "url": "https://doi.org/10.1145/3191755"}], "verified_at": "2026-08-10"
 }
-

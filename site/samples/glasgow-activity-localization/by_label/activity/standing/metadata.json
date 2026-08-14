@@ -1,0 +1,22 @@
+{
+  "label": "Activity/standing",
+  "slug": "activity/standing",
+  "kind": "clip",
+  "source_file": "StandingL1Z2_95.csv",
+  "sample_dir": "samples/glasgow-activity-localization/by_label/activity/standing",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    51,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

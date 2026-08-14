@@ -1,0 +1,22 @@
+{
+  "label": "Localization/101",
+  "slug": "localization/101",
+  "kind": "clip",
+  "source_file": "session_21000__freq168.h5",
+  "sample_dir": "samples/csi-bench/by_label/localization/101",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    168,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

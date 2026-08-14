@@ -1,0 +1,161 @@
+{
+  "coverage": {
+    "BreathingDetection": {
+      "labels": {
+        "sleep": "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set1/device_Hex_1cd6be198931/Diff_easy/2022_03_08/session_24588001__freq208_5G.h5",
+        "empty": "BreathingDetection/sub_Human/user_U06/env_E10/act_empty/Dpl_HC_near_Fridge/device_Hex_1cd6be1df30d/Diff_hard/session_613001__freq208_5G.h5"
+      },
+      "settings": {
+        "easy": "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set1/device_Hex_1cd6be198931/Diff_easy/2022_03_08/session_24588001__freq208_5G.h5",
+        "hard": "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set2/device_Hex_1cd6be198931/Diff_hard/2022_03_12/session_74249002__freq208_5G.h5",
+        "medium": "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set3/device_Hex_1cd6be198931/Diff_medium/2022_03_17/session_101876002__freq208_5G.h5"
+      },
+      "files": [
+        "BreathingDetection/sub_Human/user_U06/env_E10/act_empty/Dpl_HC_near_Fridge/device_Hex_1cd6be1df30d/Diff_hard/session_613001__freq208_5G.h5",
+        "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set1/device_Hex_1cd6be198931/Diff_easy/2022_03_08/session_24588001__freq208_5G.h5",
+        "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set2/device_Hex_1cd6be198931/Diff_hard/2022_03_12/session_74249002__freq208_5G.h5",
+        "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set3/device_Hex_1cd6be198931/Diff_medium/2022_03_17/session_101876002__freq208_5G.h5"
+      ]
+    },
+    "FallDetection": {
+      "labels": {
+        "Fall": "FallDetection/sub_Human/user_U07/act_Fall/env_E21/device_HP/session_2168000__freq232.h5",
+        "Nonfall": "FallDetection/sub_Human/user_U08/act_Nonfall/env_E22/device_ESP32/session_10000__freq64.h5"
+      },
+      "settings": {},
+      "files": [
+        "FallDetection/sub_Human/user_U07/act_Fall/env_E21/device_HP/session_2168000__freq232.h5",
+        "FallDetection/sub_Human/user_U08/act_Nonfall/env_E22/device_ESP32/session_10000__freq64.h5"
+      ]
+    },
+    "Localization": {
+      "labels": {
+        "1": "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_001/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_1000__freq168.h5",
+        "10": "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_010/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_5000__freq168.h5",
+        "100": "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_100/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_10000__freq168.h5",
+        "101": "Localization/sub_Human/env_E01/Diff_hard/Dpl_case1/act_twouser_walking/user_UM04/motionsrc_101/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_21000__freq168.h5",
+        "110": "Localization/sub_Human/env_E01/Diff_hard/Dpl_case1/act_twouser_walking/user_UM04/motionsrc_110/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_29000__freq168.h5",
+        "11": "Localization/sub_Human/env_E03/Diff_hard/Dpl_case1/act_twouser_walking/user_UM01/motionsrc_011/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_10000__freq168.h5",
+        "0": "Localization/sub_Human/env_E07/Diff_easy/Dpl_case1/act_empty/motionsrc_000/device_EchoDot3rd-5G_EchoDot3rd-5G_EchoDot3rd-5G/session_1000__freq2496.h5"
+      },
+      "settings": {
+        "easy": "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_001/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_1000__freq168.h5",
+        "hard": "Localization/sub_Human/env_E01/Diff_hard/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_010/device_GoveePlug-2G_AmazonPlug-2G_WyzePlug-2G/session_17000__freq168.h5",
+        "medium": "Localization/sub_Human/env_E01/Diff_medium/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_001/device_GoveePlug-2G_AmazonPlug-2G_WyzePlug-2G/session_37000__freq168.h5"
+      },
+      "files": [
+        "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_001/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_1000__freq168.h5",
+        "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_010/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_5000__freq168.h5",
+        "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_100/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_10000__freq168.h5",
+        "Localization/sub_Human/env_E01/Diff_hard/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_010/device_GoveePlug-2G_AmazonPlug-2G_WyzePlug-2G/session_17000__freq168.h5",
+        "Localization/sub_Human/env_E01/Diff_hard/Dpl_case1/act_twouser_walking/user_UM04/motionsrc_101/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_21000__freq168.h5",
+        "Localization/sub_Human/env_E01/Diff_hard/Dpl_case1/act_twouser_walking/user_UM04/motionsrc_110/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_29000__freq168.h5",
+        "Localization/sub_Human/env_E01/Diff_medium/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_001/device_GoveePlug-2G_AmazonPlug-2G_WyzePlug-2G/session_37000__freq168.h5",
+        "Localization/sub_Human/env_E03/Diff_hard/Dpl_case1/act_twouser_walking/user_UM01/motionsrc_011/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_10000__freq168.h5",
+        "Localization/sub_Human/env_E07/Diff_easy/Dpl_case1/act_empty/motionsrc_000/device_EchoDot3rd-5G_EchoDot3rd-5G_EchoDot3rd-5G/session_1000__freq2496.h5"
+      ]
+    },
+    "MotionSourceRecognition": {
+      "labels": {
+        "Fan": "MotionSourceRecognition/sub_Fan/user_F01/act_Test_1/env_E11/device_HP/session_708000__freq232.h5",
+        "Human": "MotionSourceRecognition/sub_Human/user_U03/act_Human/env_E19/device_HP/session_1753000__freq232.h5",
+        "IRobot": "MotionSourceRecognition/sub_IRobot/user_IR01/act_Test_1/env_E11/device_HP/session_768000__freq232.h5",
+        "Pet": "MotionSourceRecognition/sub_Pet/user_P01/act_Max_Test_1/env_E20/device_HP/session_990000__freq232.h5"
+      },
+      "settings": {},
+      "files": [
+        "MotionSourceRecognition/sub_Fan/user_F01/act_Test_1/env_E11/device_HP/session_708000__freq232.h5",
+        "MotionSourceRecognition/sub_Human/user_U03/act_Human/env_E19/device_HP/session_1753000__freq232.h5",
+        "MotionSourceRecognition/sub_IRobot/user_IR01/act_Test_1/env_E11/device_HP/session_768000__freq232.h5",
+        "MotionSourceRecognition/sub_Pet/user_P01/act_Max_Test_1/env_E20/device_HP/session_990000__freq232.h5"
+      ]
+    },
+    "Multitask/HumanActivityRecognition": {
+      "labels": {
+        "jumping": "Multitask/sub_Human_h5/user_U01/act_jumping/env_E01/device_AmazonPlug/session_16000__freq56.h5",
+        "running": "Multitask/sub_Human_h5/user_U01/act_running/env_E01/device_AmazonPlug/session_199000__freq56.h5",
+        "seated-breathing": "Multitask/sub_Human_h5/user_U01/act_seated-breathing/env_E01/device_AmazonPlug/session_241000__freq56.h5",
+        "walking": "Multitask/sub_Human_h5/user_U01/act_walking-case1/env_E01/device_AmazonPlug/session_265000__freq56.h5",
+        "wavinghand": "Multitask/sub_Human_h5/user_U01/act_wavinghand/env_E01/device_AmazonPlug/session_361000__freq56.h5"
+      },
+      "settings": {},
+      "files": [
+        "Multitask/sub_Human_h5/user_U01/act_jumping/env_E01/device_AmazonPlug/session_16000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U01/act_running/env_E01/device_AmazonPlug/session_199000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U01/act_seated-breathing/env_E01/device_AmazonPlug/session_241000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U01/act_walking-case1/env_E01/device_AmazonPlug/session_265000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U01/act_wavinghand/env_E01/device_AmazonPlug/session_361000__freq56.h5"
+      ]
+    },
+    "Multitask/HumanIdentification": {
+      "labels": {
+        "U01": "Multitask/sub_Human_h5/user_U01/act_jumping/env_E01/device_AmazonPlug/session_16000__freq56.h5",
+        "U02": "Multitask/sub_Human_h5/user_U02/act_jumping/env_E01/device_AmazonPlug/session_394000__freq56.h5",
+        "U03": "Multitask/sub_Human_h5/user_U03/act_jumping/env_E02/device_AmazonPlug/session_742000__freq56.h5",
+        "U04": "Multitask/sub_Human_h5/user_U04/act_jumping/env_E03/device_AmazonPlug/session_898000__freq56.h5",
+        "U05": "Multitask/sub_Human_h5/user_U05/act_jumping/env_E04/device_AmazonPlug/session_1192000__freq56.h5",
+        "U06": "Multitask/sub_Human_h5/user_U06/act_jumping/env_E06/device_AmazonPlug/session_1765000__freq56.h5",
+        "U22": "Multitask/sub_Human_h5/user_U22/act_jumping/env_E27/device_AmazonPlug/session_2101000__freq56.h5"
+      },
+      "settings": {},
+      "files": [
+        "Multitask/sub_Human_h5/user_U01/act_jumping/env_E01/device_AmazonPlug/session_16000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U02/act_jumping/env_E01/device_AmazonPlug/session_394000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U03/act_jumping/env_E02/device_AmazonPlug/session_742000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U04/act_jumping/env_E03/device_AmazonPlug/session_898000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U05/act_jumping/env_E04/device_AmazonPlug/session_1192000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U06/act_jumping/env_E06/device_AmazonPlug/session_1765000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U22/act_jumping/env_E27/device_AmazonPlug/session_2101000__freq56.h5"
+      ]
+    },
+    "Multitask/ProximityRecognition": {
+      "labels": {
+        "1.5": "Multitask/sub_Human_h5/user_U01/act_jumping/env_E01/device_AmazonPlug/session_16000__freq56.h5",
+        "0.5": "Multitask/sub_Human_h5/user_U01/act_walking-case1/env_E01/device_AmazonPlug/session_265000__freq56.h5",
+        "2.5": "Multitask/sub_Human_h5/user_U01/act_walking-case3/env_E01/device_AmazonPlug/session_313000__freq56.h5",
+        "3.5": "Multitask/sub_Human_h5/user_U01/act_walking-case4/env_E01/device_AmazonPlug/session_337000__freq56.h5"
+      },
+      "settings": {},
+      "files": [
+        "Multitask/sub_Human_h5/user_U01/act_jumping/env_E01/device_AmazonPlug/session_16000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U01/act_walking-case1/env_E01/device_AmazonPlug/session_265000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U01/act_walking-case3/env_E01/device_AmazonPlug/session_313000__freq56.h5",
+        "Multitask/sub_Human_h5/user_U01/act_walking-case4/env_E01/device_AmazonPlug/session_337000__freq56.h5"
+      ]
+    }
+  },
+  "files": [
+    "BreathingDetection/sub_Human/user_U06/env_E10/act_empty/Dpl_HC_near_Fridge/device_Hex_1cd6be1df30d/Diff_hard/session_613001__freq208_5G.h5",
+    "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set1/device_Hex_1cd6be198931/Diff_easy/2022_03_08/session_24588001__freq208_5G.h5",
+    "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set2/device_Hex_1cd6be198931/Diff_hard/2022_03_12/session_74249002__freq208_5G.h5",
+    "BreathingDetection/sub_Human/user_U06/env_E10/act_sleep/Dpl_Set3/device_Hex_1cd6be198931/Diff_medium/2022_03_17/session_101876002__freq208_5G.h5",
+    "FallDetection/sub_Human/user_U07/act_Fall/env_E21/device_HP/session_2168000__freq232.h5",
+    "FallDetection/sub_Human/user_U08/act_Nonfall/env_E22/device_ESP32/session_10000__freq64.h5",
+    "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_001/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_1000__freq168.h5",
+    "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_010/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_5000__freq168.h5",
+    "Localization/sub_Human/env_E01/Diff_easy/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_100/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_10000__freq168.h5",
+    "Localization/sub_Human/env_E01/Diff_hard/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_010/device_GoveePlug-2G_AmazonPlug-2G_WyzePlug-2G/session_17000__freq168.h5",
+    "Localization/sub_Human/env_E01/Diff_hard/Dpl_case1/act_twouser_walking/user_UM04/motionsrc_101/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_21000__freq168.h5",
+    "Localization/sub_Human/env_E01/Diff_hard/Dpl_case1/act_twouser_walking/user_UM04/motionsrc_110/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_29000__freq168.h5",
+    "Localization/sub_Human/env_E01/Diff_medium/Dpl_case1/act_singleuser_walking/user_U01/motionsrc_001/device_GoveePlug-2G_AmazonPlug-2G_WyzePlug-2G/session_37000__freq168.h5",
+    "Localization/sub_Human/env_E03/Diff_hard/Dpl_case1/act_twouser_walking/user_UM01/motionsrc_011/device_EchoShow8-5G_AppleHomePod-5G_EchoSpot-5G/session_10000__freq168.h5",
+    "Localization/sub_Human/env_E07/Diff_easy/Dpl_case1/act_empty/motionsrc_000/device_EchoDot3rd-5G_EchoDot3rd-5G_EchoDot3rd-5G/session_1000__freq2496.h5",
+    "MotionSourceRecognition/sub_Fan/user_F01/act_Test_1/env_E11/device_HP/session_708000__freq232.h5",
+    "MotionSourceRecognition/sub_Human/user_U03/act_Human/env_E19/device_HP/session_1753000__freq232.h5",
+    "MotionSourceRecognition/sub_IRobot/user_IR01/act_Test_1/env_E11/device_HP/session_768000__freq232.h5",
+    "MotionSourceRecognition/sub_Pet/user_P01/act_Max_Test_1/env_E20/device_HP/session_990000__freq232.h5",
+    "Multitask/sub_Human_h5/user_U01/act_jumping/env_E01/device_AmazonPlug/session_16000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U01/act_running/env_E01/device_AmazonPlug/session_199000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U01/act_seated-breathing/env_E01/device_AmazonPlug/session_241000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U01/act_walking-case1/env_E01/device_AmazonPlug/session_265000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U01/act_walking-case3/env_E01/device_AmazonPlug/session_313000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U01/act_walking-case4/env_E01/device_AmazonPlug/session_337000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U01/act_wavinghand/env_E01/device_AmazonPlug/session_361000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U02/act_jumping/env_E01/device_AmazonPlug/session_394000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U03/act_jumping/env_E02/device_AmazonPlug/session_742000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U04/act_jumping/env_E03/device_AmazonPlug/session_898000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U05/act_jumping/env_E04/device_AmazonPlug/session_1192000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U06/act_jumping/env_E06/device_AmazonPlug/session_1765000__freq56.h5",
+    "Multitask/sub_Human_h5/user_U22/act_jumping/env_E27/device_AmazonPlug/session_2101000__freq56.h5"
+  ]
+}

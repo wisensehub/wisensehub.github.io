@@ -1,0 +1,27 @@
+{
+  "label": "Activity/standing",
+  "slug": "activity/standing",
+  "kind": "segment",
+  "source_file": "data.csv",
+  "sample_dir": "samples/figshare-csi-har/by_label/activity/standing",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    114,
+    2,
+    2
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 590.0,
+    "end_seconds": 960.0,
+    "label": "standing",
+    "source_label": "standing"
+  },
+  "source_sample_index": null
+}

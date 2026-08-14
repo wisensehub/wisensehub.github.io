@@ -1,0 +1,22 @@
+{
+  "label": "MotionSourceRecognition/Fan",
+  "slug": "motionsourcerecognition/fan",
+  "kind": "clip",
+  "source_file": "session_708000__freq232.h5",
+  "sample_dir": "samples/csi-bench/by_label/motionsourcerecognition/fan",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    232,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

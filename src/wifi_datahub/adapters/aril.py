@@ -17,7 +17,7 @@ def normalize_aril_arrays(
     activity_label: np.ndarray,
     location_label: np.ndarray,
 ) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
-    """Convert official ARIL arrays to [sample, time, link, subcarrier].
+    """Convert official ARIL arrays to [sample, time, subcarrier, tx, rx].
 
     The official model consumes `[sample, 52, 192]`, where 52 is the
     subcarrier/channel axis and 192 is the packet axis.
@@ -26,9 +26,9 @@ def normalize_aril_arrays(
     if data.ndim != 3:
         raise ValueError(f"ARIL data must be 3-D, got {data.shape}")
     if data.shape[1:] == (52, 192):
-        canonical = data.transpose(0, 2, 1)[:, :, None, :]
+        canonical = data.transpose(0, 2, 1)[:, :, :, None, None]
     elif data.shape[1:] == (192, 52):
-        canonical = data[:, :, None, :]
+        canonical = data[:, :, :, None, None]
     else:
         raise ValueError(f"expected ARIL sample shape 52×192 or 192×52, got {data.shape[1:]}")
     activity = np.asarray(activity_label).reshape(-1).astype(np.int16)
@@ -58,6 +58,9 @@ def convert_aril_mat(input_path: Path, output_path: Path, split: str) -> Path:
         packet_index=packet_index,
         amplitude=amplitude,
         valid_mask=valid_mask,
+        subcarrier_index=np.arange(amplitude.shape[2], dtype=np.int32),
+        tx_link_index=np.arange(amplitude.shape[3], dtype=np.int32),
+        rx_link_index=np.arange(amplitude.shape[4], dtype=np.int32),
         activity_label=activity,
         location_label=location,
     )
@@ -71,12 +74,19 @@ def convert_aril_mat(input_path: Path, output_path: Path, split: str) -> Path:
         "source_representation": "processed_amplitude",
         "standard_representation": "amplitude",
         "shape": list(amplitude.shape),
-        "axis_order": ["sample", "packet", "link", "subcarrier"],
+        "axis_order": ["sample", "packet", "subcarrier", "tx_link", "rx_link"],
         "sample_rate_hz": None,
         "time_axis": "packet_index",
         "power_unit": "source_amplitude_arbitrary_unit",
         "labels": {"activity": ACTIVITY_NAMES, "location": "integer 0-15"},
-        "transformations": ["transpose channel and packet axes", "insert link axis", "cast float32"],
+        "antenna_mapping": "singleton_tx_rx",
+        "antenna_mapping_assumption": "The processed ARIL release exposes no separate antenna-pair axis; WiSenseHub preserves it as one Tx and one Rx.",
+        "transformations": [
+            "transpose subcarrier and packet axes",
+            "name explicit subcarrier, tx_link, and rx_link axes",
+            "preserve the source as one Tx by one Rx",
+            "cast float32",
+        ],
         "created_at": datetime.now(timezone.utc).isoformat(),
         "tool": "wisensehub-0.6.0",
     }

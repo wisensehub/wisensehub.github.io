@@ -1,14 +1,83 @@
 {
-  "id": "csi-bench", "name": "CSI-Bench", "year": 2025,
+  "id": "csi-bench",
+  "name": "CSI-Bench",
+  "year": 2025,
   "summary": "Large-scale in-the-wild benchmark spanning seven WiFi sensing tasks, commercial edge hardware, real homes, and continuous natural activity.",
-  "tasks": ["fall", "vital_sign", "spatial_localization", "motion_source", "har", "identity", "multitask"],
-  "modalities": ["WiFi CSI"],
-  "hardware": {"platform": "Commercial routers and IoT edge devices", "chipset": "Broadcom, Qualcomm, MediaTek, Espressif, NXP", "wifi_standard": "802.11ac and device-dependent", "band": "2.4/5 GHz"},
-  "settings": {"environments": 26, "subjects": 35, "scenario": "Homes, offices, and public indoor areas; in the wild"},
-  "scale": {"hours": 461, "samples": 231600, "device_types": 16},
-  "original": {"landing_page": "https://ai-iot-sensing.github.io/projects/project.html", "download_page": "https://www.kaggle.com/datasets/guozhenjennzhu/csi-bench", "access": "account", "license": "CC BY-NC 4.0 on Kaggle; repository text should be checked per release", "redistribution": "restricted", "formats": ["HDF5", "MAT", "CSV", "JSON"]},
-  "standardization": {"status": "adapter-ready", "profile": "vital-sign", "notes": "BreathingDetection samples use the vital-sign profile (10 Hz, 60 s; rate assumed when not reported). Other CSI-Bench tasks should use general-sensing when added. Keep official splits and multi-task labels."},
-  "sources": [{"type": "paper", "url": "https://arxiv.org/abs/2505.21866"}, {"type": "repository", "url": "https://github.com/guozhen-jenn-zhu/CSI-Bench-Real-WiFi-Sensing-Benchmark"}],
-  "verified_at": "2026-06-28"
+  "tasks": [
+    "fall",
+    "vital_sign",
+    "spatial_localization",
+    "motion_source",
+    "har",
+    "identity",
+    "multitask"
+  ],
+  "modalities": [
+    "WiFi CSI"
+  ],
+  "hardware": {
+    "platform": "Commercial routers and IoT edge devices",
+    "chipset": "Broadcom, Qualcomm, MediaTek, Espressif, NXP",
+    "wifi_standard": "802.11ac and device-dependent",
+    "band": "2.4/5 GHz"
+  },
+  "settings": {
+    "environments": 26,
+    "subjects": 35,
+    "scenario": "Homes, offices, and public indoor areas; in the wild"
+  },
+  "scale": {
+    "hours": 461,
+    "samples": 231600,
+    "device_types": 16
+  },
+  "original": {
+    "landing_page": "https://ai-iot-sensing.github.io/projects/project.html",
+    "download_page": "https://www.kaggle.com/datasets/guozhenjennzhu/csi-bench",
+    "access": "account",
+    "license": "CC BY-NC 4.0 on Kaggle; repository text should be checked per release",
+    "redistribution": "restricted",
+    "formats": [
+      "HDF5",
+      "MAT",
+      "CSV",
+      "JSON"
+    ]
+  },
+  "standardization": {
+    "status": "adapter-ready",
+    "profile": "task-auto",
+    "notes": "Task-aware time profile: BreathingDetection uses 10 Hz; all other sensing tasks use 100 Hz. Window length is chosen per task, the full recording is segmented without dropping data, and native subcarrier/Tx/Rx sizes are preserved unless requested otherwise."
+  },
+  "sources": [
+    {
+      "type": "paper",
+      "url": "https://arxiv.org/abs/2505.21866"
+    },
+    {
+      "type": "repository",
+      "url": "https://github.com/guozhen-jenn-zhu/CSI-Bench-Real-WiFi-Sensing-Benchmark"
+    }
+  ],
+  "verified_at": "2026-06-28",
+  "collection": {
+    "device": "Commercial routers and IoT edge devices (Broadcom, Qualcomm, MediaTek, Espressif, NXP)",
+    "distance": "In-the-wild homes/offices; proximity task uses 0.5\u20133.5 m",
+    "subjects": "35 subjects across tasks",
+    "labels": {
+      "BreathingDetection": "empty \u00b7 sleep",
+      "FallDetection": "Fall \u00b7 Nonfall",
+      "Localization": "0 \u00b7 1 \u00b7 10 \u00b7 11 \u00b7 100 \u00b7 101 \u00b7 110",
+      "MotionSourceRecognition": "Fan \u00b7 Human \u00b7 IRobot \u00b7 Pet",
+      "HumanActivityRecognition": "jumping \u00b7 running \u00b7 seated-breathing \u00b7 walking \u00b7 wavinghand",
+      "HumanIdentification": "U01 \u00b7 U02 \u00b7 U03 \u00b7 U04 \u00b7 U05 \u00b7 U06 \u00b7 U22",
+      "ProximityRecognition": "0.5 \u00b7 1.5 \u00b7 2.5 \u00b7 3.5 m"
+    },
+    "scenario_labels": "Difficulty settings: easy \u00b7 medium \u00b7 hard (where provided by the official splits)",
+    "band": "2.4/5 GHz (device-dependent)",
+    "subcarriers": "56\u20132496 depending on device/task",
+    "sampling_rate_hz": "Task view: 10 Hz for BreathingDetection; 100 Hz for other tasks (recorded as an assumption when the source rate is absent)",
+    "clip_length": "Flexible by task; full recordings are split into consecutive task-specific windows",
+    "scenario": "Homes, offices, and public indoor areas; in the wild"
+  }
 }
-

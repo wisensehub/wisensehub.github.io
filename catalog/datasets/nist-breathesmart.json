@@ -6,6 +6,6 @@
   "settings": {"environments": 1, "subjects": 0, "scenario": "Anatomically correct breathing manikin under controlled respiratory motion"},
   "scale": {"human_subjects": 0, "data_organization": "Files corresponding to publication figures"},
   "original": {"landing_page": "https://doi.org/10.18434/mds2-2963", "download_page": "https://data.nist.gov/od/ds/ark:/88434/mds2-2963/BreatheSmartv2.zip", "access": "direct", "license": "NIST open license", "redistribution": "allowed", "formats": ["CSV", "ZIP", "DOCX documentation"]},
-  "standardization": {"status": "verified", "profile": "vital-sign", "notes": "Task profile: 10 Hz, 60 s. Verified on official BreatheSmartv2.zip. Adapter pairs real/imaginary CSI logs, reshapes 9 links × 114 subcarriers, preserves config metadata. Derived views keep native MIMO dimensions."},
+  "standardization": {"status": "verified", "profile": "vital-sign", "notes": "Breathing uses 10 Hz and up to 30 s. Discard the source file's all-zero reserved slots, retaining the 56 measured subcarriers, 2 Tx, and 3 Rx; output is [T, S, Tx, Rx] per sample."},
   "sources": [{"type": "data", "url": "https://data.nist.gov/od/id/mds2-2963"}], "verified_at": "2026-07-07"
 }

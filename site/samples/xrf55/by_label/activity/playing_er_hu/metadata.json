@@ -1,0 +1,22 @@
+{
+  "label": "Activity/playing Er-Hu",
+  "slug": "activity/playing_er_hu",
+  "kind": "clip",
+  "source_file": "01_42_01.npy",
+  "sample_dir": "samples/xrf55/by_label/activity/playing_er_hu",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    1,
+    9
+  ],
+  "sample_rate_hz": 200.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

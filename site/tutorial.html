@@ -6,16 +6,19 @@
   <meta name="description" content="A beginner-friendly WiSenseHub tutorial for converting WiFi sensing datasets.">
   <title>Tutorial — WiSenseHub</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css?v=20260809-labelcoverage">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="index.html"><span class="brand-mark">W</span> WiSenseHub</a>
     <nav aria-label="Primary navigation">
       <a href="index.html#datasets">Datasets</a>
-      <a href="index.html#standard">Standard</a>
+      <a href="guide.html">How it works</a>
       <a href="example.html">Examples</a>
-      <a href="https://github.com/ysy23333/WiSenseHub">GitHub</a>
+      <a href="https://github.com/hanqingguo/WiSenseHub">GitHub</a>
     </nav>
   </header>
 
@@ -23,92 +26,104 @@
     <a class="back-link" href="index.html">← Home</a>
     <section class="detail-hero">
       <p class="eyebrow">QUICKSTART TUTORIAL</p>
-      <h1>Convert one WiFi sensing dataset into research-ready tensors.</h1>
-      <p>This tutorial starts with a zero-download synthetic fixture, then shows the same command pattern for real official releases. The output is compressed NumPy <code>.npz</code> plus provenance, quality, and split manifests.</p>
+      <h1>Prepare a CSI-Bench sample—with an agent or by hand.</h1>
+      <p>The WiSenseHub skill can handle the complete workflow and explain every step. The manual commands remain below for users who want full terminal control.</p>
       <div class="hero-actions">
-        <a class="button primary" href="#zero-download">Run zero-download demo</a>
-        <a class="button secondary" href="#embedded-notebook">View embedded notebook</a>
-        <a class="button secondary" href="notebooks/quickstart.ipynb">Download notebook</a>
+        <a class="button primary" href="#agent">Use the agent skill</a>
+        <a class="button secondary" href="#install">Use the terminal</a>
+        <a class="button secondary" href="dataset.html?id=csi-bench#sample">View the sample</a>
       </div>
+    </section>
+
+    <section id="agent" class="tutorial-step">
+      <div class="section-heading"><div><p class="eyebrow">RECOMMENDED</p><h2>Let the WiSenseHub skill do the work</h2></div><p>You describe the result you want. The agent installs tools, downloads data, processes it, checks the output, and explains what happened.</p></div>
+      <div class="tutorial-choice">
+        <article><h3>1. Install from GitHub</h3><p>Send this message to Codex:</p><pre><code>Help me install this skill:
+https://github.com/hanqingguo/WiSenseHub/tree/main/skills/wisensehub</code></pre><p>After installation, restart Codex so the new skill is loaded.</p></article>
+        <article><h3>2. Call the skill</h3><p>Select <strong>WiSenseHub</strong> from the Skills UI or type <code>$wisensehub</code>, then ask:</p><pre><code>Download the CSI-Bench sample and prepare it for me.</code></pre><p>The user does not need to run commands or choose technical flags.</p></article>
+      </div>
+      <div class="honesty-note"><strong>What the agent explains</strong><p>After setup, download, processing, and validation, it tells you what changed, why that step was needed, and where the files were saved. It asks only when a dataset login or an important processing choice is required.</p></div>
+      <details class="view-options"><summary>More things you can ask</summary><pre><code>Prepare the breathing sample for vital-sign research.
+Make 5-second activity clips at 50 Hz.
+Show me what is inside one processed sample.
+Prepare my complete dataset using its official split.
+Explain why my conversions failed.</code></pre></details>
     </section>
 
     <section class="tutorial-grid">
-      <article><span>01</span><h2>Install</h2><p>Create a clean Python environment and install WiSenseHub in editable mode.</p></article>
-      <article><span>02</span><h2>Prepare</h2><p>Put an official dataset release under <code>data/&lt;dataset-id&gt;/original/</code> without renaming files.</p></article>
-      <article><span>03</span><h2>Convert</h2><p>Run one unified <code>prepare</code> command while choosing split and view settings.</p></article>
-      <article><span>04</span><h2>Inspect</h2><p>Load the generated <code>.npz</code> arrays and check metadata before training a model.</p></article>
+      <article><span>01</span><h2>Install</h2><p>Open the project and create a Python environment.</p></article>
+      <article><span>02</span><h2>Download</h2><p>Save and unzip the sample into the exact input folder.</p></article>
+      <article><span>03</span><h2>Prepare</h2><p>Convert the source files and make a random data split.</p></article>
+      <article><span>04</span><h2>Find results</h2><p>Open the generated NPZ, reports, and split file.</p></article>
     </section>
 
-    <section id="zero-download" class="tutorial-step">
-      <div class="section-heading"><div><p class="eyebrow">STEP 1</p><h2>Run the zero-download demo</h2></div><p>This proves the standardization pipeline works before you touch a large research dataset.</p></div>
-      <pre><code>python -m venv .venv
+    <section id="install" class="tutorial-step">
+      <div class="section-heading"><div><p class="eyebrow">STEP 1</p><h2>Open WiSenseHub and install it</h2></div><p>Run these commands from a terminal. If you already cloned the project, start at <code>cd WiSenseHub</code>.</p></div>
+      <pre><code>git clone https://github.com/hanqingguo/WiSenseHub.git
+cd WiSenseHub
+
+python3 -m venv .venv
 source .venv/bin/activate
-pip install -e ".[dev]"
-
-python examples/make_synthetic_input.py
-python -m wifi_datahub standardize \
-  --input examples/data/synthetic_csi.csv \
-  --output examples/data/standardized/synthetic_csi.npz \
-  --dataset-id synthetic-demo \
-  --sample-rate 100 \
-  --duration 4
-
-python -m wifi_datahub quality \
-  --input examples/data/standardized/synthetic_csi.npz \
-  --output examples/data/standardized/synthetic_csi.quality.json</code></pre>
+pip install -e ".[data]"</code></pre>
+      <div class="honesty-note"><strong>Where am I?</strong><p>All commands below must run inside the <code>WiSenseHub</code> project folder. Keep <code>(.venv)</code> visible at the start of your terminal prompt.</p></div>
     </section>
 
     <section class="tutorial-step">
-      <div class="section-heading"><div><p class="eyebrow">STEP 2</p><h2>Use a real dataset release</h2></div><p>Download from the official source, extract it into the expected folder, then let the dataset adapter handle discovery.</p></div>
+      <div class="section-heading"><div><p class="eyebrow">STEP 2</p><h2>Download the small CSI-Bench sample</h2></div><p>The ZIP may stay in <code>data/csi-bench/</code>. The extracted task folders must go inside <code>data/csi-bench/original/</code>.</p></div>
+      <pre><code>mkdir -p data/csi-bench/original
+
+curl -L https://hanqingguo.github.io/WiSenseHub/samples/csi-bench-original-subset.zip \
+  -o data/csi-bench/csi-bench-sample.zip
+
+unzip -q data/csi-bench/csi-bench-sample.zip \
+  -d data/csi-bench/original</code></pre>
       <div class="folder-tree">
-        <pre><code>data/ut-har/
-├── original/       # official downloaded files
-├── standardized/   # generated native NPZ tensors
-├── standardized/views/  # optional fixed-shape derived views
-├── reports/        # quality reports
-├── splits/         # train/val/test manifests
-└── prepare-manifest.json</code></pre>
+        <pre><code>data/csi-bench/
+├── csi-bench-sample.zip       # downloaded ZIP; safe to keep
+└── original/                  # WiSenseHub reads from here
+    ├── BreathingDetection/
+    ├── FallDetection/
+    ├── Localization/
+    ├── MotionSourceRecognition/
+    └── Multitask/</code></pre>
       </div>
-      <pre><code>python -m wifi_datahub settings ut-har
+      <p>Check that the files are in the right place:</p>
+      <pre><code>find data/csi-bench/original -type f | head</code></pre>
+      <details class="view-options"><summary>Download selected files from Kaggle instead</summary><p>This method needs a Kaggle account and Kaggle CLI login.</p><pre><code>python scripts/download_csi_bench_subset.py \
+  --output data/csi-bench/original</code></pre></details>
+    </section>
 
-python -m wifi_datahub prepare ut-har \
-  --setting official \
+    <section class="tutorial-step">
+      <div class="section-heading"><div><p class="eyebrow">STEP 3</p><h2>Prepare the sample</h2></div><p>Use a random split for this small sample. The official ID split needs extra files that are only included in the complete dataset.</p></div>
+      <pre><code>wisensehub prepare csi-bench \
   --data-root data \
-  --target-length 128 \
-  --layout link-subcarrier \
-  --interpolation linear</code></pre>
+  --setting random \
+  --profile general-sensing</code></pre>
+      <p>When the command finishes, WiSenseHub prints how many files were converted and the train, validation, and test counts.</p>
     </section>
 
     <section class="tutorial-step">
-      <div class="section-heading"><div><p class="eyebrow">STEP 3</p><h2>Choose split and tensor settings</h2></div><p>WiSenseHub keeps native standardized data and optionally derives fixed-size views for model training.</p></div>
-      <div class="table-scroll">
-        <table class="settings-table">
-          <thead><tr><th>Option</th><th>Purpose</th><th>Example</th></tr></thead>
-          <tbody>
-            <tr><td><code>--setting</code></td><td>Evaluation protocol such as official, random, cross-subject, or cross-device.</td><td><code>--setting cross_subject --holdout 3</code></td></tr>
-            <tr><td><code>--target-rate</code></td><td>Resample a derived view to a fixed Hz when timestamps support it.</td><td><code>--target-rate 100</code></td></tr>
-            <tr><td><code>--target-length</code></td><td>Pad/crop/interpolate to a fixed number of time steps.</td><td><code>--target-length 128</code></td></tr>
-            <tr><td><code>--interpolation</code></td><td>Select none, nearest, or linear interpolation.</td><td><code>--interpolation linear</code></td></tr>
-            <tr><td><code>--layout</code></td><td>Keep canonical axes or flatten link/subcarrier dimensions.</td><td><code>--layout flat</code></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </section>
-
-    <section class="tutorial-step">
-      <div class="section-heading"><div><p class="eyebrow">STEP 4</p><h2>Load the output in Python</h2></div><p>The model-facing artifact is NumPy, not a hidden framework tensor. You can convert it to PyTorch, TensorFlow, or JAX later.</p></div>
-      <pre><code>import json
+      <div class="section-heading"><div><p class="eyebrow">STEP 4</p><h2>Find and open the results</h2></div><p>WiSenseHub keeps the downloaded source files. It writes all new files next to the <code>original/</code> folder.</p></div>
+      <div class="folder-tree"><pre><code>data/csi-bench/
+├── original/                   # your downloaded source files
+├── standardized/              # native NPZ + JSON
+│   └── views/                 # fixed-shape model inputs
+├── reports/                   # data quality checks
+├── splits/random.json         # train/val/test file list
+└── prepare-manifest.json      # full record of this run</code></pre></div>
+      <p>Open the first generated model view:</p>
+      <pre><code>python - &lt;&lt;'PY'
+from pathlib import Path
 import numpy as np
 
-sample = np.load("data/ut-har/standardized/views/example.view.npz")
-print(sample.files)
-print(sample["amplitude"].shape)
-print(sample["valid_mask"].mean())
+path = next(Path("data/csi-bench/standardized/views").glob("*.npz"))
+sample = np.load(path)
 
-with open("data/ut-har/prepare-manifest.json") as f:
-    manifest = json.load(f)
-print(manifest["split"]["partition_counts"])</code></pre>
-      <div class="honesty-note"><strong>Key idea</strong><p>Native files preserve dataset-specific information; derived views make training convenient. This separation prevents the hub from pretending all WiFi datasets are naturally collected with the same sampling rate, antennas, or subcarriers.</p></div>
+print("File:", path)
+print("Arrays:", sample.files)
+print("Shape:", sample["amplitude"].shape)
+PY</code></pre>
+      <div class="honesty-note"><strong>Next run</strong><p>Do not download again. Keep <code>data/csi-bench/original/</code> and rerun the <code>wisensehub prepare</code> command. Existing outputs are kept unless you add <code>--force</code>.</p></div>
     </section>
 
     <section class="tutorial-step">
@@ -125,6 +140,6 @@ print(manifest["split"]["partition_counts"])</code></pre>
     </section>
   </main>
 
-  <footer><p>WiSenseHub tutorials never redistribute restricted dataset bytes.</p><p><a href="example.html">See dataset-specific examples</a></p></footer>
+  <footer><p>The hosted sample is for research and evaluation. Check the CSI-Bench license before redistributing it.</p><p><a href="dataset.html?id=csi-bench">Back to CSI-Bench</a></p></footer>
 </body>
 </html>

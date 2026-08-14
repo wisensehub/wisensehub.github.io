@@ -12,6 +12,14 @@ from typing import Any, Dict, Iterable, Tuple
 import numpy as np
 
 from .generic import convert_generic, load_generic_source
+from .xrf55_schema import (
+    XRF55_ACTION_NAMES,
+    XRF55_RX_LINKS,
+    XRF55_SAMPLE_RATE_HZ,
+    XRF55_SUBCARRIERS,
+    XRF55_TIME_SAMPLES,
+    parse_xrf55_clip_id,
+)
 
 
 def _sha256(path: Path) -> str | None:
@@ -58,8 +66,15 @@ def _largest_numeric(mapping: Dict[str, np.ndarray], minimum_ndim: int = 2) -> n
 
 def _path_metadata_labels(input_path: Path) -> Dict[str, str]:
     labels: Dict[str, str] = {}
+    csi_bench_tasks = {
+        "BreathingDetection", "FallDetection", "Localization",
+        "MotionSourceRecognition", "HumanActivityRecognition",
+        "HumanIdentification", "ProximityRecognition", "Multitask",
+    }
     for part in input_path.parts:
-        if part.startswith("act_"):
+        if part in csi_bench_tasks:
+            labels["task"] = part
+        elif part.startswith("act_"):
             labels["activity"] = part[len("act_") :]
         elif part.startswith("user_"):
             labels["subject"] = part[len("user_") :]
@@ -69,6 +84,30 @@ def _path_metadata_labels(input_path: Path) -> Dict[str, str]:
             labels["subject_type"] = part[len("sub_") :]
         elif part.startswith("Diff_"):
             labels["difficulty"] = part[len("Diff_") :]
+        elif part.startswith("motionsrc_"):
+            raw = part[len("motionsrc_") :]
+            labels["location"] = raw.lstrip("0") or "0"
+    path_text = "/".join(input_path.parts)
+    # CSI-Bench tasks use different official primary labels.
+    if "HumanIdentification" in path_text and "subject" in labels:
+        labels["class"] = labels["subject"]
+    elif "MotionSourceRecognition" in path_text and "subject_type" in labels:
+        labels["class"] = labels["subject_type"]
+    elif "Localization" in path_text and "location" in labels:
+        labels["class"] = labels["location"]
+    elif "HumanActivityRecognition" in path_text and "activity" in labels:
+        activity = labels["activity"]
+        labels["class"] = "walking" if activity.startswith("walking") else activity
+    elif "ProximityRecognition" in path_text and "activity" in labels:
+        # Distance is not encoded in the path; keep activity as a fallback class.
+        labels["class"] = labels["activity"]
+    elif "activity" in labels:
+        activity = labels["activity"]
+        if activity.startswith("walking"):
+            labels["activity"] = "walking"
+            labels["class"] = "walking"
+        else:
+            labels.setdefault("class", activity)
     return labels
 
 
@@ -133,6 +172,7 @@ def _save(
     input_path: Path, output_path: Path, dataset_id: str, arrays: Dict[str, np.ndarray],
     primary: str, axes: list[str], source_representation: str, transformations: list[str],
     sample_rate_hz: float | None = None, power_unit: str = "source_amplitude_arbitrary_unit",
+    metadata_extra: Dict[str, object] | None = None,
 ) -> Path:
     value = np.asarray(arrays[primary])
     if value.ndim < 3:
@@ -158,6 +198,8 @@ def _save(
         "transformations": transformations, "created_at": datetime.now(timezone.utc).isoformat(),
         "tool": "wisensehub-0.6.0",
     }
+    if metadata_extra:
+        sidecar.update(metadata_extra)
     if sample_rate_hz:
         sidecar["duration_s"] = time_length / float(sample_rate_hz)
     if clip_labels:
@@ -182,19 +224,32 @@ def _complex_arrays(value: np.ndarray) -> Dict[str, np.ndarray]:
 
 
 def _canonical_csi_bench_tensor(data: np.ndarray) -> tuple[np.ndarray, list[str]]:
+    """Return CSI-Bench CSI as [N,] time, subcarrier, tx_link, rx_link.
+
+    CSI-Bench source files expose either a batch of [time, subcarrier]
+    samples or [subcarrier, time, flattened_link]. The release does not
+    provide a reliable Tx/Rx factorization for the flattened link axis, so
+    we preserve every link and represent it explicitly as 1 Tx x L Rx.
+    """
     data = np.asarray(data)
     if data.ndim == 4:
-        if data.shape[-1] in (56, 114, 208, 30, 52, 100) or data.shape[1] > data.shape[0]:
-            return data, ["sample", "time", "link", "subcarrier"]
+        if data.shape[-1] in (56, 64, 114, 168, 208, 232, 30, 52, 100) or data.shape[1] > data.shape[0]:
+            # Existing supported layout: [sample, time, flattened_link, subcarrier].
+            return np.transpose(data, (0, 1, 3, 2))[:, :, :, None, :], [
+                "sample", "time", "subcarrier", "tx_link", "rx_link",
+            ]
         raise ValueError(f"CSI-Bench 4-D tensor has unsupported shape {data.shape}")
     if data.ndim != 3:
         raise ValueError(f"CSI-Bench expects a 3-D or 4-D CSI tensor, got {data.shape}")
     if data.shape[0] <= 32 and data.shape[1] > data.shape[0]:
-        return data[:, :, None, :], ["sample", "time", "link", "subcarrier"]
-    if data.shape[0] in (56, 114, 208) and data.shape[1] >= data.shape[0]:
-        return data.transpose(1, 2, 0), ["time", "link", "subcarrier"]
-    if data.shape[-1] in (56, 114, 208, 30, 52, 100) and data.shape[1] >= data.shape[0]:
-        return data, ["time", "link", "subcarrier"]
+        return data[:, :, :, None, None], ["sample", "time", "subcarrier", "tx_link", "rx_link"]
+    # Common CSI-Bench window layout: [subcarrier, time, link]
+    if data.shape[2] <= 16 and data.shape[1] >= 32 and data.shape[0] >= 16 and data.shape[0] != data.shape[1]:
+        return np.transpose(data, (1, 0, 2))[:, :, None, :], ["time", "subcarrier", "tx_link", "rx_link"]
+    if data.shape[0] in (56, 64, 114, 168, 208, 232) and data.shape[1] >= data.shape[0]:
+        return np.transpose(data, (1, 0, 2))[:, :, None, :], ["time", "subcarrier", "tx_link", "rx_link"]
+    if data.shape[-1] in (56, 64, 114, 168, 208, 232, 30, 52, 100) and data.shape[1] >= data.shape[0]:
+        return np.transpose(data, (0, 2, 1))[:, :, None, :], ["time", "subcarrier", "tx_link", "rx_link"]
     raise ValueError(f"CSI-Bench tensor layout is not recognized: {data.shape}")
 
 
@@ -204,13 +259,34 @@ def convert_csi_bench_mat(input_path: Path, output_path: Path) -> Path:
     data = data if data is not None else _largest_numeric(mapping, 2)
     data, axes = _canonical_csi_bench_tensor(data)
     arrays = _complex_arrays(data) if np.iscomplexobj(data) else {"amplitude": data.astype(np.float32)}
+    arrays["subcarrier_index"] = np.arange(data.shape[axes.index("subcarrier")], dtype=np.int32)
+    arrays["tx_link_index"] = np.arange(data.shape[axes.index("tx_link")], dtype=np.int32)
+    arrays["rx_link_index"] = np.arange(data.shape[axes.index("rx_link")], dtype=np.int32)
     path_labels = _path_metadata_labels(input_path)
+    if path_labels.get("class"):
+        # Use the task's official primary label as activity for sidecars / by_label.
+        path_labels["activity"] = path_labels["class"]
     if path_labels.get("activity"):
         arrays["activity_label"] = np.asarray(path_labels["activity"], dtype="U64")
+    if path_labels.get("task"):
+        arrays["task_label"] = np.asarray(path_labels["task"], dtype="U64")
     return _save(
         input_path, output_path, "csi-bench", arrays, "amplitude", axes,
         "complex_csi" if np.iscomplexobj(data) else "processed_amplitude",
-        ["load official CSI_amps/X tensor", "transpose to canonical axes", "attach path-derived activity label", "cast float32"],
+        [
+            "load official CSI_amps/X tensor",
+            "transpose to [time, subcarrier, tx_link, rx_link] canonical axes",
+            "preserve flattened source links as one Tx by L Rx",
+            "attach path-derived task and activity labels",
+            "cast float32",
+        ],
+        metadata_extra={
+            "antenna_mapping": "single_tx_flattened_rx",
+            "antenna_mapping_assumption": (
+                "The source exposes a flattened link axis without a reliable Tx/Rx factorization; "
+                "WiSenseHub preserves all links as tx_link=1 and rx_link=source_link_count."
+            ),
+        },
     )
 
 
@@ -224,18 +300,55 @@ def convert_mmfi_directory(input_path: Path, output_path: Path) -> Path:
         frame = _find(mapping, ("CSIamp",))
         if frame is None:
             raise ValueError(f"MM-Fi frame lacks CSIamp: {path.name}")
-        frame = np.asarray(frame).squeeze()
-        if frame.ndim == 3 and frame.shape[-1] in (10, 30, 114):
-            frame = frame.reshape(-1, frame.shape[-1])
-        elif frame.ndim == 2:
-            pass
-        else:
-            raise ValueError(f"unsupported MM-Fi CSIamp frame shape {frame.shape}")
-        frames.append(frame)
-    amplitude = np.nan_to_num(np.stack(frames), copy=False).astype(np.float32)
-    return _save(input_path, output_path, "mm-fi", {"amplitude": amplitude}, "amplitude",
-                 ["time", "link", "subcarrier"], "processed_amplitude",
-                 ["load sorted frame*.mat CSIamp", "flatten antenna pair axes into link", "replace non-finite values"])
+        frame = np.asarray(frame, dtype=np.float64).squeeze()
+        if frame.ndim != 3 or frame.shape[:2] != (3, 114):
+            raise ValueError(
+                f"MM-Fi CSIamp must be [3 Rx,114 subcarriers,packet captures], got {frame.shape}"
+            )
+        # Match the official reader's invalid-value repair, then unfold every
+        # packet capture into time so none of the released CSI is discarded.
+        for packet_index in range(frame.shape[2]):
+            packet = frame[:, :, packet_index]
+            finite = np.isfinite(packet)
+            fill = float(packet[finite].mean()) if finite.any() else 0.0
+            packet[~finite] = fill
+        frames.append(frame.transpose(2, 1, 0)[:, :, None, :])  # [10,S,Tx=1,Rx=3]
+    amplitude = np.concatenate(frames, axis=0).astype(np.float32)  # [T,S,Tx,Rx]
+    activity = next((part for part in reversed(input_path.parts) if re.fullmatch(r"A\d+", part)), None)
+    arrays: Dict[str, np.ndarray] = {"amplitude": amplitude}
+    if activity:
+        arrays["activity_label"] = np.asarray(activity)
+    activity_names = {
+        "A01": "stretching and relaxing", "A02": "chest expansion (horizontal)",
+        "A03": "chest expansion (vertical)", "A04": "twist left", "A05": "twist right",
+        "A06": "mark time", "A07": "limb extension left", "A08": "limb extension right",
+        "A09": "lunge left-front", "A10": "lunge right-front", "A11": "limb extension both",
+        "A12": "squat", "A13": "raising hand left", "A14": "raising hand right",
+        "A15": "lunge left side", "A16": "lunge right side", "A17": "waving hand left",
+        "A18": "waving hand right", "A19": "picking up things", "A20": "throwing left",
+        "A21": "throwing right", "A22": "kicking left", "A23": "kicking right",
+        "A24": "body extension left", "A25": "body extension right", "A26": "jumping up",
+        "A27": "bowing",
+    }
+    if activity:
+        arrays["activity_label"] = np.asarray(activity_names.get(activity, activity))
+    label_sets = {"Activity": [activity_names.get(activity, activity)]} if activity else {}
+    return _save(input_path, output_path, "mm-fi", arrays, "amplitude",
+                 ["time", "subcarrier", "tx_link", "rx_link"], "processed_amplitude",
+                 ["load sorted frame*.mat CSIamp [3,114,10]",
+                  "replace non-finite packet values with the finite packet mean",
+                  "unfold all 10 packet captures per synchronized frame into time",
+                  "transpose to [time,114 subcarriers,1 Tx,3 Rx]"],
+                 sample_rate_hz=100.0, metadata_extra={
+                     "label_sets": label_sets,
+                     "source_axis_order": ["frame", "rx_link", "subcarrier", "packet_within_frame"],
+                     "source_shape": [len(files), 3, 114, 10],
+                     "source_frame_rate_hz": 10.0,
+                     "packet_captures_per_frame": 10,
+                     "sample_rate_evidence": "10 synchronized frames/s × 10 released CSI packet captures/frame",
+                     "antenna_layout": {"tx_links": 1, "rx_links": 3},
+                     "antenna_mapping_evidence": "official MM-Fi CSIamp layout",
+                 })
 
 
 def convert_ntu_fi_mat(input_path: Path, output_path: Path) -> Path:
@@ -245,18 +358,56 @@ def convert_ntu_fi_mat(input_path: Path, output_path: Path) -> Path:
         raise ValueError("NTU-Fi MAT file must contain CSIamp")
     data = np.asarray(data).squeeze()
     if data.ndim == 2 and data.shape[0] == 342:
-        data = data.reshape(3, 114, data.shape[1])
-    if data.ndim != 3:
-        raise ValueError(f"unsupported NTU-Fi CSIamp shape {data.shape}")
-    if data.shape[0:2] == (3, 114):
-        data = data[:, :, ::4].transpose(2, 0, 1)
-    elif data.shape[-2:] == (3, 114):
-        data = data[::4]
+        source = data.reshape(3, 114, data.shape[1])
+    elif data.ndim == 3 and data.shape[0:2] == (3, 114):
+        source = data
+    elif data.ndim == 3 and data.shape[-2:] == (3, 114):
+        source = data.transpose(1, 2, 0)
     else:
         raise ValueError(f"NTU-Fi expected [3,114,time], got {data.shape}")
-    return _save(input_path, output_path, "ntu-fi", {"amplitude": data.astype(np.float32)}, "amplitude",
-                 ["time", "link", "subcarrier"], "processed_amplitude",
-                 ["load official CSIamp", "downsample time by four as SenseFi", "transpose to canonical axes"])
+    # Match the released SenseFi loader exactly: retain packets 0,4,8,... and
+    # reshape the three antenna streams to canonical 1 Tx x 3 Rx. Preserve the
+    # released amplitude as the primary signal and expose SenseFi's published
+    # normalization as a separate, selectable array.
+    sampled = source[:, :, ::4]
+    amplitude = sampled.transpose(2, 1, 0)[:, :, None, :].astype(np.float32)
+    official_normalized = ((amplitude - 42.3199) / 4.9802).astype(np.float32)
+    label = input_path.parent.name
+    identity_clip = "ntu-fi-humanid" in str(input_path).lower()
+    arrays = {
+        "amplitude": amplitude,
+        "official_normalized_amplitude": official_normalized,
+        "subcarrier_index": np.arange(114, dtype=np.int32),
+        "tx_link_index": np.arange(1, dtype=np.int32),
+        "rx_link_index": np.arange(3, dtype=np.int32),
+    }
+    if identity_clip:
+        arrays["subject"] = np.asarray(label)
+    else:
+        arrays["activity_label"] = np.asarray(label)
+    return _save(input_path, output_path, "ntu-fi", arrays, "amplitude",
+                 ["time", "subcarrier", "tx_link", "rx_link"], "processed_amplitude",
+                 [
+                     "load official CSIamp [3 antennas,114 subcarriers,2000 packets]",
+                     "retain every fourth packet following the official SenseFi loader",
+                     "reshape to canonical [T,S,Tx,Rx] = [500,114,1,3]",
+                     "preserve source amplitude and add official normalization (x - 42.3199) / 4.9802",
+                 ],
+                 metadata_extra={
+                     "label_sets": {"Identity" if identity_clip else "Activity": [label]},
+                     "source_axis_order": ["antenna_stream", "subcarrier", "packet"],
+                     "source_shape": list(source.shape),
+                     "antenna_layout": {"tx_links": 1, "rx_links": 3},
+                     "antenna_mapping_evidence": "SenseFi exposes three antenna streams; retained as 1 Tx x 3 Rx",
+                     "official_packet_downsample_factor": 4,
+                     "official_normalization": {
+                         "array": "official_normalized_amplitude",
+                         "formula": "(amplitude - 42.3199) / 4.9802",
+                         "mean": 42.3199,
+                         "standard_deviation": 4.9802,
+                     },
+                     "sample_rate_evidence": "Physical packet cadence is not reported in the processed MAT files",
+                 })
 
 
 def convert_widar_csv(input_path: Path, output_path: Path) -> Path:
@@ -264,9 +415,49 @@ def convert_widar_csv(input_path: Path, output_path: Path) -> Path:
     if value.size != 22 * 20 * 20:
         raise ValueError(f"SenseFi Widar BVP CSV must contain 8800 values, got {value.size}")
     bvp = value.reshape(22, 20, 20).astype(np.float32)
-    return _save(input_path, output_path, "widar3", {"bvp": bvp}, "bvp",
-                 ["gesture_channel", "doppler_bin", "time_bin"], "processed_bvp",
-                 ["load official SenseFi CSV", "reshape 22x400 to 22x20x20"], power_unit="normalized_bvp")
+    official_normalized_bvp = ((bvp - 0.0025) / 0.0119).astype(np.float32)
+    label = re.sub(r"^\d+-", "", input_path.parent.name).replace("_", " ")
+    subject_match = re.match(r"^(user\d+)-", input_path.name, re.IGNORECASE)
+    split = next((part for part in input_path.parts if part.lower() in {"train", "test"}), None)
+    arrays = {
+        "bvp": bvp,
+        "official_normalized_bvp": official_normalized_bvp,
+        "activity_label": np.asarray(label),
+    }
+    if subject_match:
+        arrays["subject"] = np.asarray(subject_match.group(1).lower())
+    if split:
+        arrays["source_split"] = np.asarray(split.lower())
+    return _save(input_path, output_path, "widar3", arrays, "bvp",
+                 ["time_bin", "velocity_x_bin", "velocity_y_bin"], "processed_bvp",
+                 [
+                     "load authentic SenseFi Widar BVP CSV",
+                     "reshape source [22 time bins, 400 flattened velocity bins] to [22,20,20]",
+                     "retain the released BVP and add SenseFi's fixed normalized companion",
+                 ], power_unit="bvp_power_distribution",
+                 metadata_extra={
+                     "label_sets": {"Gesture": [label]},
+                     "time_axis": "time_bin",
+                     "source_axis_order": ["time_bin", "flattened_velocity_bin"],
+                     "source_shape": [22, 400],
+                     "labels": {
+                         "gesture": label,
+                         **({"subject": subject_match.group(1).lower()} if subject_match else {}),
+                         **({"split": split.lower()} if split else {}),
+                     },
+                     "official_normalization": {
+                         "array": "official_normalized_bvp",
+                         "formula": "(bvp - 0.0025) / 0.0119",
+                         "mean": 0.0025,
+                         "standard_deviation": 0.0119,
+                         "source": "SenseFi Widar_Dataset loader",
+                     },
+                     "sample_rate_evidence": "The processed SenseFi CSV exposes 22 semantic BVP snapshots but no physical cadence",
+                     "canonical_tensor_exception": {
+                         "reason": "Widar3 stores processed body-velocity profiles, not raw CSI.",
+                         "axis_order": ["time_bin", "velocity_x_bin", "velocity_y_bin"],
+                     },
+                 })
 
 
 def convert_three_rooms_directory(input_path: Path, output_path: Path) -> Path:
@@ -301,15 +492,30 @@ def convert_signfi_mat(input_path: Path, output_path: Path) -> Path:
     csi = np.asarray(csi)
     if csi.ndim != 4:
         raise ValueError(f"SignFi expects [time,subcarrier,link,sample], got {csi.shape}")
-    if csi.shape[0] == 200 and csi.shape[1] == 30:
-        csi = csi.transpose(3, 0, 2, 1)
-    arrays = _complex_arrays(csi)
+    source_shape = list(csi.shape)
+    if csi.shape[0] != 200 or csi.shape[1] != 30 or csi.shape[2] != 3:
+        raise ValueError(
+            "SignFi expects the official [200 time,30 subcarrier,3 Rx,N sample] "
+            f"tensor, got {csi.shape}"
+        )
+    # The official release stores [T,S,Rx,N].  Add the documented singleton
+    # Tx axis and write the hub contract directly as [N,T,S,Tx,Rx].
+    canonical = csi.transpose(3, 0, 1, 2)[:, :, :, None, :]
+    arrays = _complex_arrays(canonical)
     label = _find(mapping, ("label_lab", "label_home", "label", "labels"))
     if label is not None:
         arrays["source_label"] = np.asarray(label).reshape(-1)
     return _save(input_path, output_path, "signfi", arrays, "amplitude",
-                 ["sample", "time", "link", "subcarrier"], "complex_csi",
-                 ["load official csid tensor", "transpose 200x30x3xN to canonical axes", "derive amplitude and phase"])
+                 ["sample", "time", "subcarrier", "tx_link", "rx_link"], "complex_csi",
+                 ["load official csid tensor", "transpose [T,S,Rx,N] to [N,T,S,Tx,Rx]",
+                  "insert the documented singleton Tx axis", "derive amplitude and phase"],
+                 metadata_extra={
+                     "source_axis_order": ["time", "subcarrier", "rx_link", "sample"],
+                     "source_shape": source_shape,
+                     "antenna_layout": {"tx_links": 1, "rx_links": 3},
+                     "antenna_mapping_evidence": "official SignFi tensor schema",
+                     "source_rate_status": "not reported by the official release page",
+                 })
 
 
 def _canonical_sequence(value: np.ndarray) -> Tuple[np.ndarray, list[str]]:
@@ -334,20 +540,146 @@ def convert_wimans(input_path: Path, output_path: Path) -> Path:
         mapping = _load_mat(input_path)
         value = _find(mapping, ("CSI", "csi", "CSIamp", "amp", "amplitude"))
         value = value if value is not None else _largest_numeric(mapping, 2)
-    canonical, axes = _canonical_sequence(value)
+    value = np.asarray(value).squeeze()
+    if value.ndim != 4 or value.shape[1:3] != (3, 3) or value.shape[-1] != 30:
+        raise ValueError(
+            "WiMANS CSI amplitude must use the official "
+            f"[time,3 Tx,3 Rx,30 subcarriers] layout, got {value.shape}"
+        )
+    # The release stores [T,Tx,Rx,S].  Only transpose named axes; do not
+    # flatten the antenna grid and later guess how to factor it again.
+    canonical = value.transpose(0, 3, 1, 2)
+    # Every recording lasts exactly three seconds.  Packet loss makes T lower
+    # than the 3000 transmitted packets, so T/3 is the truthful received-packet
+    # cadence for resampling the complete clip back to a 3 s task grid.
+    effective_sample_rate_hz = float(canonical.shape[0]) / 3.0
+    axes = ["time", "subcarrier", "tx_link", "rx_link"]
     arrays = _complex_arrays(canonical)
+    arrays["timestamp_s"] = (
+        np.arange(canonical.shape[0], dtype=np.float64) / effective_sample_rate_hz
+    )
+    arrays["subcarrier_index"] = np.arange(30, dtype=np.int32)
+    arrays["tx_link_index"] = np.arange(3, dtype=np.int32)
+    arrays["rx_link_index"] = np.arange(3, dtype=np.int32)
+    metadata: Dict[str, object] = {
+        "source_axis_order": ["time", "tx_link", "rx_link", "subcarrier"],
+        "source_shape": list(value.shape),
+        "antenna_layout": {"tx_links": 3, "rx_links": 3},
+        "antenna_mapping": "released Tx and Rx axes",
+        "nominal_sample_rate_hz": 1000.0,
+        "fixed_clip_duration_s": 3.0,
+        "sample_rate_evidence": (
+            "official paper: 3000 packets in 3 seconds at 1000 packets/s; "
+            "effective received-packet rate is T/3 because shorter clips reflect packet loss"
+        ),
+    }
+    annotation_path = next(
+        (parent / "annotation.csv" for parent in input_path.parents if (parent / "annotation.csv").exists()),
+        None,
+    )
+    if annotation_path:
+        with annotation_path.open(newline="", encoding="utf-8-sig") as handle:
+            row = next((item for item in csv.DictReader(handle) if item.get("label") == input_path.stem), None)
+        if row:
+            activities = list(dict.fromkeys(
+                value for key, value in row.items() if key.startswith("user_") and key.endswith("_activity") and value
+            ))
+            locations = list(dict.fromkeys(
+                value for key, value in row.items() if key.startswith("user_") and key.endswith("_location") and value
+            ))
+            if activities:
+                arrays["activity_label"] = np.asarray(" + ".join(activities))
+            occupancy = int(row["number_of_users"])
+            label_sets: Dict[str, list[str]] = {
+                "Occupancy": [f"{occupancy} {'person' if occupancy == 1 else 'people'}"],
+                "Environment": [row["environment"]],
+                "WiFi band": [f"{row['wifi_band']} GHz"],
+            }
+            if activities:
+                label_sets["Activity"] = activities
+            if locations:
+                label_sets["Location"] = locations
+            metadata.update({
+                "annotation": row,
+                "label_sets": label_sets,
+            })
+    if "activity_label" not in arrays:
+        arrays["activity_label"] = np.asarray(input_path.stem)
     return _save(input_path, output_path, "wimans", arrays, "amplitude", axes,
                  "complex_csi" if np.iscomplexobj(canonical) else "processed_amplitude",
-                 ["load official WiMANS MAT/amp NPY", "flatten antenna axes when present", "cast float32"])
+                 ["load official WiMANS amplitude [T,3 Tx,3 Rx,30 subcarriers]",
+                  "join official annotation.csv by sample label",
+                  "transpose to canonical [T,S,Tx,Rx]", "cast float32"],
+                 sample_rate_hz=effective_sample_rate_hz,
+                 metadata_extra=metadata)
 
 
 def convert_xrf55_npy(input_path: Path, output_path: Path) -> Path:
     value = np.load(input_path, allow_pickle=False)
-    canonical, axes = _canonical_sequence(value)
+    expected_shape = (XRF55_RX_LINKS * XRF55_SUBCARRIERS, XRF55_TIME_SAMPLES)
+    if value.shape != expected_shape:
+        raise ValueError(
+            "XRF55 WiFi NPY must use the official [270 flattened channels, "
+            f"1000 time samples] layout, got {value.shape}"
+        )
+
+    clip = parse_xrf55_clip_id(input_path)
+    scene_match = next(
+        (
+            match for part in reversed(input_path.parts)
+            if (match := re.fullmatch(r"Scene(\d+)", part, re.IGNORECASE))
+        ),
+        None,
+    )
+    scene_id = int(scene_match.group(1)) if scene_match else None
+    # The official Q&A defines each consecutive group of 30 rows as the
+    # subcarriers for one receiving stream.  Preserve those nine streams
+    # without inventing a Tx/Rx factorization: Tx=1 and Rx=9.
+    canonical = value.reshape(
+        XRF55_RX_LINKS, XRF55_SUBCARRIERS, XRF55_TIME_SAMPLES,
+    ).transpose(2, 1, 0)[:, :, None, :]
+    axes = ["time", "subcarrier", "tx_link", "rx_link"]
     arrays = _complex_arrays(canonical)
+    arrays.update({
+        "subcarrier_index": np.arange(XRF55_SUBCARRIERS, dtype=np.int16),
+        "tx_link_index": np.arange(1, dtype=np.int8),
+        "rx_link_index": np.arange(XRF55_RX_LINKS, dtype=np.int8),
+        "activity_id": np.asarray(clip.action_id, dtype=np.int16),
+        "activity_label": np.asarray(clip.action_name),
+        "subject": np.asarray(str(clip.subject_id)),
+        "repetition_id": np.asarray(clip.repetition_id, dtype=np.int16),
+        "config_activity_id": np.asarray(str(clip.action_id)),
+        "config_repetition": np.asarray(str(clip.repetition_id)),
+    })
     return _save(input_path, output_path, "xrf55", arrays, "amplitude", axes,
                  "complex_csi" if np.iscomplexobj(canonical) else "processed_amplitude",
-                 ["load official XRF55 WiFi NPY", "canonicalize time/link/subcarrier axes", "cast float32"])
+                 [
+                     "load official XRF55 WiFi NPY stored as [270 flattened channels, 1000 time samples]",
+                     "split channels into nine receiving streams with 30 subcarriers following the official Q&A",
+                     "transpose to canonical [time, subcarrier, tx_link=1, rx_link=9] axes",
+                     "cast signal values to float32",
+                 ],
+                 sample_rate_hz=XRF55_SAMPLE_RATE_HZ,
+                 metadata_extra={
+                     "source_shape": list(expected_shape),
+                     "source_axis_order": ["flattened_rx_link_subcarrier", "time"],
+                     "source_flattened_order": "receiver_device_then_receiving_antenna_then_subcarrier",
+                     "antenna_layout": {"tx_links": 1, "rx_links": XRF55_RX_LINKS},
+                     "receiver_grouping": {"receiver_devices": 3, "receiving_antennas_per_device": 3},
+                     "antenna_mapping": "rx_link_major_then_subcarrier",
+                     "antenna_mapping_evidence": (
+                         "XRF55 Q&A: each consecutive block of 30 values is one receiving "
+                         "antenna's subcarriers; the first 90 values belong to receiver device 1."
+                     ),
+                     "filename_schema": "subject_id_action_id_repetition_id.npy",
+                     "subject_id": clip.subject_id,
+                     "scene_id": scene_id,
+                     "activity_id": clip.action_id,
+                     "activity_name": clip.action_name,
+                     "repetition_id": clip.repetition_id,
+                     "label_vocabulary": XRF55_ACTION_NAMES,
+                     "label_sets": {"Activity": [clip.action_name]},
+                 })
 
 
 def _scalar(mapping: Dict[str, np.ndarray], names: Iterable[str], default: Any = None) -> Any:
@@ -385,15 +717,61 @@ def convert_ehunam_mat(input_path: Path, output_path: Path) -> Path:
     csi = csi[:, keep][:, None, :]
     arrays = _complex_arrays(csi)
     arrays["subcarrier_index"] = keep
-    timestamp_delta = _find(mapping, ("Timestamp",))
-    if timestamp_delta is not None and np.asarray(timestamp_delta).size == csi.shape[0]:
-        arrays["timestamp_s"] = np.cumsum(np.asarray(timestamp_delta).reshape(-1).astype(np.float64)) / 1000.0
+    source_rate_hz = None
+    source_timestamps = _find(mapping, ("TimeStamp", "Timestamp"))
+    if source_timestamps is not None and np.asarray(source_timestamps).size == csi.shape[0]:
+        timestamp_s = np.asarray(source_timestamps).reshape(-1).astype(np.float64)
+        timestamp_s = timestamp_s - timestamp_s[0]
+        if timestamp_s.size > 1 and np.all(np.diff(timestamp_s) >= 0) and timestamp_s[-1] > 0:
+            arrays["timestamp_s"] = timestamp_s
+            source_rate_hz = float((timestamp_s.size - 1) / timestamp_s[-1])
     rssi = _find(mapping, ("RSSI",))
     if rssi is not None:
         arrays["rssi_dbm"] = np.asarray(rssi).reshape(-1).astype(np.float32)
+
+    # EHUNAM's nine filename fields are part of the released annotation
+    # schema.  Preserve both the multi-label values (for example ``WG``) and
+    # their atomic labels so the website can offer one real clip for every
+    # published target instead of reducing the dataset to one task example.
+    parts = input_path.stem.split("_")
+    label_sets: Dict[str, list[str]] = {}
+    metadata: Dict[str, object] = {}
+    if len(parts) >= 9:
+        campaign, collection_set, receiver, application, people, activity, machines, status, sequence = parts[:9]
+        activity_names = {
+            "J": "jumping", "W": "walking", "S": "standing",
+            "T": "sitting", "G": "sit down / get up", "F": "falling",
+        }
+        label_sets["Occupancy"] = [f"{0 if people == '#' else len(people)} people"]
+        label_sets["Application"] = [application]
+        if people != "#":
+            label_sets["Identity"] = [f"person {person}" for person in people]
+        if activity != "#":
+            atomic_activities = [activity_names[code] for code in activity if code in activity_names]
+            if atomic_activities:
+                label_sets["Activity"] = list(dict.fromkeys(atomic_activities))
+                label_sets["Activity combination"] = [" + ".join(atomic_activities)]
+                arrays["activity_label"] = np.asarray(" + ".join(atomic_activities))
+        if machines != "#":
+            label_sets["Machine"] = [f"machine {machine}" for machine in machines if machine.isdigit()]
+            label_sets["Machine combination"] = [" + ".join(label_sets["Machine"])]
+        if status in {"O", "R"}:
+            label_sets["Machine state"] = ["powered on" if status == "O" else "running"]
+        metadata.update({
+            "campaign": campaign,
+            "collection_set": collection_set,
+            "receiver": receiver,
+            "application": application,
+            "sequence": sequence,
+            "label_sets": label_sets,
+        })
+    if source_rate_hz is not None:
+        metadata["sample_rate_provenance"] = "inferred from the released TimeStamp span"
     return _save(input_path, output_path, "ehunam", arrays, "amplitude",
                  ["time", "link", "subcarrier"], "complex_csi",
-                 ["load official CSI/BW/Subcarriers metadata", "remove null and pilot carriers using official Subcarrier.m", "derive amplitude and phase"])
+                 ["load official CSI/BW/Subcarriers/TimeStamp metadata", "remove null and pilot carriers using official Subcarrier.m", "infer effective source rate from the released timestamp span", "derive amplitude and phase"],
+                 sample_rate_hz=source_rate_hz,
+                 metadata_extra=metadata)
 
 
 def convert_wifi_presence_json(input_path: Path, output_path: Path) -> Path:
@@ -424,10 +802,21 @@ def convert_wifi_presence_json(input_path: Path, output_path: Path) -> Path:
                     imag[index, link, subcarrier] = float(value["i"])
     timestamps -= timestamps[0]
     amplitude = np.hypot(real, imag).astype(np.float32)
+    positive_deltas = np.diff(timestamps)
+    positive_deltas = positive_deltas[positive_deltas > 0]
+    sample_rate_hz = float(1.0 / np.median(positive_deltas)) if positive_deltas.size else None
+    state = input_path.parent.name.replace("_", " ").title() if input_path.parent.name != "original" else None
+    arrays: Dict[str, np.ndarray] = {
+        "csi_real": real, "csi_imag": imag, "amplitude": amplitude, "timestamp_s": timestamps,
+    }
+    if state:
+        arrays["activity_label"] = np.asarray(state)
     return _save(input_path, output_path, "wifi-presence-movement",
-                 {"csi_real": real, "csi_imag": imag, "amplitude": amplitude, "timestamp_s": timestamps},
+                 arrays,
                  "amplitude", ["time", "link", "subcarrier"], "complex_csi",
-                 ["stream gzip JSON Lines", "parse official r/i complex fields", "transpose subcarrier/link axes", "normalize epoch timestamps to elapsed seconds"])
+                 ["stream gzip JSON Lines", "parse official r/i complex fields", "transpose subcarrier/link axes", "normalize epoch timestamps to elapsed seconds"],
+                 sample_rate_hz=sample_rate_hz,
+                 metadata_extra={"label_sets": {"Activity state": [state]} if state else {}})
 
 
 def _find_ancestor_child(path: Path, child: str) -> Path | None:
@@ -438,18 +827,30 @@ def _find_ancestor_child(path: Path, child: str) -> Path | None:
     return None
 
 
+WIFI_TAD_CLASS_NAMES = {
+    1: "run",
+    2: "walk",
+    3: "jump",
+    4: "wave",
+    5: "bend",
+    6: "stand",
+    7: "sit",
+}
+
+
 def convert_wifi_tad_npy(input_path: Path, output_path: Path) -> Path:
     data = np.load(input_path, allow_pickle=False).squeeze()
     if data.ndim != 2:
         raise ValueError(f"WiFiTAD NPY must be 2-D, got {data.shape}")
-    # The official loader applies np.transpose before feeding a 60-channel
-    # temporal tensor. Canonical storage keeps time first.
-    if data.shape[0] == 60 and data.shape[1] != 60:
+    # The public release stores 8,500 time samples by 30 processed feature
+    # channels. Its loader transposes that array for model input; the hub keeps
+    # time first so annotations remain direct sample indices.
+    if data.shape[0] == 30 and data.shape[1] != 30:
         time_first = data.T
-    elif data.shape[1] == 60:
+    elif data.shape[1] == 30:
         time_first = data
     else:
-        raise ValueError(f"WiFiTAD expects one 60-channel axis, got {data.shape}")
+        raise ValueError(f"WiFiTAD expects one 30-feature axis, got {data.shape}")
     amplitude = time_first[:, None, :].astype(np.float32)
     arrays: Dict[str, np.ndarray] = {
         "amplitude": amplitude,
@@ -474,16 +875,51 @@ def convert_wifi_tad_npy(input_path: Path, output_path: Path) -> Path:
                     if row and row[0] == video_name and len(row) >= 5:
                         ratio = info[1] / info[0] if info and info[0] else 1.0
                         try:
-                            segments.append((float(row[-2]) * ratio, float(row[-1]) * ratio, int(float(row[2]))))
-                        except ValueError:
+                            label_id = int(float(row[2]))
+                            if label_id not in WIFI_TAD_CLASS_NAMES:
+                                raise ValueError(f"unknown WiFiTAD class id {label_id}")
+                            segments.append((
+                                float(row[-2]) * ratio,
+                                float(row[-1]) * ratio,
+                                label_id,
+                            ))
+                        except (IndexError, ValueError):
                             continue
         if segments:
             arrays["segment_start_index"] = np.asarray([item[0] for item in segments], dtype=np.float32)
             arrays["segment_end_index"] = np.asarray([item[1] for item in segments], dtype=np.float32)
             arrays["segment_label"] = np.asarray([item[2] for item in segments], dtype=np.int16)
+            arrays["segment_label_name"] = np.asarray(
+                [WIFI_TAD_CLASS_NAMES[item[2]] for item in segments], dtype="U16"
+            )
+    metadata_extra: Dict[str, object] = {
+        "canonical_tensor_exception": {
+            "reason": "WiFiTAD stores processed temporal feature channels, not raw CSI subcarriers.",
+            "axis_order": ["time", "link", "feature"],
+        },
+        "label_vocabulary": {
+            "activity": [WIFI_TAD_CLASS_NAMES[index] for index in sorted(WIFI_TAD_CLASS_NAMES)],
+            "source_class_index": {
+                str(index): WIFI_TAD_CLASS_NAMES[index] for index in sorted(WIFI_TAD_CLASS_NAMES)
+            },
+        },
+    }
+    if "segment_label" in arrays:
+        metadata_extra["segments"] = [
+            {
+                "start_seconds": float(start) / 100.0,
+                "end_seconds": float(end) / 100.0,
+                "label": WIFI_TAD_CLASS_NAMES[int(label)],
+                "source_label": str(int(label)),
+            }
+            for start, end, label in zip(
+                arrays["segment_start_index"], arrays["segment_end_index"], arrays["segment_label"]
+            )
+        ]
     return _save(input_path, output_path, "wifi-tad", arrays, "amplitude",
                  ["time", "link", "feature"], "processed_amplitude",
-                 ["load official smartwifi NPY", "orient 60 channels after official transpose", "store official amplitude/40 normalization", "attach temporal annotation indices"])
+                 ["load official smartwifi NPY", "orient 30 feature channels with time first", "store official amplitude/40 normalization", "attach 100 Hz temporal annotation indices and class names"],
+                 sample_rate_hz=100.0, metadata_extra=metadata_extra)
 
 
 def _column_mapping(value: Any) -> Dict[str, np.ndarray] | None:
@@ -517,20 +953,57 @@ def convert_operanet_mat(input_path: Path, output_path: Path) -> Path:
     if len(csi_names) != 270:
         raise ValueError(f"OPERAnet WiFi table must contain 270 CSI columns, found {len(csi_names)}")
     flat = np.column_stack([columns[name] for name in csi_names])
-    csi = flat.reshape(flat.shape[0], 9, 30)
+    source_csi = flat.reshape(flat.shape[0], 3, 3, 30)
+    csi = source_csi.transpose(0, 3, 1, 2)
     arrays = _complex_arrays(csi)
     lowered = {name.lower(): name for name in columns}
     for source_name, target_name in {
         "activity": "source_label", "person_id": "subject", "room_no": "environment", "exp_no": "experiment"
     }.items():
         if source_name in lowered:
-            arrays[target_name] = np.asarray(columns[lowered[source_name]]).astype("U64")
+            arrays[target_name] = np.char.strip(
+                np.asarray(columns[lowered[source_name]]).astype("U64")
+            )
+    nominal_sample_rate_hz = 1600.0
+    sample_rate_hz = None
+    sample_rate_provenance = ""
     if "timestamp" in lowered:
-        timestamp = np.asarray(columns[lowered["timestamp"]], dtype=np.float64)
+        timestamp = np.asarray(columns[lowered["timestamp"]], dtype=np.float64).reshape(-1)
         arrays["timestamp_s"] = (timestamp - timestamp[0]) / 1000.0
+        # Timestamps are quantized to whole milliseconds while packets arrive
+        # at about 1.6 kHz, so adjacent packets often share a timestamp. The
+        # median positive difference would therefore produce a false 1 kHz
+        # rate. Estimate effective cadence over the complete excerpt instead.
+        span_s = float(arrays["timestamp_s"][-1]) if timestamp.size > 1 else 0.0
+        if span_s > 0:
+            sample_rate_hz = float((timestamp.size - 1) / span_s)
+            sample_rate_provenance = "effective rate inferred from packet count over released timestamp span"
+    if sample_rate_hz is None:
+        sample_rate_hz = nominal_sample_rate_hz
+        arrays["timestamp_s"] = np.arange(csi.shape[0], dtype=np.float64) / sample_rate_hz
+        sample_rate_provenance = "official nominal 1600 Hz; excerpt does not contain timestamp metadata"
+    label_sets = {}
+    if "source_label" in arrays:
+        label_sets["Activity"] = sorted({str(item) for item in np.asarray(arrays["source_label"]).reshape(-1)})
+    setting_values = {}
+    for field, setting in {
+        "subject": "Person", "environment": "Room", "experiment": "Experiment",
+    }.items():
+        if field in arrays:
+            setting_values[setting] = sorted({str(item) for item in np.asarray(arrays[field]).reshape(-1)})
     return _save(input_path, output_path, "operanet", arrays, "amplitude",
-                 ["time", "link", "subcarrier"], "complex_csi",
-                 ["load official MATLAB table", "order tx1rx1_sub1 through tx3rx3_sub30", "reshape 270 complex fields to 9 links x 30 subcarriers", "attach activity/person/room metadata"])
+                 ["time", "subcarrier", "tx_link", "rx_link"], "complex_csi",
+                 ["load official MATLAB table", "order tx1rx1_sub1 through tx3rx3_sub30", "reshape and transpose 270 complex fields to [T,S,Tx,Rx]", "attach activity/person/room/experiment metadata"],
+                 sample_rate_hz=sample_rate_hz,
+                 metadata_extra={
+                     "label_sets": label_sets,
+                     "setting_values": setting_values,
+                     "antenna_layout": {"tx_links": 3, "rx_links": 3},
+                     "source_axis_order": ["time", "tx_link", "rx_link", "subcarrier"],
+                     "source_shape": list(source_csi.shape),
+                     "nominal_sample_rate_hz": nominal_sample_rate_hz,
+                     "sample_rate_provenance": sample_rate_provenance,
+                 })
 
 
 def _read_numeric_csv(path: Path) -> np.ndarray:
@@ -553,21 +1026,69 @@ def convert_nist_breathesmart(input_path: Path, output_path: Path) -> Path:
     if real.shape != imag.shape:
         raise ValueError(f"BreatheSmart real/imag shapes differ: {real.shape} vs {imag.shape}")
     if real.shape[1] == 1026:
-        links, subcarriers = 9, 114
+        stored_links, stored_subcarriers = 9, 114
     elif real.shape[1] == 504:
-        links, subcarriers = 9, 56
+        stored_links, stored_subcarriers = 9, 56
     elif real.shape[1] % 114 == 0:
-        links, subcarriers = real.shape[1] // 114, 114
+        stored_links, stored_subcarriers = real.shape[1] // 114, 114
     elif real.shape[1] % 56 == 0:
-        links, subcarriers = real.shape[1] // 56, 56
+        stored_links, stored_subcarriers = real.shape[1] // 56, 56
     else:
         raise ValueError(f"BreatheSmart CSI width is not compatible with 56/114 subcarriers: {real.shape[1]}")
-    real = real.reshape(real.shape[0], links, subcarriers).astype(np.float32)
-    imag = imag.reshape(imag.shape[0], links, subcarriers).astype(np.float32)
+
+    # The NIST CSV envelope reserves 3 x 3 link slots and, in some files, 114
+    # carrier slots per link.  The experiment documented by NIST measured only
+    # 2 Tx x 3 Rx x 56 subcarriers.  In the official 1026-column files the
+    # unmeasured positions are literal zero columns: carrier slots 56..113 and
+    # every third flattened link.  Do not present those reserved slots as
+    # measured CSI.
+    source_real = real.reshape(real.shape[0], stored_links, stored_subcarriers).astype(np.float32)
+    source_imag = imag.reshape(imag.shape[0], stored_links, stored_subcarriers).astype(np.float32)
+    nonzero = np.logical_or(source_real != 0, source_imag != 0)
+    source_subcarrier_mask = np.any(nonzero, axis=(0, 1))
+    if not np.any(source_subcarrier_mask):
+        raise ValueError("BreatheSmart recording contains no non-zero CSI subcarriers")
+    source_real = source_real[:, :, source_subcarrier_mask]
+    source_imag = source_imag[:, :, source_subcarrier_mask]
+    source_link_mask = np.any(
+        np.logical_or(source_real != 0, source_imag != 0), axis=(0, 2),
+    )
+    active_link_indices = np.flatnonzero(source_link_mask)
+
+    if stored_links == 9 and active_link_indices.tolist() == [0, 1, 3, 4, 6, 7]:
+        # Stored order is three receiver groups, each reserving three Tx slots.
+        # Select the two measured Tx slots and transpose to [T,S,Tx,Rx].
+        real = source_real.reshape(source_real.shape[0], 3, 3, -1)[:, :, :2, :]
+        imag = source_imag.reshape(source_imag.shape[0], 3, 3, -1)[:, :, :2, :]
+        real = np.transpose(real, (0, 3, 2, 1))
+        imag = np.transpose(imag, (0, 3, 2, 1))
+    elif stored_links == 6 and active_link_indices.tolist() == list(range(6)):
+        # Compact releases may omit the unused third Tx slot altogether while
+        # retaining the same Rx-major, then Tx ordering.
+        real = np.transpose(source_real.reshape(source_real.shape[0], 3, 2, -1), (0, 3, 2, 1))
+        imag = np.transpose(source_imag.reshape(source_imag.shape[0], 3, 2, -1), (0, 3, 2, 1))
+    else:
+        raise ValueError(
+            "BreatheSmart active link slots do not match the documented 2 Tx x 3 Rx layout: "
+            f"stored_links={stored_links}, active_slots={active_link_indices.tolist()}"
+        )
+
+    measured_subcarriers = int(np.count_nonzero(source_subcarrier_mask))
+    if measured_subcarriers != 56:
+        raise ValueError(
+            "BreatheSmart active subcarriers do not match the documented 56-carrier layout: "
+            f"found {measured_subcarriers} of {stored_subcarriers} stored slots"
+        )
     arrays: Dict[str, np.ndarray] = {
         "csi_real": real, "csi_imag": imag, "amplitude": np.hypot(real, imag).astype(np.float32),
-        "timestamp_s": np.arange(real.shape[0], dtype=np.float64) / 10.0,
+        "subcarrier_index": np.flatnonzero(source_subcarrier_mask).astype(np.int32),
+        "tx_link_index": np.arange(2, dtype=np.int32),
+        "rx_link_index": np.arange(3, dtype=np.int32),
+        "source_subcarrier_mask": source_subcarrier_mask.astype(bool),
+        "source_link_mask": source_link_mask.astype(bool),
     }
+    source_rate_hz: float | None = None
+    pattern_label: str | None = None
     config_candidates = sorted(input_path.parent.glob("config*.csv")) + sorted(input_path.parent.glob("config*.cvs"))
     if config_candidates:
         with config_candidates[0].open(newline="", encoding="utf-8-sig", errors="ignore") as handle:
@@ -576,11 +1097,42 @@ def convert_nist_breathesmart(input_path: Path, output_path: Path) -> Path:
             if len(row) >= 2 and row[0].strip():
                 key = re.sub(r"[^a-z0-9]+", "_", row[0].strip().lower()).strip("_")
                 if key:
-                    arrays[f"config_{key}"] = np.asarray(str(row[1]).strip())
+                    value = str(row[1]).strip()
+                    arrays[f"config_{key}"] = np.asarray(value)
+                    if key == "msgfreq":
+                        try:
+                            source_rate_hz = float(value)
+                        except ValueError:
+                            pass
+                    elif key == "pattern":
+                        pattern_label = value
+    if not source_rate_hz:
+        rate_match = next((re.search(r"FrameRate(\d+(?:\.\d+)?)", part, re.IGNORECASE)
+                           for part in input_path.parts if "framerate" in part.lower()), None)
+        source_rate_hz = float(rate_match.group(1)) if rate_match else 10.0
+    arrays["timestamp_s"] = np.arange(real.shape[0], dtype=np.float64) / source_rate_hz
+    if not pattern_label:
+        pattern_match = next((re.search(r"BreathingPattern\d+", part, re.IGNORECASE)
+                              for part in input_path.parts if "breathingpattern" in part.lower()), None)
+        pattern_label = pattern_match.group(0) if pattern_match else None
     return _save(input_path, output_path, "nist-breathesmart", arrays, "amplitude",
-                 ["time", "link", "subcarrier"], "complex_csi",
-                 ["pair official real and imaginary CSV logs", "reshape 3x3 MIMO x 56/114 subcarriers", "attach config CSV values"],
-                 sample_rate_hz=10.0)
+                 ["time", "subcarrier", "tx_link", "rx_link"], "complex_csi",
+                 [
+                     "pair official real and imaginary CSV logs",
+                     "discard carrier and link slots that are zero for the complete recording",
+                     "map the six measured streams to canonical [T,S,Tx,Rx] = [T,56,2,3]",
+                     "attach config CSV values",
+                 ],
+                 sample_rate_hz=source_rate_hz,
+                 metadata_extra={
+                     "label_sets": {"Breathing pattern": [pattern_label]} if pattern_label else {},
+                     "source_axis_order": ["time", "stored_link_slot", "stored_subcarrier_slot"],
+                     "source_shape": [int(real.shape[0]), stored_links, stored_subcarriers],
+                     "antenna_layout": {"tx_links": 2, "rx_links": 3},
+                     "antenna_mapping": "source_rx_major_then_tx_slot_to_canonical_tx_rx",
+                     "discarded_all_zero_subcarrier_slots": int(stored_subcarriers - measured_subcarriers),
+                     "discarded_all_zero_link_slots": int(stored_links - active_link_indices.size),
+                 })
 
 
 def convert_csida_zarr(input_path: Path, output_path: Path) -> Path:
@@ -593,14 +1145,28 @@ def convert_csida_zarr(input_path: Path, output_path: Path) -> Path:
     phase_path = root / "csi_data_pha"
     if not amp_path.exists():
         raise ValueError(f"CSIDA csi_data_amp Zarr array not found under {root}")
-    amplitude = np.asarray(zarr.open(str(amp_path), mode="r"), dtype=np.float32)
-    if amplitude.ndim != 4:
-        raise ValueError(f"CSIDA amplitude must be [sample,time,3,114], got {amplitude.shape}")
-    arrays: Dict[str, np.ndarray] = {"amplitude": amplitude}
+    source_amplitude = np.asarray(zarr.open(str(amp_path), mode="r"), dtype=np.float32)
+    if source_amplitude.ndim != 4 or source_amplitude.shape[2:] != (3, 114):
+        raise ValueError(
+            "CSIDA amplitude must use the official [sample,time,3 Rx,114 subcarrier] "
+            f"layout, got {source_amplitude.shape}"
+        )
+
+    # Official CSIDA stores [sample, time, Rx, subcarrier]. WiSenseHub keeps
+    # antenna directions explicit and places subcarriers before the links:
+    # [sample, time, subcarrier, Tx=1, Rx=3].
+    amplitude = np.transpose(source_amplitude, (0, 1, 3, 2))[:, :, :, None, :]
+    arrays: Dict[str, np.ndarray] = {
+        "amplitude": amplitude,
+        "subcarrier_index": np.arange(amplitude.shape[2], dtype=np.int16),
+        "tx_link_index": np.asarray([0], dtype=np.int16),
+        "rx_link_index": np.arange(amplitude.shape[4], dtype=np.int16),
+    }
     if phase_path.exists():
-        phase = np.asarray(zarr.open(str(phase_path), mode="r"), dtype=np.float32)
-        if phase.shape != amplitude.shape:
+        source_phase = np.asarray(zarr.open(str(phase_path), mode="r"), dtype=np.float32)
+        if source_phase.shape != source_amplitude.shape:
             raise ValueError("CSIDA amplitude and phase shapes differ")
+        phase = np.transpose(source_phase, (0, 1, 3, 2))[:, :, :, None, :]
         arrays["phase_rad"] = phase
         arrays["csi_real"] = (amplitude * np.cos(phase)).astype(np.float32)
         arrays["csi_imag"] = (amplitude * np.sin(phase)).astype(np.float32)
@@ -611,46 +1177,81 @@ def convert_csida_zarr(input_path: Path, output_path: Path) -> Path:
         path = root / source_name
         if path.exists():
             values = np.asarray(zarr.open(str(path), mode="r")).reshape(-1)
-            if values.size != amplitude.shape[0]:
+            if values.size != source_amplitude.shape[0]:
                 raise ValueError(f"CSIDA {source_name} count does not match samples")
             arrays[target_name] = values
+    source_representation = "amplitude_phase" if phase_path.exists() else "amplitude"
     return _save(input_path, output_path, "csida", arrays, "amplitude",
-                 ["sample", "time", "link", "subcarrier"], "amplitude_phase",
-                 ["open official Zarr arrays", "align amplitude/phase and four label arrays", "reconstruct real and imaginary CSI"])
+                 ["sample", "time", "subcarrier", "tx_link", "rx_link"], source_representation,
+                 [
+                     "open official Zarr arrays",
+                     "align amplitude/phase and gesture, room, position, and user labels",
+                     "transpose [time,Rx,subcarrier] to canonical [time,subcarrier,Tx,Rx]",
+                     "preserve all 114 subcarriers and the native 1 Tx by 3 Rx antenna layout",
+                     "reconstruct real and imaginary CSI when phase is available",
+                 ],
+                 sample_rate_hz=1000.0,
+                 metadata_extra={
+                     "labels": {
+                         "activity": ["pull left", "pull right", "lift up", "press down", "circle", "zigzag"],
+                         "environment": ["room 0", "room 1"],
+                         "location": ["position 0", "position 1", "position 2"],
+                         "subject": ["user 0", "user 1", "user 2", "user 3", "user 4"],
+                     },
+                     "source_axis_order": ["sample", "time", "rx_link", "subcarrier"],
+                     "antenna_layout": {"tx_links": 1, "rx_links": 3},
+                 })
 
 
 def convert_exposing_csi_mat(input_path: Path, output_path: Path) -> Path:
     mapping = _load_mat(input_path)
-    csi = _find(mapping, ("csi_buff",))
+    csi = _find(mapping, ("csi", "csi_buff"))
     if csi is None:
-        raise ValueError("Exposing the CSI MAT file must contain csi_buff")
+        raise ValueError("Exposing the CSI MAT file must contain csi or csi_buff")
     csi = np.asarray(csi)
-    if csi.ndim != 2 or csi.shape[1] < 2048:
-        raise ValueError(f"expected AX-CSI csi_buff [packet,2048+], got {csi.shape}")
+    if csi.ndim not in {2, 3} or csi.shape[1] < 2048:
+        raise ValueError(f"expected AX-CSI [packet,2048+,stream?], got {csi.shape}")
     csi = np.fft.fftshift(csi[:, :2048], axes=1)
-    csi = csi[np.sum(np.abs(csi), axis=1) != 0]
+    csi = csi[np.sum(np.abs(csi), axis=tuple(range(1, csi.ndim))) != 0]
     remove = np.asarray([
         *range(0, 12), 509, 510, 511, 512, 513, 514, 1013, 1014, 1015, 1016, 1017,
         1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029,
         1030, 1031, 1032, 1033, 1034, 1035, 1535, 1536, 1537, 1538, 1539,
         2036, 2037, 2038, 2039, 2040, 2041, 2042, 2043, 2044, 2045, 2046, 2047,
     ], dtype=np.int32)
-    streams = []
-    for stream in range(4):
-        value = csi[stream::4]
-        value = np.delete(value, remove, axis=1)
-        scale = np.mean(np.abs(value), axis=1, keepdims=True)
-        streams.append(value / np.maximum(scale, np.finfo(np.float32).eps))
-    length = min(value.shape[0] for value in streams)
-    canonical = np.stack([value[:length] for value in streams], axis=1)
+    if csi.ndim == 3:
+        if csi.shape[2] != 4:
+            raise ValueError(f"official Exposing CSI stream axis must have length 4, got {csi.shape}")
+        canonical = np.delete(csi, remove, axis=1).transpose(0, 2, 1)
+        scale = np.mean(np.abs(canonical), axis=2, keepdims=True)
+        canonical = canonical / np.maximum(scale, np.finfo(np.float32).eps)
+        source_layout = "load official csi [packet,2048,4 streams]"
+    else:
+        streams = []
+        for stream in range(4):
+            value = csi[stream::4]
+            value = np.delete(value, remove, axis=1)
+            scale = np.mean(np.abs(value), axis=1, keepdims=True)
+            streams.append(value / np.maximum(scale, np.finfo(np.float32).eps))
+        length = min(value.shape[0] for value in streams)
+        canonical = np.stack([value[:length] for value in streams], axis=1)
+        source_layout = "deinterleave legacy csi_buff into four monitor streams"
     arrays = _complex_arrays(canonical)
     activity = re.search(r"(?:^|_)([A-L])(?:_|$)", input_path.stem.upper())
     if activity:
-        arrays["source_label"] = np.asarray(activity.group(1))
+        activity_code = activity.group(1)
+        activity_names = {
+            "A": "walk", "B": "run", "C": "jump", "D": "sitting",
+            "E": "empty_room", "F": "standing", "G": "wave_hands",
+            "H": "clapping", "I": "lay_down", "J": "wiping",
+            "K": "squat", "L": "stretching",
+        }
+        arrays["source_label"] = np.asarray(activity_code)
+        arrays["activity_label"] = np.asarray(activity_names[activity_code])
     arrays["subcarrier_index"] = np.delete(np.arange(2048, dtype=np.int32), remove)
     return _save(input_path, output_path, "exposing-csi", arrays, "amplitude",
                  ["time", "link", "subcarrier"], "complex_csi",
-                 ["load official csi_buff", "FFT-shift 160 MHz AX-CSI", "remove official null carriers", "deinterleave four monitor streams", "normalize each packet by mean amplitude"],
+                 [source_layout, "FFT-shift 160 MHz AX-CSI", "remove official null carriers", "normalize each packet by mean amplitude"],
                  sample_rate_hz=1.0 / 0.006)
 
 
@@ -661,31 +1262,89 @@ def convert_wifi_80mhz_mat(input_path: Path, output_path: Path) -> Path:
     csi = np.asarray(csi)
     if csi.ndim != 2:
         raise ValueError(f"80 MHz CFR trace must be a 2-D complex matrix, got {csi.shape}")
+    source_shape = list(csi.shape)
+    transformations = ["load the official complex CFR matrix"]
     shifted = False
     if csi.shape[1] == 1024:
         csi = np.fft.fftshift(csi, axes=1)[:, :1024:4]
         shifted = True
+        transformations.append("FFT-shift the 1024-bin capture and select every fourth bin")
     if csi.shape[1] == 256:
         if not shifted:
             csi = np.fft.fftshift(csi, axes=1)
+            transformations.append("FFT-shift the 256-bin capture")
         remove = np.asarray([0, 1, 2, 3, 4, 5, 127, 128, 129, 251, 252, 253, 254, 255])
         csi = np.delete(csi, remove, axis=1)
+        transformations.append("remove the 14 non-data bins to retain 242 subcarriers")
     elif csi.shape[1] != 242:
         raise ValueError(f"80 MHz trace expects 242, 256, or 1024 frequency bins, got {csi.shape[1]}")
-    csi = csi[np.sum(np.abs(csi), axis=1) != 0]
+    else:
+        transformations.append("preserve all 242 Nexmon data subcarriers")
     if csi.shape[0] < 4:
         raise ValueError("80 MHz trace contains fewer than four monitor-antenna packets")
     length = csi.shape[0] // 4
-    streams = [csi[index:length * 4:4] for index in range(4)]
-    canonical = np.stack(streams, axis=1)
+    trailing_rows = csi.shape[0] - length * 4
+    if trailing_rows:
+        transformations.append(f"discard {trailing_rows} incomplete trailing monitor row(s)")
+    # The release interleaves four monitor antennas for every transmitted
+    # packet. Reshape first, then remove fully empty packet groups; deleting
+    # individual zero rows would shift every later antenna assignment.
+    canonical = csi[:length * 4].reshape(length, 4, 242)
+    valid_packets = np.any(np.abs(canonical) > 0, axis=(1, 2))
+    removed_packets = int(np.count_nonzero(~valid_packets))
+    canonical = canonical[valid_packets]
+    transformations.append("group each four consecutive rows as the monitor-antenna axis")
+    if removed_packets:
+        transformations.append(f"discard {removed_packets} all-zero packet group(s)")
+    if canonical.shape[0] == 0:
+        raise ValueError("80 MHz trace contains no non-zero packet groups")
     arrays = _complex_arrays(canonical)
+    arrays["subcarrier_index"] = np.arange(242, dtype=np.int32)
+    arrays["monitor_antenna_index"] = np.arange(4, dtype=np.int16)
     activity = re.search(r"(?:^|_)([WRJLSCGE])(?:_|\d|$)", input_path.stem.upper())
     if activity:
-        arrays["source_label"] = np.asarray(activity.group(1))
+        activity_code = activity.group(1)
+        activity_names = {
+            "W": "walking", "R": "running", "J": "jumping", "L": "sitting still",
+            "S": "standing", "C": "sit down / stand up", "G": "arm exercises",
+            "E": "empty room",
+        }
+        arrays["source_label"] = np.asarray(activity_code)
+        arrays["activity_label"] = np.asarray(activity_names[activity_code])
+    label_sets: Dict[str, list[str]] = {}
+    if activity:
+        label_sets["Activity"] = [activity_names[activity_code]]
+    identity = re.search(r"PI\d+[a-z]?_p(\d+)", input_path.stem, re.IGNORECASE)
+    if identity:
+        person = int(identity.group(1))
+        identity_label = "empty room" if person == 0 else f"p{person:02d}"
+        arrays["subject"] = np.asarray(identity_label)
+        label_sets["Identity"] = [identity_label]
+    occupancy = re.search(r"PC\d+[a-z]?_n(\d+)", input_path.stem, re.IGNORECASE)
+    if occupancy:
+        people = int(occupancy.group(1))
+        occupancy_label = "empty room" if people == 0 else f"{people} people"
+        arrays["occupancy_label"] = np.asarray(occupancy_label)
+        label_sets["Occupancy"] = [occupancy_label]
+    subset = re.search(r"\b(AR|PI|PC)(\d+)([a-z])", input_path.stem, re.IGNORECASE)
+    subset_code = subset.group(0).upper() if subset else None
     return _save(input_path, output_path, "wifi-80mhz", arrays, "amplitude",
                  ["time", "link", "subcarrier"], "complex_csi",
-                 ["load official csi_buff CFR trace", "FFT-shift and select 242 data subcarriers", "deinterleave four monitor antennas"],
-                 sample_rate_hz=173.0)
+                 transformations, sample_rate_hz=173.0, metadata_extra={
+                     "label_sets": label_sets,
+                     "source_shape": source_shape,
+                     "source_axis_order": ["interleaved_packet_monitor_antenna", "subcarrier"],
+                     "official_source_shape": source_shape,
+                     "official_source_axis_order": ["interleaved_packet_monitor_antenna", "subcarrier"],
+                     "source_matrix_contract": "[(T × 4 monitor antennas), 242 subcarriers]",
+                     "official_nominal_sample_rate_hz": 173.0,
+                     "antenna_layout": {"tx_links": 1, "rx_links": 4},
+                     "antenna_mapping_evidence": (
+                         "The release records one transmitted spatial stream and four interleaved "
+                         "monitor antennas; WiSenseHub represents the monitor streams as Rx links."
+                     ),
+                     **({"official_subset": subset_code} if subset_code else {}),
+                 })
 
 
 def _numeric_csv_matrix(input_path: Path) -> np.ndarray:
@@ -709,14 +1368,112 @@ def convert_usrp_amplitude_csv(dataset_id: str, input_path: Path, output_path: P
     if value.shape[0] in {51, 52} and value.shape[1] > value.shape[0]:
         value = value.T
         transformations.append("transpose documented 51/52-carrier rows to time-first")
+    if dataset_id == "wipe-fall":
+        if value.shape[1] != 51:
+            raise ValueError(
+                "WiPE-FaLl CSV must contain the documented 51 OFDM subcarriers, "
+                f"got {value.shape}"
+            )
+        release_folder = next(
+            (part.lower() for part in input_path.parts
+             if part.lower() in {"low", "low_unseen", "med", "med_unseen", "high", "high_unseen"}),
+            None,
+        )
+        if not release_folder:
+            raise ValueError(
+                "WiPE-FaLl label is encoded by its official folder; keep the CSV inside "
+                "low, low_unseen, med, med_unseen, high, or high_unseen"
+            )
+        risk = {"low": "low", "med": "medium", "high": "high"}[release_folder.split("_")[0]]
+        release_split = "unseen test" if release_folder.endswith("_unseen") else "training"
+        arrays = {
+            "amplitude": value[:, :, None, None].astype(np.float32),
+            "source_label": np.asarray(risk),
+            "activity_label": np.asarray(risk),
+        }
+        return _save(
+            input_path, output_path, dataset_id, arrays, "amplitude",
+            ["time", "subcarrier", "tx_link", "rx_link"], "processed_amplitude",
+            transformations + ["insert singleton Tx and Rx axes", "cast float32"],
+            metadata_extra={
+                "label_sets": {"Fall risk": [risk], "Release split": [release_split]},
+                "release_folder": release_folder,
+                "source_axis_order": ["time", "subcarrier"],
+                "source_shape": list(value.shape),
+                "antenna_layout": {"tx_links": 1, "rx_links": 1},
+                "sample_rate_evidence": "The public README does not report the CSI sample rate.",
+            },
+        )
     amplitude = value[:, None, :].astype(np.float32)
+    label = input_path.parent.name
+    if dataset_id == "wireless-har-wifi-uwb" and re.fullmatch(r"Room_\d+", label, re.IGNORECASE):
+        label = re.sub(r"_\d+$", "", input_path.stem)
+    metadata: Dict[str, object] = {}
+    if dataset_id == "wireless-har-wifi-uwb":
+        room = next((part for part in input_path.parts if re.fullmatch(r"Room_\d+", part, re.IGNORECASE)), None)
+        metadata["label_sets"] = {
+            "Activity": [label.lower()],
+            **({"Room": [room.replace("_", " ").lower()]} if room else {}),
+        }
+    elif dataset_id == "glasgow-multiuser":
+        release_class = input_path.parent.name
+        occupancy_match = re.match(r"(\d+)_Subjects?_(.+)$", release_class)
+        occupancy = int(occupancy_match.group(1)) if occupancy_match else 0
+        raw_scenario = occupancy_match.group(2) if occupancy_match else release_class
+        activities = []
+        for token in re.findall(r"Sitting|Standing|Walking|Walk|Empty(?: Room)?", raw_scenario, re.IGNORECASE):
+            normalized = {
+                "sitting": "sitting", "standing": "standing",
+                "walking": "walking", "walk": "walking",
+                "empty": "empty room", "empty room": "empty room",
+            }[token.lower()]
+            if normalized not in activities:
+                activities.append(normalized)
+        scenario = re.sub(r"_+", " ", raw_scenario).strip().lower()
+        scenario = re.sub(r"\bwalk\b", "walking", scenario)
+        scenario = f"{occupancy} people: {scenario}" if occupancy else "0 people: empty room"
+        # Keep the legacy scalar activity field for downstream code that
+        # expects one simple label, while ``label_sets`` retains the full
+        # released joint class without collapsing it.
+        label = activities[0] if len(activities) == 1 else scenario
+        metadata["release_class"] = release_class
+        metadata["label_sets"] = {
+            "Scenario": [scenario],
+            "Occupancy": [f"{occupancy} people"],
+            "Activity": activities or ["empty room"],
+        }
+    elif dataset_id == "glasgow-activity-localization":
+        stem = input_path.stem
+        activity_match = re.match(r"(EmptyRoom|Leaning|NoActivity|Sitting|Standing|WalkingRxTx|WalkingTxRx)", stem, re.IGNORECASE)
+        raw_activity = activity_match.group(1) if activity_match else stem
+        activity = {
+            "emptyroom": "empty room", "leaning": "leaning",
+            "noactivity": "no activity", "sitting": "sitting", "standing": "standing",
+            "walkingrxtx": "walking Rx to Tx", "walkingtxrx": "walking Tx to Rx",
+        }.get(raw_activity.lower(), raw_activity.replace("_", " "))
+        location_match = re.search(r"L(\d+)Z(\d+)", stem, re.IGNORECASE)
+        if not location_match:
+            parent_match = re.search(r"Location(\d+)", input_path.parent.name, re.IGNORECASE)
+            zone_match = re.search(r"Z(\d+)", stem, re.IGNORECASE)
+            location_match = (
+                re.match(r"(\d+) (\d+)", f"{parent_match.group(1)} {zone_match.group(1)}")
+                if parent_match and zone_match else None
+            )
+        label = activity
+        label_sets = {"Activity": [activity]}
+        if location_match:
+            location, zone = location_match.groups()
+            label_sets["Location"] = [f"location {location}, zone {zone}"]
+        metadata["label_sets"] = label_sets
     arrays: Dict[str, np.ndarray] = {
         "amplitude": amplitude,
-        "source_label": np.asarray(input_path.parent.name),
+        "source_label": np.asarray(label.lower()),
+        "activity_label": np.asarray(label.lower()),
     }
     return _save(input_path, output_path, dataset_id, arrays, "amplitude",
                  ["time", "link", "subcarrier"], "processed_amplitude",
-                 transformations + ["insert singleton USRP link axis", "cast float32"])
+                 transformations + ["insert singleton USRP link axis", "cast float32"],
+                 metadata_extra=metadata)
 
 
 def convert_wireless_har_wifi(input_path: Path, output_path: Path) -> Path:
@@ -725,15 +1482,121 @@ def convert_wireless_har_wifi(input_path: Path, output_path: Path) -> Path:
         raise ValueError("wireless HAR adapter only accepts files inside the official WiFi_CSI directory")
     if input_path.suffix.lower() == ".csv":
         return convert_usrp_amplitude_csv("wireless-har-wifi-uwb", input_path, output_path)
-    source, _ = load_generic_source(input_path)
-    data = _find(source, ("csi", "CSI", "amp", "amplitude", "data", "x", "input"))
+    data = None
+    source_shape = None
+    source_channel_names: list[str] = []
+    if input_path.suffix.lower() == ".mat":
+        try:
+            source, _ = load_generic_source(input_path)
+            data = _find(source, ("csi", "CSI", "amp", "amplitude", "data", "x", "input"))
+        except (NotImplementedError, ValueError):
+            # Room 2 is a MATLAB 7.3 table. Its channel names explicitly run
+            # from tx1rx1_sub1 through tx1rx3_sub30. Keep that released
+            # factorization rather than treating the 90 columns as carriers.
+            import h5py
+
+            with h5py.File(input_path, "r") as handle:
+                value_cells = []
+                name_cells = []
+                def collect(_name, obj):
+                    if (
+                        isinstance(obj, h5py.Dataset)
+                        and obj.attrs.get("MATLAB_class") == np.bytes_(b"cell")
+                        and obj.size == 90
+                    ):
+                        targets = [handle[reference] for reference in np.asarray(obj).reshape(-1)]
+                        if all(
+                            isinstance(target, h5py.Dataset)
+                            and target.dtype.names == ("real", "imag")
+                            for target in targets
+                        ):
+                            value_cells.append(obj)
+                        elif all(
+                            isinstance(target, h5py.Dataset)
+                            and target.attrs.get("MATLAB_class") == np.bytes_(b"char")
+                            for target in targets
+                        ):
+                            name_cells.append(obj)
+                handle.visititems(collect)
+                if not value_cells or not name_cells:
+                    raise ValueError("Wireless HAR MATLAB table does not contain its 90 named complex CSI columns")
+                names = []
+                for reference in np.asarray(name_cells[0]).reshape(-1):
+                    chars = np.asarray(handle[reference]).reshape(-1)
+                    names.append("".join(chr(int(value)) for value in chars))
+                columns = []
+                for reference in np.asarray(value_cells[0]).reshape(-1):
+                    raw = np.asarray(handle[reference]).reshape(-1)
+                    columns.append(raw["real"] + 1j * raw["imag"])
+                if len({column.size for column in columns}) != 1:
+                    raise ValueError("Wireless HAR CSI columns do not share one time length")
+                by_name = dict(zip(names, columns))
+                expected_names = [
+                    f"tx1rx{rx}_sub{subcarrier}"
+                    for rx in range(1, 4)
+                    for subcarrier in range(1, 31)
+                ]
+                missing = [name for name in expected_names if name not in by_name]
+                if missing:
+                    raise ValueError(f"Wireless HAR MATLAB table is missing CSI columns: {missing[:5]}")
+                source_channel_names = expected_names
+                source_flat = np.column_stack([by_name[name] for name in expected_names])
+                source_shape = list(source_flat.shape)
+                # Released storage is Rx-major, then subcarrier. Canonical CSI
+                # is [T,S,Tx,Rx], with one transmit and three receive links.
+                data = source_flat.reshape(source_flat.shape[0], 3, 30).transpose(0, 2, 1)[:, :, None, :]
+    else:
+        source, _ = load_generic_source(input_path)
+        data = _find(source, ("csi", "CSI", "amp", "amplitude", "data", "x", "input"))
     if data is None:
         data = _largest_numeric(source, 1)
-    canonical, axes = _canonical_sequence(np.asarray(data))
+    if source_shape is None:
+        canonical, axes = _canonical_sequence(np.asarray(data))
+    else:
+        canonical = np.asarray(data)
+        axes = ["time", "subcarrier", "tx_link", "rx_link"]
     arrays = _complex_arrays(canonical)
+    source_label = input_path.parent.name.lower()
+    display_labels = {
+        "kneel": "kneel",
+        "liedown": "lie down",
+        "pickup": "pick up",
+        "sit": "sit",
+        "sitrotate": "sit and rotate",
+        "stand": "stand",
+        "standrotate": "stand and rotate",
+        "walk": "walk",
+    }
+    label = display_labels.get(source_label, source_label.replace("_", " "))
+    arrays["source_label"] = np.asarray(label)
+    arrays["activity_label"] = np.asarray(label)
+    room = next((part for part in input_path.parts if re.fullmatch(r"Room_\d+", part, re.IGNORECASE)), None)
+    metadata_extra: Dict[str, object] = {
+        "label_sets": {"Activity": [label]},
+        "source_activity_code": source_label,
+        "sample_rate_evidence": (
+            "The released Room 2 MAT table contains packet order but no timestamp or documented packet rate."
+        ),
+    }
+    if room:
+        metadata_extra["settings"] = {"room": room.replace("_", " ").lower()}
+    if source_shape is not None:
+        metadata_extra.update({
+            "source_axis_order": ["time", "flattened_csi_channel"],
+            "source_shape": source_shape,
+            "antenna_layout": {"tx_links": 1, "rx_links": 3},
+            "antenna_mapping": "released names tx1rx{1..3}_sub{1..30}",
+            "source_channel_names": source_channel_names,
+        })
     return _save(input_path, output_path, "wireless-har-wifi-uwb", arrays, "amplitude", axes,
                  "complex_csi" if np.iscomplexobj(canonical) else "processed_amplitude",
-                 ["select official WiFi_CSI branch", "load released numeric CSI array", "canonicalize time/link/subcarrier axes"])
+                 [
+                     "select official WiFi_CSI branch",
+                     "load released 90-column complex CSI table",
+                     "reshape named channels from [T,90] to [T,30,1,3]",
+                     "preserve all 30 native subcarriers and all 3 receive links",
+                 ],
+                 metadata_extra=metadata_extra)
 
 
 def convert_profile(dataset_id: str, input_path: Path, output_path: Path) -> Path:

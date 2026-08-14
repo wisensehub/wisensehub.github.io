@@ -1,11 +1,11 @@
 {
   "id": "wifi-tad", "name": "WiFiTAD", "year": 2025,
   "summary": "Continuous, untrimmed WiFi CSI recordings annotated with temporal boundaries for seven daily activities.",
-  "tasks": ["tad_tal", "fall"], "modalities": ["WiFi CSI"],
+  "tasks": ["tad_tal"], "modalities": ["processed WiFi temporal features"],
   "hardware": {"platform": "Two laptops", "chipset": "Intel 5300", "wifi_standard": "802.11n", "band": null},
   "settings": {"environments": 1, "subjects": 3, "scenario": "7 m × 12 m office; continuous random activity sequences"},
   "scale": {"sequences": 553, "activity_instances": 2114, "activities": 7, "nominal_sample_rate_hz": 100, "approx_seconds_per_sequence": 85},
-  "original": {"landing_page": "https://arxiv.org/abs/2412.16233", "download_page": null, "access": "unclear", "license": "Not stated for dataset", "redistribution": "unclear", "formats": []},
-  "standardization": {"status": "adapter-ready", "profile": "continuous-100hz", "notes": "Official NPY orientation, amplitude normalization, and temporal annotation mapping are implemented; release access is tracked separately."},
+  "original": {"landing_page": "https://github.com/aiotgroup/WiFiTAD", "download_page": "https://drive.google.com/file/d/1gy0ppFtypVTtgBfrFzdMJUbXTb1MbPSK/view", "access": "direct", "license": "Not stated for dataset", "redistribution": "unclear", "formats": ["NPY", "CSV", "JSON"]},
+  "standardization": {"status": "verified", "profile": "continuous-100hz", "notes": "Preserve the released 30-channel processed feature representation at 100 Hz and attach all temporal activity intervals; do not relabel features as raw CSI subcarriers."},
   "sources": [{"type": "paper", "url": "https://arxiv.org/abs/2412.16233"}], "verified_at": "2026-06-28"
 }

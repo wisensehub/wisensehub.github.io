@@ -1,0 +1,22 @@
+{
+  "label": "Activity/jumping",
+  "slug": "activity/jumping",
+  "kind": "clip",
+  "source_file": "MC1_01A_1_HAR_d_J_#_#_01.mat",
+  "sample_dir": "samples/ehunam/by_label/activity/jumping",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    56,
+    1,
+    1
+  ],
+  "sample_rate_hz": 9.990252939159335,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

@@ -1,0 +1,22 @@
+{
+  "label": "Occupancy/6 people",
+  "slug": "occupancy/6_people",
+  "kind": "clip",
+  "source_file": "MC1_05_2_PC_abdefh_#_#_#_01.mat",
+  "sample_dir": "samples/ehunam/by_label/occupancy/6_people",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    241,
+    1,
+    1
+  ],
+  "sample_rate_hz": 294.44796691701544,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

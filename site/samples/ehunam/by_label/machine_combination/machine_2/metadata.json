@@ -1,0 +1,22 @@
+{
+  "label": "Machine combination/machine 2",
+  "slug": "machine_combination/machine_2",
+  "kind": "clip",
+  "source_file": "MC2_07_1_MR_#_#_2_R_02.mat",
+  "sample_dir": "samples/ehunam/by_label/machine_combination/machine_2",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    56,
+    1,
+    1
+  ],
+  "sample_rate_hz": 2554.9578387246884,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

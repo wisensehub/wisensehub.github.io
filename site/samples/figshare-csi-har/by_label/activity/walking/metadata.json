@@ -1,0 +1,27 @@
+{
+  "label": "Activity/walking",
+  "slug": "activity/walking",
+  "kind": "segment",
+  "source_file": "data.csv",
+  "sample_dir": "samples/figshare-csi-har/by_label/activity/walking",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    114,
+    2,
+    2
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 70.0,
+    "end_seconds": 920.0,
+    "label": "walking",
+    "source_label": "walking"
+  },
+  "source_sample_index": null
+}

@@ -5,8 +5,7 @@
   "hardware": {"platform": "Modern commercial WiFi collectors", "chipset": null, "wifi_standard": "802.11ac/ax experimental configurations", "band": "Multiple bandwidths up to 160 MHz"},
   "settings": {"environments": 1, "subjects": null, "scenario": "Multiple controlled experiments varying WiFi configuration, collectors, target positions, and sensing conditions"},
   "scale": {"hours": 2, "size_gb": 80, "collectors": 3, "archives": "one per experiment"},
-  "original": {"landing_page": "https://zenodo.org/records/7732595", "download_page": "https://zenodo.org/records/7732595", "access": "direct", "license": "Zenodo record terms; verify per archive", "redistribution": "unclear", "formats": ["Experiment archives", "CSI", "anonymized ground truth"]},
+  "original": {"landing_page": "https://zenodo.org/records/7732595", "download_page": "https://zenodo.org/records/7732595", "access": "direct", "license": "CC BY-SA 4.0", "redistribution": "allowed", "formats": ["Experiment archives", "CSI", "anonymized ground truth"]},
   "standardization": {"status": "adapter-ready", "profile": "continuous-native", "notes": "Treat bandwidth, MIMO mode, collector, position, and experiment as explicit domain fields rather than collapsing them."},
   "sources": [{"type": "paper", "url": "https://arxiv.org/abs/2302.00992"}, {"type": "data", "url": "https://zenodo.org/records/7732595"}], "verified_at": "2026-07-01"
 }
-

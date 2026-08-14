@@ -1,0 +1,22 @@
+{
+  "label": "Activity/lunge right side",
+  "slug": "activity/lunge_right_side",
+  "kind": "clip",
+  "source_file": "wifi-csi",
+  "sample_dir": "samples/mm-fi/by_label/activity/lunge_right_side",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    114,
+    1,
+    3
+  ],
+  "sample_rate_hz": 100.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

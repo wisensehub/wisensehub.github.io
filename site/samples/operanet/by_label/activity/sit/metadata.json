@@ -1,0 +1,26 @@
+{
+  "label": "Activity/sit",
+  "slug": "activity/sit",
+  "kind": "segment",
+  "source_file": "wificsi1_exp003__rows_221891_224891.mat",
+  "sample_dir": "samples/operanet/by_label/activity/sit",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 1553.8860103626944,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 0.0,
+    "end_seconds": 1.930643547849283,
+    "label": "sit"
+  },
+  "source_sample_index": null
+}

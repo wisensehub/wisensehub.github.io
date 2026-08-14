@@ -3,10 +3,9 @@
   "summary": "Cross-domain gesture dataset providing original and processed CSI together with gesture, environment, location, and person labels.",
   "tasks": ["gesture", "identity", "spatial_localization", "multitask"], "modalities": ["WiFi CSI"],
   "hardware": {"platform": "Two laptops with one transmit and three receive antennas", "chipset": "Atheros AR9580", "wifi_standard": "802.11n", "band": "5 GHz, 40 MHz"},
-  "settings": {"environments": 2, "subjects": 5, "scenario": "Six gestures at five locations across two rooms"},
-  "scale": {"samples": 3000, "gesture_classes": 6, "locations": 5, "nominal_sample_rate_hz": 1000, "sample_seconds": 1.8, "subcarriers": 114, "links": 3},
-  "original": {"landing_page": "https://data.mendeley.com/datasets/gyr6c4nbsc", "download_page": "https://data.mendeley.com/datasets/gyr6c4nbsc", "access": "direct", "license": "CC BY 4.0", "redistribution": "allowed", "formats": ["Zarr original CSI", "Zarr processed CSI", "labels"]},
-  "standardization": {"status": "adapter-ready", "profile": "clip-1.8s-100hz", "notes": "The original source reports Atheros AR9580; this corrects the Intel 5300 platform shown in CSI-Bench Table 1."},
-  "sources": [{"type": "data", "url": "https://data.mendeley.com/datasets/gyr6c4nbsc"}, {"type": "paper", "url": "https://doi.org/10.3390/app11083329"}], "verified_at": "2026-06-28"
+  "settings": {"environments": 2, "subjects": 5, "scenario": "Six gestures at five physical room-position pairs across two rooms"},
+  "scale": {"samples": 2844, "recorded_trials": 3000, "gesture_classes": 6, "physical_locations": 5, "released_position_ids": 3, "nominal_sample_rate_hz": 1000, "sample_seconds": 1.8, "subcarriers": 114, "tx_links": 1, "rx_links": 3},
+  "original": {"landing_page": "https://data.mendeley.com/datasets/gyr6c4nbsc/1", "download_page": "https://data.mendeley.com/datasets/gyr6c4nbsc/1", "access": "direct", "license": "CC BY 4.0", "redistribution": "allowed", "formats": ["Zarr processed amplitude", "gesture, room, position, and user labels"]},
+  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "Gesture tasks use the 100 Hz time rule: each 1.8 s source clip is resampled from 1800 to 180 steps. All 114 subcarriers, 1 Tx, and 3 Rx links stay native by default; output is [T, S, Tx, Rx] per sample."},
+  "sources": [{"type": "data", "url": "https://data.mendeley.com/datasets/gyr6c4nbsc/1"}, {"type": "paper", "url": "https://doi.org/10.3390/app11083329"}], "verified_at": "2026-08-09"
 }
-

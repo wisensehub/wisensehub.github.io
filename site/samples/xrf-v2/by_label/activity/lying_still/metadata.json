@@ -1,0 +1,29 @@
+{
+  "label": "Activity/lying still",
+  "slug": "activity/lying_still",
+  "kind": "segment",
+  "source_file": "15_1_7.h5",
+  "sample_dir": "samples/xrf-v2/by_label/activity/lying_still",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 50.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 32.0,
+    "end_seconds": 40.0,
+    "start_index": 1600,
+    "end_index": 2000,
+    "label_id": 33,
+    "label": "lying still"
+  },
+  "source_sample_index": null
+}

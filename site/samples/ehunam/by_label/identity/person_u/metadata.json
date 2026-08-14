@@ -1,0 +1,22 @@
+{
+  "label": "Identity/person u",
+  "slug": "identity/person_u",
+  "kind": "clip",
+  "source_file": "MC3_06_3_PC_u_#_#_#_01.mat",
+  "sample_dir": "samples/ehunam/by_label/identity/person_u",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    208,
+    1,
+    1
+  ],
+  "sample_rate_hz": 1381.4322918262933,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

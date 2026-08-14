@@ -1,0 +1,22 @@
+{
+  "label": "Activity/walking",
+  "slug": "activity/walking",
+  "kind": "clip",
+  "source_file": "MC1_01A_1_HAR_d_W_#_#_01.mat",
+  "sample_dir": "samples/ehunam/by_label/activity/walking",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    56,
+    1,
+    1
+  ],
+  "sample_rate_hz": 9.984002731859858,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

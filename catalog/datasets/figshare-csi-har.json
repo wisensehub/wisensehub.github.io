@@ -21,7 +21,6 @@
   },
   "scale": {"activities": 7, "subcarriers": 114, "mimo": "2×2", "size_mb": 489},
   "original": {"landing_page": "https://figshare.com/articles/dataset/14386892", "download_page": "https://figshare.com/articles/dataset/14386892", "access": "direct", "license": "CC BY 4.0", "redistribution": "allowed", "formats": ["CSV CSI", "CSV labels", "CSV bounding boxes"]},
-  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "Task profile: 100 Hz, 3 s for HAR clips. Preserve room/session hierarchy, convert interval labels into temporal segments, and keep native MIMO link/subcarrier counts."},
+  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "HAR uses the 100 Hz time rule. Keep 114 subcarriers, 2 Tx, and 2 Rx; output is [T, S, Tx, Rx] per sample."},
   "sources": [{"type": "data", "url": "https://figshare.com/articles/dataset/14386892"}, {"type": "repository", "url": "https://github.com/retsediv/WIFI_CSI_based_HAR"}], "verified_at": "2026-07-01"
 }
-

@@ -1,0 +1,22 @@
+{
+  "label": "Localization/0",
+  "slug": "localization/0",
+  "kind": "clip",
+  "source_file": "session_1000__freq2496.h5",
+  "sample_dir": "samples/csi-bench/by_label/localization/0",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    150,
+    2496,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

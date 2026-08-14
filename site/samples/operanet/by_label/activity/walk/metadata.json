@@ -1,0 +1,26 @@
+{
+  "label": "Activity/walk",
+  "slug": "activity/walk",
+  "kind": "segment",
+  "source_file": "wificsi1_exp002__rows_34518_37518.mat",
+  "sample_dir": "samples/operanet/by_label/activity/walk",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 1564.4235785080855,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 0.0,
+    "end_seconds": 1.9176392130710238,
+    "label": "walk"
+  },
+  "source_sample_index": null
+}

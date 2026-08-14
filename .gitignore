@@ -10,12 +10,22 @@ examples/data/synthetic_csi.csv
 examples/data/standardized/
 work/
 outputs/
+presentations/
 data/
 !site/data/
 site/data/*
 !site/data/catalog.json
 !site/data/samples.json
-# Hosted downloads are the zip archives; keep trees out of git (large / redundant).
+# Publish only compact per-label/per-setting packages. Full originals and
+# complete standardized recordings stay local under data/ and are never
+# committed to the website repository.
 site/samples/*/
+!site/samples/*/
+site/samples/*/*
+!site/samples/*/by_label/
+!site/samples/*/by_label/**
+!site/samples/*/by_setting/
+!site/samples/*/by_setting/**
+!site/samples/*/sample-manifest.json
 !site/samples/*.zip
 !site/samples/fetch-report.json

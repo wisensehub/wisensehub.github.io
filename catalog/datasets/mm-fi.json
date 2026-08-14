@@ -5,8 +5,7 @@
   "hardware": {"platform": "TP-Link N750 access points and synchronized sensor platform", "chipset": "Atheros CSI Tool", "wifi_standard": "802.11n", "band": "5 GHz, 40 MHz"},
   "settings": {"environments": 4, "subjects": 40, "scenario": "Daily and rehabilitation actions in two rooms and four platform settings"},
   "scale": {"sequences": 1080, "synchronized_frames": 320760, "activities": 27, "released_sample_rate_hz": 10},
-  "original": {"landing_page": "https://ntu-aiot-lab.github.io/mm-fi", "download_page": "https://github.com/ybhbingo/MMFi_dataset", "access": "application", "license": "Dataset agreement", "redistribution": "restricted", "formats": ["MAT", "NumPy", "PNG", "BIN"]},
-  "standardization": {"status": "adapter-ready", "profile": "native-10hz", "notes": "Do not upsample the released 10 Hz WiFi stream by default; retain 3×114 CSI dimensions."},
+  "original": {"landing_page": "https://ntu-aiot-lab.github.io/mm-fi", "download_page": "https://drive.google.com/drive/folders/1s8F7GsuNTKylsBcjo9VYBko6tuVR7SAb", "access": "direct", "license": "CC BY-NC 4.0", "redistribution": "allowed", "formats": ["MAT", "NumPy", "PNG", "BIN"]},
+  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "Activity and pose tasks use the 100 Hz time rule. Each official 10 Hz CSI frame contains 3 Rx × 114 subcarriers × 10 packet captures; unfold all captures into time and keep 114 subcarriers, 1 Tx, and 3 Rx in [T, S, Tx, Rx]."},
   "sources": [{"type": "paper", "url": "https://arxiv.org/abs/2305.10345"}, {"type": "repository", "url": "https://github.com/ybhbingo/MMFi_dataset"}], "verified_at": "2026-06-28"
 }
-

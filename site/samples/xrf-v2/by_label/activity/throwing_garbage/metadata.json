@@ -1,0 +1,29 @@
+{
+  "label": "Activity/throwing garbage",
+  "slug": "activity/throwing_garbage",
+  "kind": "segment",
+  "source_file": "3_3_14.h5",
+  "sample_dir": "samples/xrf-v2/by_label/activity/throwing_garbage",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 50.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 58.0,
+    "end_seconds": 66.0,
+    "start_index": 2900,
+    "end_index": 3300,
+    "label_id": 13,
+    "label": "throwing garbage"
+  },
+  "source_sample_index": null
+}

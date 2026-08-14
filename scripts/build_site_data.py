@@ -23,10 +23,17 @@ def main() -> int:
     adapters = json.loads((ROOT / "catalog" / "adapters.json").read_text(encoding="utf-8"))["datasets"]
     splits = json.loads((ROOT / "catalog" / "splits.json").read_text(encoding="utf-8"))["datasets"]
     examples = json.loads((ROOT / "catalog" / "examples.json").read_text(encoding="utf-8"))["datasets"]
+    sample_plans_path = ROOT / "catalog" / "sample-plans.json"
+    sample_plans = json.loads(sample_plans_path.read_text(encoding="utf-8"))["datasets"] if sample_plans_path.exists() else {}
+    collections_path = ROOT / "catalog" / "collections.json"
+    collections = json.loads(collections_path.read_text(encoding="utf-8"))["datasets"] if collections_path.exists() else {}
     for dataset in datasets:
         dataset["conversion"] = adapters[dataset["id"]]
         dataset["split_settings"] = splits[dataset["id"]]
         dataset["conversion_example"] = examples[dataset["id"]]
+        dataset["sample_plan"] = sample_plans.get(dataset["id"])
+        if not dataset.get("collection") and dataset["id"] in collections:
+            dataset["collection"] = collections[dataset["id"]]
     task_counts = Counter(task for dataset in datasets for task in dataset["tasks"])
     payload = {
         "generated_at": "2026-07-01",

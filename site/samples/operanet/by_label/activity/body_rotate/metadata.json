@@ -1,0 +1,26 @@
+{
+  "label": "Activity/body rotate",
+  "slug": "activity/body_rotate",
+  "kind": "segment",
+  "source_file": "wificsi1_exp005__rows_49889_52889.mat",
+  "sample_dir": "samples/operanet/by_label/activity/body_rotate",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 1566.8756530825497,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 0.0,
+    "end_seconds": 1.9146382127375792,
+    "label": "body rotate"
+  },
+  "source_sample_index": null
+}

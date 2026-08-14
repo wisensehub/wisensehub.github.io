@@ -1,0 +1,22 @@
+{
+  "label": "Breathing pattern/BreathingPattern5",
+  "slug": "breathing_pattern/breathingpattern5",
+  "kind": "clip",
+  "source_file": "config0001_csi_real_log.csv",
+  "sample_dir": "samples/nist-breathesmart/by_label/breathing_pattern/breathingpattern5",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    180,
+    56,
+    2,
+    3
+  ],
+  "sample_rate_hz": 3.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

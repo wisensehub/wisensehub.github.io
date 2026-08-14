@@ -1,0 +1,22 @@
+{
+  "label": "Activity/pick up",
+  "slug": "activity/pick_up",
+  "kind": "clip",
+  "source_file": "pickup_1.mat",
+  "sample_dir": "samples/wireless-har-wifi-uwb/by_label/activity/pick_up",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    1,
+    3
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

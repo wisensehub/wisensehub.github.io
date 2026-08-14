@@ -1,0 +1,22 @@
+{
+  "label": "HumanIdentification/U03",
+  "slug": "humanidentification/u03",
+  "kind": "clip",
+  "source_file": "session_742000__freq56.h5",
+  "sample_dir": "samples/csi-bench/by_label/humanidentification/u03",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    56,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

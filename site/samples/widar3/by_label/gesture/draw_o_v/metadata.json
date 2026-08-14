@@ -1,0 +1,21 @@
+{
+  "label": "Gesture/Draw-O(V)",
+  "slug": "gesture/draw_o_v",
+  "kind": "clip",
+  "source_file": "user2-4-3-2-3-1-1e-07-100-20-100000-L0(1).csv",
+  "sample_dir": "samples/widar3/by_label/gesture/draw_o_v",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    22,
+    20,
+    20
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

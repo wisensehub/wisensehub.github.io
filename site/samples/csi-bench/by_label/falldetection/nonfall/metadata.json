@@ -1,0 +1,22 @@
+{
+  "label": "FallDetection/Nonfall",
+  "slug": "falldetection/nonfall",
+  "kind": "clip",
+  "source_file": "session_10000__freq64.h5",
+  "sample_dir": "samples/csi-bench/by_label/falldetection/nonfall",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    64,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

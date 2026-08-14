@@ -1,12 +1,11 @@
 {
   "id": "wireless-har-wifi-uwb", "name": "Wireless Sensing HAR (WiFi + UWB)", "year": 2022,
-  "summary": "Multimodal human-activity dataset combining WiFi CSI across three rooms with UWB channel impulse responses.",
-  "tasks": ["har", "multitask"], "modalities": ["WiFi CSI", "UWB CIR"],
-  "hardware": {"platform": "WiFi CSI and commercial UWB sensing systems", "chipset": "Intel 5300 for WiFi subset", "wifi_standard": "802.11n", "band": null},
-  "settings": {"environments": 3, "subjects": null, "scenario": "Human activities across three WiFi rooms and one UWB room"},
-  "scale": {"size_gb": 7.97, "wifi_rooms": 3, "uwb_rooms": 1},
+  "summary": "Human-activity release with WiFi CSI across three rooms and a separate UWB CIR branch. The website mini sample uses the WiFi branch and covers every Room 2 activity label.",
+  "tasks": ["har"], "modalities": ["WiFi CSI", "UWB CIR"],
+  "hardware": {"platform": "WiFi CSI and commercial UWB sensing systems", "chipset": "Intel 5300 for WiFi subset", "wifi_standard": "802.11n", "band": null, "wifi_links": "1 Tx × 3 Rx"},
+  "settings": {"environments": 3, "subjects": null, "scenario": "Rooms 1 and 3 are continuous participant recordings; Room 2 provides per-activity WiFi clips; UWB is a separate branch"},
+  "scale": {"size_gb": 7.97, "wifi_rooms": 3, "uwb_rooms": 1, "room2_activity_labels": 8, "wifi_subcarriers": 30, "wifi_tx_links": 1, "wifi_rx_links": 3},
   "original": {"landing_page": "https://figshare.com/articles/dataset/20444538", "download_page": "https://figshare.com/articles/dataset/20444538", "access": "direct", "license": "CC BY 4.0", "redistribution": "allowed", "formats": ["MAT", "dataset-specific RF files"]},
-  "standardization": {"status": "adapter-ready", "profile": "continuous-native", "notes": "Standardize WiFi independently while preserving synchronization and modality provenance when UWB is retained."},
+  "standardization": {"status": "adapter-ready", "profile": "continuous-native", "notes": "The WiFi adapter reshapes the released named columns from [T,90] to [T,30,1,3], preserving all native subcarriers and receive links. The compact sample does not imply paired UWB data."},
   "sources": [{"type": "data", "url": "https://figshare.com/articles/dataset/20444538"}], "verified_at": "2026-07-01"
 }
-

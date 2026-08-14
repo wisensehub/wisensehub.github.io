@@ -1,0 +1,22 @@
+{
+  "label": "Activity/choking someone's neck",
+  "slug": "activity/choking_someone_s_neck",
+  "kind": "clip",
+  "source_file": "01_21_01.npy",
+  "sample_dir": "samples/xrf55/by_label/activity/choking_someone_s_neck",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    1,
+    9
+  ],
+  "sample_rate_hz": 200.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

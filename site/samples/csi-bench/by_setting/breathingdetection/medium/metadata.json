@@ -1,0 +1,22 @@
+{
+  "setting": "BreathingDetection/medium",
+  "slug": "breathingdetection/medium",
+  "kind": "clip",
+  "source_file": "session_101876002__freq208_5G.h5",
+  "sample_dir": "samples/csi-bench/by_setting/breathingdetection/medium",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    208,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

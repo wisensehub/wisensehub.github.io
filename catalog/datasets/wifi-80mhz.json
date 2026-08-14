@@ -2,10 +2,10 @@
   "id": "wifi-80mhz", "name": "CSI Dataset for Wireless Human Sensing on 80 MHz Wi-Fi Channels", "year": 2023,
   "summary": "Modern 802.11ac CSI dataset designed for activity recognition, person identification, and people counting with hardware and environment diversity.",
   "tasks": ["har", "identity", "occupancy"], "modalities": ["WiFi CSI"],
-  "hardware": {"platform": "Multiple commercial 802.11ac devices", "chipset": null, "wifi_standard": "802.11ac", "band": "5 GHz, 80 MHz"},
-  "settings": {"environments": null, "subjects": 13, "scenario": "Multiple environments, days, hardware configurations, blocked direct path, and semi-anechoic chamber"},
+  "hardware": {"platform": "Netgear X4S, Asus RT-AC86U, and TP-Link AD7200 routers; Asus RT-AC86U monitor", "chipset": "Nexmon CSI-compatible monitor", "wifi_standard": "802.11ac", "band": "5 GHz, channel 42, 80 MHz"},
+  "settings": {"environments": 7, "subjects": 13, "scenario": "Seven environments, multiple days and router combinations, LOS/NLOS paths, and a semi-anechoic chamber"},
   "scale": {"hours": 13, "size_gb": 23.6, "subsets": 26},
-  "original": {"landing_page": "https://arxiv.org/abs/2305.03170", "download_page": "https://doi.org/10.21227/0p2j-zy98", "access": "account", "license": "IEEE DataPort terms", "redistribution": "restricted", "formats": ["Dataset-specific CSI files"]},
-  "standardization": {"status": "adapter-ready", "profile": "continuous-100hz", "notes": "CFR preprocessing and four-monitor deinterleaving are implemented; real-release verification still requires DataPort access."},
-  "sources": [{"type": "paper", "url": "https://arxiv.org/abs/2305.03170"}, {"type": "data", "url": "https://doi.org/10.21227/0p2j-zy98"}], "verified_at": "2026-06-28"
+  "original": {"landing_page": "https://arxiv.org/abs/2305.03170", "download_page": "https://doi.org/10.21227/xbhv-f125", "access": "account", "license": "CC BY 4.0; a signed-in IEEE DataPort subscription is required to download the archive", "redistribution": "allowed", "formats": ["Complex MAT"]},
+  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "native_shape": {"subcarriers": 242, "tx_links": 1, "rx_links": 4}, "notes": "Deinterleave each official [(T × 4), 242] complex CFR matrix into [T, 242, 1, 4]. Preserve all 242 data subcarriers and four monitor streams, then resample only time from the official 173 Hz nominal rate to the 100 Hz, 3 s task view. The schema is verified from the paper; real-byte validation awaits an account-acquired MAT file."},
+  "sources": [{"type": "paper", "url": "https://arxiv.org/abs/2305.03170"}, {"type": "data", "url": "https://doi.org/10.21227/xbhv-f125"}], "verified_at": "2026-08-11"
 }

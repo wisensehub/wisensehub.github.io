@@ -1,0 +1,29 @@
+{
+  "label": "Activity/walking to cabinet",
+  "slug": "activity/walking_to_cabinet",
+  "kind": "segment",
+  "source_file": "0_3_3.h5",
+  "sample_dir": "samples/xrf-v2/by_label/activity/walking_to_cabinet",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 50.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 39.0,
+    "end_seconds": 47.0,
+    "start_index": 1950,
+    "end_index": 2350,
+    "label_id": 26,
+    "label": "walking to cabinet"
+  },
+  "source_sample_index": null
+}

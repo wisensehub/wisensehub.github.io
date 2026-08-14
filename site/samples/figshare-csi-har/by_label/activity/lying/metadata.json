@@ -1,0 +1,27 @@
+{
+  "label": "Activity/lying",
+  "slug": "activity/lying",
+  "kind": "segment",
+  "source_file": "data.csv",
+  "sample_dir": "samples/figshare-csi-har/by_label/activity/lying",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    114,
+    2,
+    2
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 3030.0,
+    "end_seconds": 4065.0,
+    "label": "lying",
+    "source_label": "lying"
+  },
+  "source_sample_index": null
+}

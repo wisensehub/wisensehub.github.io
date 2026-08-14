@@ -1,0 +1,22 @@
+{
+  "label": "Activity/walking Rx to Tx",
+  "slug": "activity/walking_rx_to_tx",
+  "kind": "clip",
+  "source_file": "WalkingRxTxZ1_56.csv",
+  "sample_dir": "samples/glasgow-activity-localization/by_label/activity/walking_rx_to_tx",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    51,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

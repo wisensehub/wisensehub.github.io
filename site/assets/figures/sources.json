@@ -18,5 +18,9 @@
   "nist-breathesmart": {
     "label": "Breathing patterns table from the official NIST ReadMe (v2)",
     "url": "https://doi.org/10.18434/mds2-2963"
+  },
+  "wipe-fall": {
+    "label": "Timed Up-and-Go path diagram from the official WiPE-FaLl ReadMe (CC BY 4.0)",
+    "url": "https://researchdata.gla.ac.uk/1623/"
   }
 }

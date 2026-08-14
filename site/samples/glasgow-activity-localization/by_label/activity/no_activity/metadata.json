@@ -1,0 +1,22 @@
+{
+  "label": "Activity/no activity",
+  "slug": "activity/no_activity",
+  "kind": "clip",
+  "source_file": "NoActivityL1Z1_18.csv",
+  "sample_dir": "samples/glasgow-activity-localization/by_label/activity/no_activity",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    51,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

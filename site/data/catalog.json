@@ -29,24 +29,24 @@
         "samples": 1394,
         "gesture_classes": 6,
         "locations": 16,
-        "shape": "1×52×192"
+        "shape": "192 time × 52 subcarriers"
       },
       "original": {
         "landing_page": "https://github.com/geekfeiw/ARIL",
         "download_page": "https://drive.google.com/open?id=1SCxUHbl6rNWM3kT0c-D4s_kyAero9_-o",
-        "access": "account",
+        "access": "direct",
         "license": "Repository terms require confirmation",
         "redistribution": "unclear",
         "formats": [
-          "NumPy processed data",
+          "MAT processed amplitude/phase",
           "raw unsegmented data",
           "labels"
         ]
       },
       "standardization": {
         "status": "adapter-ready",
-        "profile": "clip-native",
-        "notes": "MAT adapter preserves both gesture and location labels and uses packet index because a reliable sampling rate is not asserted."
+        "profile": "general-sensing",
+        "notes": "Gesture and location use the 100 Hz task time rule. Each sample keeps all 192 source packets, 52 subcarriers, one Tx, and one Rx. The target time grid is recorded as an assumption because the processed release does not report a reliable sampling rate."
       },
       "sources": [
         {
@@ -96,8 +96,56 @@
       "conversion_example": {
         "source_path": "data/train_data_split_amp.mat",
         "primary_array": "amplitude",
-        "expected_shape": "[N, 192, 1, 52]",
-        "note": "The matching activity and location labels are stored in the same standardized NPZ."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Each sample preserves 192 time steps, 52 subcarriers, one Tx, one Rx, plus matching gesture and location labels."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Authentic processed CSI from the official ARIL archive: one real sample per location with all six gestures represented (16 samples total). Confirm the official repository terms before redistributing this subset.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 192,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 192,
+          "profile_max_length": 300,
+          "selected_window_length": 192,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 1,
+        "converted": 0,
+        "skipped": 1,
+        "failed": 0,
+        "command": "wisensehub prepare aril --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/aril/standardized/",
+          "views": "data/aril/standardized/views/",
+          "manifest": "data/aril/prepare-manifest.json",
+          "split": "data/aril/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "USRP N210 radios",
+        "distance": "Not reported",
+        "subjects": "1",
+        "labels": {
+          "Gesture": "hand up · hand down · hand left · hand right · circle · cross",
+          "Location": "location 0–15"
+        },
+        "scenario_labels": "16 indoor locations",
+        "band": "Custom OFDM",
+        "subcarriers": 52,
+        "sampling_rate_hz": "100 Hz task view (recorded as an assumption)",
+        "clip_length": "Flexible T; this release contains 192-packet samples",
+        "scenario": "Six gestures at sixteen locations"
       }
     },
     {
@@ -148,8 +196,8 @@
       },
       "standardization": {
         "status": "adapter-ready",
-        "profile": "vital-sign",
-        "notes": "BreathingDetection samples use the vital-sign profile (10 Hz, 60 s; rate assumed when not reported). Other CSI-Bench tasks should use general-sensing when added. Keep official splits and multi-task labels."
+        "profile": "task-auto",
+        "notes": "Task-aware time profile: BreathingDetection uses 10 Hz; all other sensing tasks use 100 Hz. Window length is chosen per task, the full recording is segmented without dropping data, and native subcarrier/Tx/Rx sizes are preserved unless requested otherwise."
       },
       "sources": [
         {
@@ -162,6 +210,26 @@
         }
       ],
       "verified_at": "2026-06-28",
+      "collection": {
+        "device": "Commercial routers and IoT edge devices (Broadcom, Qualcomm, MediaTek, Espressif, NXP)",
+        "distance": "In-the-wild homes/offices; proximity task uses 0.5–3.5 m",
+        "subjects": "35 subjects across tasks",
+        "labels": {
+          "BreathingDetection": "empty · sleep",
+          "FallDetection": "Fall · Nonfall",
+          "Localization": "0 · 1 · 10 · 11 · 100 · 101 · 110",
+          "MotionSourceRecognition": "Fan · Human · IRobot · Pet",
+          "HumanActivityRecognition": "jumping · running · seated-breathing · walking · wavinghand",
+          "HumanIdentification": "U01 · U02 · U03 · U04 · U05 · U06 · U22",
+          "ProximityRecognition": "0.5 · 1.5 · 2.5 · 3.5 m"
+        },
+        "scenario_labels": "Difficulty settings: easy · medium · hard (where provided by the official splits)",
+        "band": "2.4/5 GHz (device-dependent)",
+        "subcarriers": "56–2496 depending on device/task",
+        "sampling_rate_hz": "Task view: 10 Hz for BreathingDetection; 100 Hz for other tasks (recorded as an assumption when the source rate is absent)",
+        "clip_length": "Flexible by task; full recordings are split into consecutive task-specific windows",
+        "scenario": "Homes, offices, and public indoor areas; in the wild"
+      },
       "conversion": {
         "handler": "csi-bench",
         "implementation": "reference-implemented",
@@ -231,10 +299,127 @@
         ]
       },
       "conversion_example": {
-        "source_path": "supervised/human_activity.mat",
+        "source_path": "FallDetection/sub_Human/user_U08/act_Fall/sample.h5",
         "primary_array": "amplitude",
-        "expected_shape": "[N, T, L, S]",
-        "note": "The official MAT key X is retained and a link axis is inserted when needed."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Time uses the task profile; native subcarrier, Tx, and Rx dimensions are preserved. Flattened source links are recorded as 1 Tx by L Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "CSI-Bench mini sample: one recording per official label across all seven tasks, plus easy/medium/hard difficulty coverage where those settings exist, and each task label_mapping.json.",
+        "profile": "task-auto",
+        "target_rate_hz": null,
+        "duration_s": null,
+        "target_length": null,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "task-min-full-coverage",
+          "task_profiles": {
+            "BreathingDetection": {
+              "target_rate_hz": 10.0,
+              "duration_s": null,
+              "target_length": 300,
+              "interpolation": "linear",
+              "layout": "canonical",
+              "links": null,
+              "subcarriers": null,
+              "tx_links": null,
+              "rx_links": null,
+              "profile": "vital-sign",
+              "window_mode": "segment",
+              "task_min_resampled_length": 300,
+              "profile_max_length": 300,
+              "selected_window_length": 300,
+              "source_count": 4
+            },
+            "FallDetection": {
+              "target_rate_hz": 100.0,
+              "duration_s": null,
+              "target_length": 300,
+              "interpolation": "linear",
+              "layout": "canonical",
+              "links": null,
+              "subcarriers": null,
+              "tx_links": null,
+              "rx_links": null,
+              "profile": "general-sensing",
+              "window_mode": "segment",
+              "task_min_resampled_length": 500,
+              "profile_max_length": 300,
+              "selected_window_length": 300,
+              "source_count": 4
+            },
+            "Localization": {
+              "target_rate_hz": 100.0,
+              "duration_s": null,
+              "target_length": 150,
+              "interpolation": "linear",
+              "layout": "canonical",
+              "links": null,
+              "subcarriers": null,
+              "tx_links": null,
+              "rx_links": null,
+              "profile": "general-sensing",
+              "window_mode": "segment",
+              "task_min_resampled_length": 150,
+              "profile_max_length": 300,
+              "selected_window_length": 150,
+              "source_count": 9
+            },
+            "MotionSourceRecognition": {
+              "target_rate_hz": 100.0,
+              "duration_s": null,
+              "target_length": 300,
+              "interpolation": "linear",
+              "layout": "canonical",
+              "links": null,
+              "subcarriers": null,
+              "tx_links": null,
+              "rx_links": null,
+              "profile": "general-sensing",
+              "window_mode": "segment",
+              "task_min_resampled_length": 500,
+              "profile_max_length": 300,
+              "selected_window_length": 300,
+              "source_count": 6
+            },
+            "Multitask": {
+              "target_rate_hz": 100.0,
+              "duration_s": null,
+              "target_length": 300,
+              "interpolation": "linear",
+              "layout": "canonical",
+              "links": null,
+              "subcarriers": null,
+              "tx_links": null,
+              "rx_links": null,
+              "profile": "general-sensing",
+              "window_mode": "segment",
+              "task_min_resampled_length": 500,
+              "profile_max_length": 300,
+              "selected_window_length": 300,
+              "source_count": 13
+            }
+          },
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 36,
+        "converted": 0,
+        "skipped": 36,
+        "failed": 0,
+        "command": "wisensehub prepare csi-bench --data-root data --setting random",
+        "outputs": {
+          "native": "data/csi-bench/standardized/",
+          "views": "data/csi-bench/standardized/views/",
+          "manifest": "data/csi-bench/prepare-manifest.json",
+          "split": "data/csi-bench/splits/random.json"
+        }
       }
     },
     {
@@ -260,45 +445,47 @@
       "settings": {
         "environments": 2,
         "subjects": 5,
-        "scenario": "Six gestures at five locations across two rooms"
+        "scenario": "Six gestures at five physical room-position pairs across two rooms"
       },
       "scale": {
-        "samples": 3000,
+        "samples": 2844,
+        "recorded_trials": 3000,
         "gesture_classes": 6,
-        "locations": 5,
+        "physical_locations": 5,
+        "released_position_ids": 3,
         "nominal_sample_rate_hz": 1000,
         "sample_seconds": 1.8,
         "subcarriers": 114,
-        "links": 3
+        "tx_links": 1,
+        "rx_links": 3
       },
       "original": {
-        "landing_page": "https://data.mendeley.com/datasets/gyr6c4nbsc",
-        "download_page": "https://data.mendeley.com/datasets/gyr6c4nbsc",
+        "landing_page": "https://data.mendeley.com/datasets/gyr6c4nbsc/1",
+        "download_page": "https://data.mendeley.com/datasets/gyr6c4nbsc/1",
         "access": "direct",
         "license": "CC BY 4.0",
         "redistribution": "allowed",
         "formats": [
-          "Zarr original CSI",
-          "Zarr processed CSI",
-          "labels"
+          "Zarr processed amplitude",
+          "gesture, room, position, and user labels"
         ]
       },
       "standardization": {
         "status": "adapter-ready",
-        "profile": "clip-1.8s-100hz",
-        "notes": "The original source reports Atheros AR9580; this corrects the Intel 5300 platform shown in CSI-Bench Table 1."
+        "profile": "general-sensing",
+        "notes": "Gesture tasks use the 100 Hz time rule: each 1.8 s source clip is resampled from 1800 to 180 steps. All 114 subcarriers, 1 Tx, and 3 Rx links stay native by default; output is [T, S, Tx, Rx] per sample."
       },
       "sources": [
         {
           "type": "data",
-          "url": "https://data.mendeley.com/datasets/gyr6c4nbsc"
+          "url": "https://data.mendeley.com/datasets/gyr6c4nbsc/1"
         },
         {
           "type": "paper",
           "url": "https://doi.org/10.3390/app11083329"
         }
       ],
-      "verified_at": "2026-06-28",
+      "verified_at": "2026-08-09",
       "conversion": {
         "handler": "csida",
         "implementation": "reference-implemented",
@@ -344,8 +531,58 @@
       "conversion_example": {
         "source_path": "CSIDA/csi_data_amp",
         "primary_array": "amplitude",
-        "expected_shape": "[N, T, 3, 114]",
-        "note": "Keep csi_data_pha and all csi_label_* Zarr arrays beside csi_data_amp."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "The source [sample, time, 3 Rx, 114 subcarrier] array becomes [sample, time, 114 subcarrier, 1 Tx, 3 Rx]. Keep all csi_label_* Zarr arrays beside csi_data_amp; phase is used when present."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "6 authentic processed CSIDA clips from the official Mendeley release, covering all six gestures, both rooms, all released position IDs, and all five users. Licensed CC BY 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 600,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 1,
+        "converted": 0,
+        "skipped": 1,
+        "failed": 0,
+        "command": "wisensehub prepare csida --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/csida/standardized/",
+          "views": "data/csida/standardized/views/",
+          "manifest": "data/csida/prepare-manifest.json",
+          "split": "data/csida/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Atheros AR9580, 1 Tx × 3 Rx",
+        "distance": "Five physical room-position pairs",
+        "subjects": "5",
+        "labels": {
+          "Gesture": "pull left · pull right · lift up · press down · circle · zigzag",
+          "Identity": "user 0–4",
+          "Room": "room 0–1",
+          "Position": "position 0–2"
+        },
+        "scenario_labels": "2 rooms · 5 physical positions (3 + 2)",
+        "band": "5 GHz, 40 MHz",
+        "subcarriers": 114,
+        "sampling_rate_hz": "1000 Hz source · 100 Hz task view",
+        "clip_length": "1.8 s · 180 steps after resampling",
+        "scenario": "Six gestures across two rooms, five physical positions, and five users"
       }
     },
     {
@@ -452,8 +689,60 @@
       "conversion_example": {
         "source_path": "Office/MC1_01A_1_HAR_e_J_#_#_01.mat",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 1, 56 or 242]",
-        "note": "Null carriers are removed from the CSI/BW/Subcarriers metadata."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Null carriers are removed; the sample keeps 1 Tx × 1 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Thirty-four authentic EHUNAM recordings selected from the official Figshare release to cover every published label value available in the deposited files. Licensed CC BY 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 1156,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 34,
+        "converted": 34,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare ehunam --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/ehunam/standardized/",
+          "views": "data/ehunam/standardized/views/",
+          "manifest": "data/ehunam/prepare-manifest.json",
+          "split": "data/ehunam/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Raspberry Pi 4 and receiver arrays",
+        "distance": "Room and industrial layouts",
+        "subjects": "21 published; deposited filenames expose 20 identities",
+        "labels": {
+          "Activity": "jumping · walking · standing · sitting · sit down / get up · falling",
+          "Occupancy": "0 people · 1 person · 2 people · 3 people · 4 people · 5 people · 6 people · 7 people · 8 people",
+          "Identity": "person a · person b · person c · person d · person e · person f · person g · person h · person i · person j · person k · person l · person m · person o · person p · person q · person r · person s · person t · person u",
+          "Machine": "machine 1 · machine 2 · machine 3 · machine 4 · machine 5 · machine 6 · machine 7 · machine 8 · machine 9",
+          "Machine state": "powered on · running",
+          "Application": "E · HAR · MAR · MR · PC · PCMAR"
+        },
+        "scenario_labels": "MC1 · MC2 · MC3 · 23 days · 8 environments · published identity n is absent from the deposited filename universe",
+        "band": "5 GHz",
+        "subcarriers": "56 or source-reported",
+        "sampling_rate_hz": "From timestamps",
+        "clip_length": "Continuous",
+        "scenario": "Human and machine sensing across many days"
       }
     },
     {
@@ -490,8 +779,8 @@
         "landing_page": "https://zenodo.org/records/7732595",
         "download_page": "https://zenodo.org/records/7732595",
         "access": "direct",
-        "license": "Zenodo record terms; verify per archive",
-        "redistribution": "unclear",
+        "license": "CC BY-SA 4.0",
+        "redistribution": "allowed",
         "formats": [
           "Experiment archives",
           "CSI",
@@ -552,8 +841,56 @@
       "conversion_example": {
         "source_path": "S1_A.mat",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 4, 1990]",
-        "note": "The adapter FFT-shifts AX-CSI, removes official null bins, and deinterleaves four monitor streams."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "The adapter FFT-shifts AX-CSI, removes official null bins, and preserves four monitor streams as 1 Tx × 4 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Twelve authentic AX-CSI captures from the same S1a receiver, one for every activity A-L, each shortened to its first 600 packets. Licensed CC BY-SA 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 360,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 12,
+        "converted": 11,
+        "skipped": 1,
+        "failed": 0,
+        "command": "wisensehub prepare exposing-csi --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/exposing-csi/standardized/",
+          "views": "data/exposing-csi/standardized/views/",
+          "manifest": "data/exposing-csi/prepare-manifest.json",
+          "split": "data/exposing-csi/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Commercial 802.11ac/ax collectors",
+        "distance": "Controlled target positions",
+        "subjects": "3",
+        "labels": {
+          "Activity": "walk · run · jump · sitting · empty room · standing · wave hands · clapping · lay down · wiping · squat · stretching",
+          "Occupancy": "empty · occupied"
+        },
+        "scenario_labels": "collector · position · bandwidth · MIMO mode",
+        "band": "Up to 160 MHz",
+        "subcarriers": 1990,
+        "sampling_rate_hz": "~166.7 Hz",
+        "clip_length": "80 s per activity",
+        "scenario": "12 activities across 7 subject/environment scenarios"
       }
     },
     {
@@ -617,7 +954,7 @@
       "standardization": {
         "status": "adapter-ready",
         "profile": "general-sensing",
-        "notes": "Task profile: 100 Hz, 3 s for HAR clips. Preserve room/session hierarchy, convert interval labels into temporal segments, and keep native MIMO link/subcarrier counts."
+        "notes": "HAR uses the 100 Hz time rule. Keep 114 subcarriers, 2 Tx, and 2 Rx; output is [T, S, Tx, Rx] per sample."
       },
       "sources": [
         {
@@ -663,8 +1000,41 @@
       "conversion_example": {
         "source_path": "room_1/session_1/data.csv",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 4, 114]",
-        "note": "Keep label.csv beside data.csv so activity labels are attached automatically."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "The four released MIMO links become 2 Tx × 2 Rx; keep label.csv beside data.csv."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Authentic sessions from all three rooms, each retaining real labels; together they cover all seven HAR labels. Licensed CC BY 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 5200,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 3,
+        "converted": 2,
+        "skipped": 1,
+        "failed": 0,
+        "command": "wisensehub prepare figshare-csi-har --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/figshare-csi-har/standardized/",
+          "views": "data/figshare-csi-har/standardized/views/",
+          "manifest": "data/figshare-csi-har/prepare-manifest.json",
+          "split": "data/figshare-csi-har/splits/random.json"
+        }
       }
     },
     {
@@ -700,8 +1070,8 @@
         "landing_page": "https://researchdata.gla.ac.uk/1283/",
         "download_page": "https://researchdata.gla.ac.uk/1283/",
         "access": "direct",
-        "license": "University repository terms; verify record",
-        "redistribution": "unclear",
+        "license": "CC BY 4.0",
+        "redistribution": "allowed",
         "formats": [
           "CSV amplitude"
         ]
@@ -756,8 +1126,56 @@
       "conversion_example": {
         "source_path": "Location1/Zone1/walking_01.csv",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 1, 52]",
-        "note": "The official CSV contains processed USRP-OFDM CSI amplitude."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "The official processed USRP-OFDM amplitude sample keeps 1 Tx × 1 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Thirty-seven authentic recordings covering every activity/location class actually present in the three official archives. Six documented Location-1 classes are absent upstream and are reported, not fabricated. Licensed CC BY 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 473,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 37,
+        "converted": 37,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare glasgow-activity-localization --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/glasgow-activity-localization/standardized/",
+          "views": "data/glasgow-activity-localization/standardized/views/",
+          "manifest": "data/glasgow-activity-localization/prepare-manifest.json",
+          "split": "data/glasgow-activity-localization/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "USRP X300/X310",
+        "distance": "3 × 3 zone grid",
+        "subjects": "Not reported",
+        "labels": {
+          "Activity": "empty room · no activity · sitting · standing · leaning · walking Rx to Tx · walking Tx to Rx",
+          "Location": "L1Z1 · L1Z2 · L1Z3 · L2Z1 · L2Z2 · L2Z3 · L3Z1 · L3Z2 · L3Z3"
+        },
+        "scenario_labels": "37 joint classes present in the official files; 6 documented Location-1 classes are absent upstream",
+        "band": "3.75 GHz",
+        "subcarriers": "51/52",
+        "sampling_rate_hz": "Source-defined",
+        "clip_length": "~3 s",
+        "scenario": "Joint activity and location sensing"
       }
     },
     {
@@ -845,8 +1263,57 @@
       "conversion_example": {
         "source_path": "1_Subject_Sitting/1_Sitting_01.csv",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 1, 52]",
-        "note": "The class directory is retained as source-label provenance."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "The class directory is retained as provenance; the sample keeps 1 Tx × 1 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Sixteen authentic recordings, one for every released occupancy/activity combination in the official Glasgow release. Licensed CC BY 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 816,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 16,
+        "converted": 16,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare glasgow-multiuser --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/glasgow-multiuser/standardized/",
+          "views": "data/glasgow-multiuser/standardized/views/",
+          "manifest": "data/glasgow-multiuser/prepare-manifest.json",
+          "split": "data/glasgow-multiuser/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "USRP X300/X310",
+        "distance": "Room scale",
+        "subjects": "Up to 4",
+        "labels": {
+          "Occupancy": "0 people · 1 person · 2 people · 3 people · 4 people",
+          "Activity": "empty room · sitting · standing · walking",
+          "Scenario": "16 released single and mixed occupancy/activity classes"
+        },
+        "scenario_labels": "single and mixed activities",
+        "band": "3.75 GHz",
+        "subcarriers": "51/52",
+        "sampling_rate_hz": "Source-defined",
+        "clip_length": "~3 s",
+        "scenario": "Multi-person activity combinations"
       }
     },
     {
@@ -884,10 +1351,10 @@
       },
       "original": {
         "landing_page": "https://ntu-aiot-lab.github.io/mm-fi",
-        "download_page": "https://github.com/ybhbingo/MMFi_dataset",
-        "access": "application",
-        "license": "Dataset agreement",
-        "redistribution": "restricted",
+        "download_page": "https://drive.google.com/drive/folders/1s8F7GsuNTKylsBcjo9VYBko6tuVR7SAb",
+        "access": "direct",
+        "license": "CC BY-NC 4.0",
+        "redistribution": "allowed",
         "formats": [
           "MAT",
           "NumPy",
@@ -897,8 +1364,8 @@
       },
       "standardization": {
         "status": "adapter-ready",
-        "profile": "native-10hz",
-        "notes": "Do not upsample the released 10 Hz WiFi stream by default; retain 3×114 CSI dimensions."
+        "profile": "general-sensing",
+        "notes": "Activity and pose tasks use the 100 Hz time rule. Each official 10 Hz CSI frame contains 3 Rx × 114 subcarriers × 10 packet captures; unfold all captures into time and keep 114 subcarriers, 1 Tx, and 3 Rx in [T, S, Tx, Rx]."
       },
       "sources": [
         {
@@ -950,8 +1417,57 @@
       "conversion_example": {
         "source_path": "E01/S01/A01/wifi-csi/",
         "primary_array": "amplitude",
-        "expected_shape": "[T, L, S]",
-        "note": "Place the complete frame*.mat directory; E/S/A identifiers drive environment, subject, and activity metadata."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Each released CSIamp frame is [3 Rx, 114 subcarriers, 10 packet captures]; the adapter unfolds every capture into time and keeps 1 Tx × 3 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Authentic 30-frame WiFi sequences for all 27 MM-Fi activities, fetched directly from the public official archive. Licensed CC BY-NC 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 300,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "official",
+        "processed": 27,
+        "converted": 27,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare mm-fi --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/mm-fi/standardized/",
+          "views": "data/mm-fi/standardized/views/",
+          "manifest": "data/mm-fi/prepare-manifest.json",
+          "split": "data/mm-fi/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "TP-Link N750 and synchronized sensors",
+        "distance": "4 platform settings",
+        "subjects": "40",
+        "labels": {
+          "Activity": "stretching and relaxing · horizontal chest expansion · vertical chest expansion · twist left · twist right · mark time · left limb extension · right limb extension · left-front lunge · right-front lunge · both-limb extension · squat · raise left hand · raise right hand · left-side lunge · right-side lunge · wave left hand · wave right hand · pick up objects · throw left · throw right · kick left · kick right · left body extension · right body extension · jump up · bow",
+          "Pose": "17 body keypoints",
+          "Multimodal": "WiFi · camera · depth · lidar · mmWave"
+        },
+        "scenario_labels": "4 environments",
+        "band": "5 GHz, 40 MHz",
+        "subcarriers": 114,
+        "sampling_rate_hz": "100 CSI captures/s (10 synchronized frames/s × 10 captures/frame)",
+        "clip_length": "Frame sequence",
+        "scenario": "Daily and rehabilitation activities"
       }
     },
     {
@@ -995,7 +1511,7 @@
       "standardization": {
         "status": "verified",
         "profile": "vital-sign",
-        "notes": "Task profile: 10 Hz, 60 s. Verified on official BreatheSmartv2.zip. Adapter pairs real/imaginary CSI logs, reshapes 9 links × 114 subcarriers, preserves config metadata. Derived views keep native MIMO dimensions."
+        "notes": "Breathing uses 10 Hz and up to 30 s. Discard the source file's all-zero reserved slots, retaining the 56 measured subcarriers, 2 Tx, and 3 Rx; output is [T, S, Tx, Rx] per sample."
       },
       "sources": [
         {
@@ -1037,8 +1553,55 @@
       "conversion_example": {
         "source_path": "config0001_csi_real_log.csv",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 9, 114]",
-        "note": "Keep the matching imaginary log and config0001.csv in the same directory."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Keep the matching imaginary log and config CSV. The adapter removes all-zero reserved slots and retains 56 measured subcarriers × 2 Tx × 3 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "All nine FrameRate3 breathing patterns from the official NIST release (BreathingPattern1.tar, BreathingPattern2.tar, BreathingPattern3.tar, BreathingPattern4.tar, BreathingPattern5.tar, BreathingPattern6.tar, BreathingPattern7.tar, BreathingPattern8.tar, BreathingPattern9.tar).",
+        "profile": "vital-sign",
+        "target_rate_hz": 10.0,
+        "duration_s": null,
+        "target_length": 180,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 180,
+          "profile_max_length": 300,
+          "selected_window_length": 180,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 9,
+        "converted": 9,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare nist-breathesmart --data-root data --setting random --profile vital-sign",
+        "outputs": {
+          "native": "data/nist-breathesmart/standardized/",
+          "views": "data/nist-breathesmart/standardized/views/",
+          "manifest": "data/nist-breathesmart/prepare-manifest.json",
+          "split": "data/nist-breathesmart/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "2 Tx × 3 Rx MIMO WiFi test system",
+        "distance": "Lab-scale manikin setup",
+        "subjects": "0 (breathing manikin)",
+        "labels": {
+          "Breathing": "pattern 1 · pattern 2 · pattern 3 · pattern 4 · pattern 5 · pattern 6 · pattern 7 · pattern 8 · pattern 9"
+        },
+        "scenario_labels": "frame rate 3 · 6 · 8 · 10 Hz; attenuation 0 · 10 · 20 · 30 dB",
+        "band": "Not reported",
+        "subcarriers": 56,
+        "sampling_rate_hz": "3 · 6 · 8 · 10 Hz source settings; 10 Hz task view",
+        "clip_length": "30 s task view",
+        "scenario": "Controlled respiratory motion"
       }
     },
     {
@@ -1048,7 +1611,6 @@
       "summary": "Paired Atheros-platform benchmarks for six-class human activity recognition and gait-based identification of fourteen people.",
       "tasks": [
         "har",
-        "fall",
         "identity"
       ],
       "modalities": [
@@ -1061,9 +1623,9 @@
         "band": null
       },
       "settings": {
-        "environments": null,
+        "environments": 3,
         "subjects": 14,
-        "scenario": "Segmented activities and gait identity recordings"
+        "scenario": "HAR in three layouts; gait identity with a T-shirt, coat, or backpack"
       },
       "scale": {
         "har_samples": 1200,
@@ -1075,17 +1637,17 @@
       "original": {
         "landing_page": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark",
         "download_page": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark",
-        "access": "account",
-        "license": "Processed benchmark access via linked cloud storage; verify dataset terms",
-        "redistribution": "restricted",
+        "access": "direct",
+        "license": "Dataset license not stated; official-source fetch only",
+        "redistribution": "unclear",
         "formats": [
           "Processed amplitude arrays"
         ]
       },
       "standardization": {
-        "status": "adapter-ready",
-        "profile": "clip-500-packets",
-        "notes": "Published benchmark representation is amplitude-only; do not imply that raw complex CSI is available."
+        "status": "verified",
+        "profile": "general-sensing",
+        "notes": "Follow SenseFi's official 2000-to-500 packet selection, preserve all 114 subcarriers and three antenna streams as 1 Tx × 3 Rx, and add the official normalized amplitude as a companion array. The 100 Hz task view is an assumed grid because physical packet cadence is absent from the processed files."
       },
       "sources": [
         {
@@ -1133,10 +1695,60 @@
         ]
       },
       "conversion_example": {
-        "source_path": "train_amp/walk/sample_001.mat",
+        "source_path": "NTU-Fi_HAR/train_amp/walk/walk101.mat",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 3, 114]",
-        "note": "SenseFi's time-axis downsampling and canonical transpose are applied."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "The source [3 antenna,114 subcarrier,2000 packet] payload follows SenseFi's every-fourth-packet selection and becomes [500,114,1,3]. Raw and officially normalized amplitude arrays are both retained."
+      },
+      "sample_plan": {
+        "sample_kind": "official-fetch-preview",
+        "sample_note": "Twenty authentic clips from the public official SenseFi links: all six HAR activities and all fourteen released Human-ID identities. Raw files stay local because the release does not state a dataset license.",
+        "official_source": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "target_rate_assumed": true,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 500,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "official",
+        "split_provenance": "official",
+        "processed": 20,
+        "converted": 20,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare ntu-fi --data-root data --setting official --profile general-sensing",
+        "outputs": {
+          "native": "data/ntu-fi/standardized/",
+          "views": "data/ntu-fi/standardized/views/",
+          "manifest": "data/ntu-fi/prepare-manifest.json",
+          "split": "data/ntu-fi/splits/official.json"
+        }
+      },
+      "collection": {
+        "device": "Atheros CSI Tool, 3 antenna streams",
+        "distance": "Not reported",
+        "subjects": "14 released identities",
+        "labels": {
+          "Activity": "box · circle · clean · fall · run · walk",
+          "Identity": "001 · 002 · 003 · 004 · 005 · 006 · 007 · 008 · 009 · 010 · 011 · 012 · 013 · 015"
+        },
+        "scenario_labels": "HAR: 3 layouts · Human-ID: T-shirt · coat · backpack · official train/test folders",
+        "band": "Not reported",
+        "subcarriers": 114,
+        "sampling_rate_hz": "Physical rate not reported · 100 Hz task-grid assumption",
+        "clip_length": "2000 source packets · 500 after official packet selection · 300-step task windows",
+        "scenario": "Six activities and gait identity under three clothing conditions"
       }
     },
     {
@@ -1174,7 +1786,7 @@
         "landing_page": "https://doi.org/10.1038/s41597-022-01573-2",
         "download_page": "https://doi.org/10.6084/m9.figshare.c.5551209",
         "access": "direct",
-        "license": "CC BY 4.0",
+        "license": "CC0",
         "redistribution": "allowed",
         "formats": [
           "MAT",
@@ -1183,9 +1795,9 @@
         ]
       },
       "standardization": {
-        "status": "adapter-ready",
+        "status": "verified",
         "profile": "general-sensing",
-        "notes": "Task profile: 100 Hz, 3 s. Retain complex CSI and synchronized timestamps; WiFi can be downloaded independently by modality."
+        "notes": "Preserve complex CSI, all 30 subcarriers, and the documented 3 Tx × 3 Rx layout. Infer each excerpt's effective rate from its full millisecond timestamp span (nominal 1600 Hz), then create complete 100 Hz task windows without dropping the remainder."
       },
       "sources": [
         {
@@ -1234,10 +1846,59 @@
         ]
       },
       "conversion_example": {
-        "source_path": "WiFi/exp001.mat",
+        "source_path": "WiFi/Activity/walk/wificsi1_exp002__rows_34518_37518.mat",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 9, 30]",
-        "note": "The 270 tx/rx/subcarrier MATLAB-table fields are ordered deterministically."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Order tx1rx1_sub1 through tx3rx3_sub30 into [T,30,3,3], retain real/imaginary/amplitude/phase plus activity/person/room/experiment metadata, and infer effective cadence from the full timestamp span."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Eight authentic contiguous WiFi CSI excerpts from the official Figshare release: background, no activity, walk, sit, stand, lie down, stand from floor, and body rotate. Each excerpt retains 3000 real packets, packet annotations, and all 270 complex CSI values.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 188,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 188,
+          "profile_max_length": 300,
+          "selected_window_length": 188,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 8,
+        "converted": 8,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare operanet --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/operanet/standardized/",
+          "views": "data/operanet/standardized/views/",
+          "manifest": "data/operanet/prepare-manifest.json",
+          "split": "data/operanet/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Intel 5300, 3 Tx × 3 Rx",
+        "distance": "Room 1: 5.1 m × 10.0 m · Room 2: 7.2 m × 7.2 m",
+        "subjects": "6",
+        "labels": {
+          "Activity": "background · no activity · walk · sit · stand · lie down · stand from floor · body rotate",
+          "Room": "room 1 · room 2",
+          "Multimodal": "WiFi · UWB · radar · vision"
+        },
+        "scenario_labels": "subject · room · experiment · receiver NUC1/NUC2",
+        "band": "5 GHz, channel 149",
+        "subcarriers": 30,
+        "sampling_rate_hz": "1600 Hz nominal · effective rate from timestamps · 100 Hz task view",
+        "clip_length": "Continuous source; authentic 3000-packet label excerpts on this page",
+        "scenario": "Daily activities and localization experiments in two rooms"
       }
     },
     {
@@ -1270,7 +1931,7 @@
       "original": {
         "landing_page": "https://yongsen.github.io/SignFi/",
         "download_page": "https://yongsen.github.io/SignFi/",
-        "access": "application",
+        "access": "direct",
         "license": "SignFi Dataset Terms of Use",
         "redistribution": "restricted",
         "formats": [
@@ -1280,19 +1941,28 @@
       "standardization": {
         "status": "adapter-ready",
         "profile": "clip-native",
-        "notes": "Access requires accepting dataset terms; preserve lab/home domain and user splits."
+        "native_shape": {
+          "subcarriers": 30,
+          "tx_links": 1,
+          "rx_links": 3
+        },
+        "notes": "Authorized local copy required. WiSenseHub can process it locally, but cannot host CSI or publish previews. The source is [200 time, 30 subcarriers, 3 Rx, samples]; each local output is [T, S, 1 Tx, 3 Rx]. The source packet rate is not reported, so any 100 Hz task view is recorded as a target-grid assumption."
       },
       "sources": [
         {
           "type": "project",
-          "url": "https://yongsen.github.io/SignFi/"
+          "url": "https://yongsen.github.io/SignFi/#terms-of-use-for-signfi-dataset"
+        },
+        {
+          "type": "repository",
+          "url": "https://github.com/yongsen/SignFi/blob/master/sign_labels.csv"
         },
         {
           "type": "paper",
           "url": "https://doi.org/10.1145/3191755"
         }
       ],
-      "verified_at": "2026-06-28",
+      "verified_at": "2026-08-10",
       "conversion": {
         "handler": "signfi",
         "implementation": "reference-implemented",
@@ -1339,8 +2009,30 @@
       "conversion_example": {
         "source_path": "dataset_lab_276_dl.mat",
         "primary_array": "amplitude",
-        "expected_shape": "[N, 200, 3, 30]",
-        "note": "Complex CSI and lab/home labels are retained."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Each clip retains complex CSI, 30 subcarriers, and 1 Tx × 3 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "real-sample-unavailable",
+        "sample_note": "Download requires accepting the SignFi Terms of Use. Those terms allow non-commercial research, but prohibit publishing or making any constituent part public and prohibit redistribution without prior written approval. WiSenseHub can process your authorized copy locally, but cannot host a CSI sample or public preview.",
+        "official_source": "https://yongsen.github.io/SignFi/",
+        "profile": "general-sensing",
+        "split_setting": "official_groups",
+        "full_source_preserved": true
+      },
+      "collection": {
+        "device": "Intel 5300",
+        "distance": "Lab and home",
+        "subjects": "5",
+        "labels": {
+          "Gesture": "FINISH · GO · HELP · LIKE · LOVE · MORE · NEED · NO · NOT · PLEASE · RIGHT · SORRY · WANT · WITH · WITHOUT · YES · ANIMAL · BEAR · BIRD · CAT · COW · DOG · ELEPHANT · GIRAFFE · HORSE · LION · MONKEY · PET · RAT · SNAKE · TIGER · BLACK · BLUE · BROWN · COLOR · GRAY · GREEN · ORANGE · PINK · PURPLE · RED · WHITE · YELLOW · AWFUL · BAD · BALD · BEAUTIFUL · CLEAN · COLD · CUTE · DEPRESSED · DIFFERENT · EXCITED · FINE · GOOD · HAPPY · HOT · HUNGRY · HURT · MAD/ANGRY · MEAN · NICE · OLD · PISSED OFF · RUDE · SAD · SCARED · SLOW · SO-SO · STRONG · TALL · THIRSTY · UPSET · WONDERFUL · YOUNG · AUNT · BABY · BOYFRIEND · BROTHER · CHILDREN · COUSIN (female) · COUSIN (male) · DATE · DAUGHTER · DIVORCE · FAMILY · FATHER · FRIEND · GIRLFRIEND · GRANDDAUGHTER · GRANDFATHER · GRANDMOTHER · GRANDSON · HUSBAND · MARRY · MOTHER · NEPHEW · NIECE · ROOMMATE · SIBLINGS · SINGLE · SISTER · SON · SWEETHEART · UNCLE · WIFE · APPLE · BACON · BANANA · BITTER · BREAD · BREAKFAST · BUTTER · CANDY · CARROT · CHEESE · CHERRY · CHICKEN · COFFEE · COKE (Coca Cola) · COOK · COOKIE · DELICIOUS · DINNER · DRINK · EAT · EGGS · FISH · FOOD · FRUIT · GRAPES · GROSS · HAMBURGER · HOTDOG · ICE CREAM · KETCHUP · LEMON · LETTUCE · LUNCH · MEAT · MILK · MUSHROOM · NUTS · ONION · PEACH · PEPPER · PINEAPPLE · PIZZA · POTATO · SALT · SANDWICH · SODA-POP · STRAWBERRIES · SUGAR · SWEET · TEA · TOMATO · TURKEY · VEGETABLES · WATER · APARTMENT · BATHROOM · BICYCLE · BUY · CAR · CLEAN · DOOR · GARAGE · GO-IN/ENTER · HOME · HOUSE · KITCHEN · ROOM · SHOWER · SOFA · TELEPHONE · TOILET · WALK · ASK-YOU · BOY · DEAF · GIRL · GIVE-YOU · HEARING · I/ME · MAN · MY/MINE · WOMAN · WORK · YOU · YOUR · HOW · WHAT · WHEN · WHERE · WHO · WHY · BOOK · BUS · CLASS · COLLEGE · DORM · DRAW · ELEMENTARY · ENGLISH · HIGH-SCHOOL · HISTORY · KNOW · LEARN · MATH · PAPER · PLAY · READ · SCHOOL · SCIENCE · SENTENCE · SIGN · SPORTS · STUDENT · TEACHER · UNIVERSITY · WRITE · AFTER · AFTERNOON · AGAIN · ALWAYS · BEFORE · DAY · FRIDAY · FUTURE · HOUR · LAST/PAST · MIDNIGHT · MINUTE · MONDAY · MONTH · MORNING · NEVER · NIGHT/EVENING · NOON · NOW · SATURDAY · SOMETIMES · SUNDAY · THURSDAY · TIME · TODAY · TOMORROW · TUESDAY · WEDNESDAY · WEEK · YEAR · YESTERDAY · Air Conditioner · BODY · LEG · FAN · RADIO · TV · REFRIGERATOR · BROWSER · WINDOW · WASHER · COMPUTER · LEFT (direction) · RIGHT (direction) · UP · DOWN · START · STOP · NEXT · PREVIOUS · ZOOM · OPEN · CLOSE · CONTINUE"
+        },
+        "scenario_labels": "lab · home · user groups",
+        "band": "5 GHz",
+        "subcarriers": 30,
+        "sampling_rate_hz": "Packet index",
+        "clip_length": "~200 packets",
+        "scenario": "Fine-grained sign language"
       }
     },
     {
@@ -1374,17 +2066,22 @@
       "original": {
         "landing_page": "https://github.com/ermongroup/Wifi_Activity_Recognition",
         "download_page": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark",
-        "access": "account",
-        "license": "Dataset license not clearly stated",
+        "access": "direct",
+        "license": "Dataset license not stated; official-source fetch only",
         "redistribution": "unclear",
         "formats": [
-          "CSV processed amplitude"
+          "NumPy payloads stored with CSV filenames"
         ]
       },
       "standardization": {
         "status": "verified",
-        "profile": "clip-250-packets",
-        "notes": "Verified on the official SenseFi X_test/y_test pair. Values are upstream processed amplitude features and can be negative; no phase, timestamp, or physical power is invented."
+        "profile": "general-sensing",
+        "native_shape": {
+          "subcarriers": 30,
+          "tx_links": 1,
+          "rx_links": 3
+        },
+        "notes": "The source [T,90] processed feature matrix becomes [T,30,1,3]. Preserve signed values and use a diverging display scale. The physical packet rate is not reported, so the 100 Hz task grid is recorded as an assumption rather than measured source metadata."
       },
       "sources": [
         {
@@ -1396,7 +2093,7 @@
           "url": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark"
         }
       ],
-      "verified_at": "2026-07-02",
+      "verified_at": "2026-08-11",
       "conversion": {
         "handler": "ut-har",
         "implementation": "reference-implemented",
@@ -1430,8 +2127,47 @@
       "conversion_example": {
         "source_path": "UT_HAR/data/X_test.csv",
         "primary_array": "amplitude",
-        "expected_shape": "[N, 250, 3, 30]",
-        "note": "Keep UT_HAR/label/y_test.csv beside the data/ tree; these .csv files contain NumPy binary payloads."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Each upstream processed clip is 250 time × 30 subcarriers × 1 Tx × 3 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-fetch-preview",
+        "sample_note": "Seven authentic processed UT-HAR validation clips, one for every activity class, fetched from the public official SenseFi link. Raw arrays remain local because the dataset license is not stated.",
+        "official_source": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark",
+        "delivery": "official-fetch",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "target_length": 250,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "selected_window_length": 250,
+          "full_source_preserved": true,
+          "remainder": "none for the seven 250-step clips"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 7,
+        "converted": 7,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare ut-har --data-root data --setting random --profile general-sensing"
+      },
+      "collection": {
+        "device": "Intel 5300",
+        "distance": "Controlled room",
+        "subjects": "Not reported",
+        "labels": {
+          "Activity": "lie down · fall · walk · pickup · run · sit down · stand up"
+        },
+        "scenario_labels": "official train · test",
+        "band": "5 GHz",
+        "subcarriers": 30,
+        "sampling_rate_hz": "Packet index",
+        "clip_length": "250 packets",
+        "scenario": "Single-person indoor activities"
       }
     },
     {
@@ -1494,7 +2230,7 @@
       "standardization": {
         "status": "adapter-ready",
         "profile": "general-sensing",
-        "notes": "Task profile: 100 Hz, 3 s. Parse interleaved imaginary/real values, select documented L-LTF or HT-LTF subcarriers, and retain scenario/antenna labels. Keep native link/subcarrier counts."
+        "notes": "Activity uses the 100 Hz time rule. Keep 52 subcarriers, 1 Tx, and 1 Rx; output is [T, S, Tx, Rx] per sample."
       },
       "sources": [
         {
@@ -1549,8 +2285,41 @@
       "conversion_example": {
         "source_path": "LOS/BQ/w1.csv",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 1, 52]",
-        "note": "Interleaved imaginary/real samples are parsed and documented ESP32 subcarriers are selected."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Interleaved imaginary/real samples are parsed; the documented 52 subcarriers and 1 × 1 link stay native."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "One CSV per class from the official Zenodo archive (b1.csv, w1.csv, ww1.csv). Classes: no presence, walking, arm waving. Files truncated to the first 1000 packets to keep the sample small.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 999,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 3,
+        "converted": 0,
+        "skipped": 3,
+        "failed": 0,
+        "command": "wisensehub prepare wallhack18k --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/wallhack18k/standardized/",
+          "views": "data/wallhack18k/standardized/views/",
+          "manifest": "data/wallhack18k/prepare-manifest.json",
+          "split": "data/wallhack18k/splits/random.json"
+        }
       }
     },
     {
@@ -1573,38 +2342,48 @@
         "band": null
       },
       "settings": {
-        "environments": 3,
+        "environments": 2,
         "subjects": 10,
-        "scenario": "Empty room, meeting room, and office with activity and gesture classes"
+        "scenario": "Two collection studies vary distance (1/3/6 m) and receiver height (60/90/120); ten volunteers were collected, while public factor folders are A/B/C"
       },
       "scale": {
         "samples": 4800,
         "activities": 16,
-        "trials_per_activity_per_subject": 50
+        "trials_per_activity_per_subject": 30,
+        "public_volunteer_subsets": 3
       },
       "original": {
-        "landing_page": "https://doi.org/10.1109/ACCESS.2019.2947024",
-        "download_page": null,
-        "access": "unclear",
-        "license": "Dataset license and current official download require confirmation",
+        "landing_page": "https://github.com/linteresa/WiAR",
+        "download_page": "https://github.com/linteresa/WiAR/tree/master/distance_factor_activity_data",
+        "access": "direct",
+        "license": "Dataset license not stated",
         "redistribution": "unclear",
         "formats": [
-          "CSI files",
+          "Intel 5300 DAT",
           "RSSI"
         ]
       },
       "standardization": {
-        "status": "adapter-ready",
-        "profile": "clip-4s-100hz",
-        "notes": "Intel 5300 beamforming-record parser is implemented from the official MATLAB/C reference; current release access still requires confirmation."
+        "status": "verified",
+        "profile": "general-sensing",
+        "native_shape": {
+          "subcarriers": 30,
+          "tx_links": 1,
+          "rx_links": 3
+        },
+        "notes": "Decode every authentic Intel 5300 record and preserve raw complex CSI. The source [T,Tx=1,Rx=3,S=30] becomes canonical [T,S=30,Tx=1,Rx=3]. Keep all native subcarriers and links; use the official nominal 30 Hz rate to build complete 100 Hz, 3 s activity windows without dropping the remainder."
       },
       "sources": [
+        {
+          "type": "repository",
+          "url": "https://github.com/linteresa/WiAR"
+        },
         {
           "type": "paper",
           "url": "https://doi.org/10.1109/ACCESS.2019.2947024"
         }
       ],
-      "verified_at": "2026-06-28",
+      "verified_at": "2026-08-11",
       "conversion": {
         "handler": "wiar-intel5300",
         "implementation": "reference-implemented",
@@ -1643,8 +2422,57 @@
       "conversion_example": {
         "source_path": "office/subject_01/walk_01.dat",
         "primary_array": "amplitude",
-        "expected_shape": "[T, Tx×Rx, 30]",
-        "note": "The Intel 5300 beamforming records are decoded directly from the official binary format."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Intel 5300 records provide the real Tx/Rx counts, which are retained instead of flattened."
+      },
+      "sample_plan": {
+        "sample_kind": "official-fetch-preview",
+        "sample_note": "Sixteen authentic Intel 5300 captures from the official WiAR repository, one for every activity, fixed at the public 1 m distance setting. Raw files remain local because the dataset license is not stated.",
+        "official_source": "https://github.com/linteresa/WiAR",
+        "delivery": "official-fetch",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 613,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 16,
+        "converted": 16,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare wiar --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/wiar/standardized/",
+          "views": "data/wiar/standardized/views/",
+          "manifest": "data/wiar/prepare-manifest.json",
+          "split": "data/wiar/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Intel 5300 · 1 Tx × 3 Rx",
+        "distance": "1 · 3 · 6 m",
+        "subjects": "10 collected; public subsets A/B/C",
+        "labels": {
+          "Activity": "horizontal arm wave · high arm wave · two hands wave · high throw · draw X · draw tick · toss paper · forward kick · side kick · bend · hand clap · walk · phone call · drink water · sit down · squat"
+        },
+        "scenario_labels": "receiver height 60 · 90 · 120",
+        "band": "Not reported",
+        "subcarriers": 30,
+        "sampling_rate_hz": "30 Hz nominal · 100 Hz task view",
+        "clip_length": "variable real capture · 3 s task windows",
+        "scenario": "Separate distance and receiver-height activity studies"
       }
     },
     {
@@ -1653,8 +2481,7 @@
       "year": 2021,
       "summary": "Large cross-domain gesture dataset with raw CSI and body-coordinate velocity profile representations across users, rooms, positions, and orientations.",
       "tasks": [
-        "gesture",
-        "har"
+        "gesture"
       ],
       "modalities": [
         "WiFi CSI",
@@ -1669,19 +2496,22 @@
       "settings": {
         "environments": 3,
         "subjects": 16,
-        "scenario": "Gestures at multiple positions and orientations"
+        "scenario": "Cross-domain gestures across 3 rooms, 15 locations, 5 orientations, and 16 users"
       },
       "scale": {
-        "samples_reported_by_csi_bench": 271100,
         "processed_gesture_samples_in_sensefi": 43652,
-        "gesture_classes": 22
+        "sensefi_gesture_classes": 22,
+        "paper_core_gestures": 15,
+        "paper_users": 16,
+        "paper_locations": 15,
+        "paper_orientations": 5
       },
       "original": {
         "landing_page": "https://tns.thss.tsinghua.edu.cn/widar3.0/",
         "download_page": "https://tns.thss.tsinghua.edu.cn/widar3.0/",
         "access": "direct",
-        "license": "Research use; verify project terms",
-        "redistribution": "restricted",
+        "license": "CC BY 4.0",
+        "redistribution": "allowed",
         "formats": [
           "DAT",
           "MAT",
@@ -1689,9 +2519,14 @@
         ]
       },
       "standardization": {
-        "status": "adapter-ready",
-        "profile": "clip-4s-100hz",
-        "notes": "Expose raw CSI and BVP as separate representations; never label BVP as raw CSI."
+        "status": "verified",
+        "profile": "semantic-bvp",
+        "native_shape": {
+          "time_bins": 22,
+          "velocity_x_bins": 20,
+          "velocity_y_bins": 20
+        },
+        "notes": "This sample is processed BVP, not raw CSI. Reshape the released SenseFi CSV from [22 time bins, 400 flattened velocity bins] to [22 time bins, 20 x-velocity bins, 20 y-velocity bins]. Preserve the released BVP, add SenseFi's fixed normalized companion, and do not invent a packet rate, subcarrier axis, or Tx/Rx axes."
       },
       "sources": [
         {
@@ -1699,11 +2534,15 @@
           "url": "https://tns.thss.tsinghua.edu.cn/widar3.0/"
         },
         {
+          "type": "data",
+          "url": "https://doi.org/10.21227/jzp9-2a29"
+        },
+        {
           "type": "repository",
           "url": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark"
         }
       ],
-      "verified_at": "2026-06-28",
+      "verified_at": "2026-08-11",
       "conversion": {
         "handler": "widar3",
         "implementation": "reference-implemented",
@@ -1766,6 +2605,55 @@
         "primary_array": "bvp",
         "expected_shape": "[22, 20, 20]",
         "note": "This benchmark release stores processed BVP rather than raw CSI."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Twenty-two authentic processed BVP clips, one for every SenseFi Widar gesture class. The hosted subset is CC BY 4.0 and preserves the released train/test paths.",
+        "official_source": "https://doi.org/10.21227/jzp9-2a29",
+        "delivery": "hosted-sample",
+        "profile": "semantic-bvp",
+        "target_rate_hz": null,
+        "duration_s": null,
+        "target_length": 22,
+        "interpolation": "none",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 22,
+          "profile_max_length": 22,
+          "selected_window_length": 22,
+          "full_source_preserved": true,
+          "remainder": "none; every processed BVP clip already contains 22 semantic snapshots"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 22,
+        "converted": 22,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare widar3 --data-root data --setting random --profile semantic-bvp --interpolation none",
+        "outputs": {
+          "native": "data/widar3/standardized/",
+          "views": "data/widar3/standardized/views/",
+          "manifest": "data/widar3/prepare-manifest.json",
+          "split": "data/widar3/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Source collection: Intel 5300 · 1 Tx × 6 Rx; sample view: receiver-free BVP",
+        "distance": "15 collection locations",
+        "subjects": "16",
+        "labels": {
+          "Gesture": "Push&Pull · Sweep · Clap · Slide · Draw-N(H) · Draw-O(H) · Draw-Rectangle(H) · Draw-Triangle(H) · Draw-Zigzag(H) · Draw-Zigzag(V) · Draw-N(V) · Draw-O(V) · Draw-1 · Draw-2 · Draw-3 · Draw-4 · Draw-5 · Draw-6 · Draw-7 · Draw-8 · Draw-9 · Draw-10"
+        },
+        "scenario_labels": "3 rooms · 15 locations · 5 orientations · subject",
+        "band": "5 GHz",
+        "subcarriers": "Not present in the processed BVP sample",
+        "sampling_rate_hz": "22 semantic time snapshots · physical cadence not provided",
+        "clip_length": "22 time snapshots × 20 x-velocity × 20 y-velocity",
+        "scenario": "Cross-domain gesture sensing with body-coordinate velocity maps"
       }
     },
     {
@@ -1782,15 +2670,15 @@
         "WiFi CSI"
       ],
       "hardware": {
-        "platform": "Multiple commercial 802.11ac devices",
-        "chipset": null,
+        "platform": "Netgear X4S, Asus RT-AC86U, and TP-Link AD7200 routers; Asus RT-AC86U monitor",
+        "chipset": "Nexmon CSI-compatible monitor",
         "wifi_standard": "802.11ac",
-        "band": "5 GHz, 80 MHz"
+        "band": "5 GHz, channel 42, 80 MHz"
       },
       "settings": {
-        "environments": null,
+        "environments": 7,
         "subjects": 13,
-        "scenario": "Multiple environments, days, hardware configurations, blocked direct path, and semi-anechoic chamber"
+        "scenario": "Seven environments, multiple days and router combinations, LOS/NLOS paths, and a semi-anechoic chamber"
       },
       "scale": {
         "hours": 13,
@@ -1799,18 +2687,23 @@
       },
       "original": {
         "landing_page": "https://arxiv.org/abs/2305.03170",
-        "download_page": "https://doi.org/10.21227/0p2j-zy98",
+        "download_page": "https://doi.org/10.21227/xbhv-f125",
         "access": "account",
-        "license": "IEEE DataPort terms",
-        "redistribution": "restricted",
+        "license": "CC BY 4.0; a signed-in IEEE DataPort subscription is required to download the archive",
+        "redistribution": "allowed",
         "formats": [
-          "Dataset-specific CSI files"
+          "Complex MAT"
         ]
       },
       "standardization": {
         "status": "adapter-ready",
-        "profile": "continuous-100hz",
-        "notes": "CFR preprocessing and four-monitor deinterleaving are implemented; real-release verification still requires DataPort access."
+        "profile": "general-sensing",
+        "native_shape": {
+          "subcarriers": 242,
+          "tx_links": 1,
+          "rx_links": 4
+        },
+        "notes": "Deinterleave each official [(T × 4), 242] complex CFR matrix into [T, 242, 1, 4]. Preserve all 242 data subcarriers and four monitor streams, then resample only time from the official 173 Hz nominal rate to the 100 Hz, 3 s task view. The schema is verified from the paper; real-byte validation awaits an account-acquired MAT file."
       },
       "sources": [
         {
@@ -1819,10 +2712,10 @@
         },
         {
           "type": "data",
-          "url": "https://doi.org/10.21227/0p2j-zy98"
+          "url": "https://doi.org/10.21227/xbhv-f125"
         }
       ],
-      "verified_at": "2026-06-28",
+      "verified_at": "2026-08-11",
       "conversion": {
         "handler": "wifi-80mhz",
         "implementation": "reference-implemented",
@@ -1873,8 +2766,36 @@
       "conversion_example": {
         "source_path": "AR1a_W.mat",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 4, 242]",
-        "note": "256/1024-bin CFR traces are converted to 242 carriers and four monitor links."
+        "expected_shape": "[T, 242, 1, 4] per trace",
+        "note": "The official [(T × 4), 242] complex matrix is deinterleaved into four monitor streams; only time is resampled for a task view."
+      },
+      "sample_plan": {
+        "sample_kind": "account-gated-source",
+        "sample_note": "The dataset is CC BY 4.0, but the 22.02 GB IEEE DataPort archive requires a signed-in subscription. Supply a lawfully downloaded MAT file; WiSenseHub will then build the real preview locally.",
+        "official_source": "https://doi.org/10.21227/xbhv-f125",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": 3.0,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "split_setting": "random",
+        "command": "wisensehub prepare wifi-80mhz --data-root data --setting random --profile general-sensing"
+      },
+      "collection": {
+        "device": "Netgear, Asus, and TP-Link 802.11ac routers · Asus 4-antenna monitor",
+        "distance": "Multiple documented device layouts",
+        "subjects": "13 total; AR uses 4 people and PI/PC use 10",
+        "labels": {
+          "Activity": "empty room · walking · running · jumping · sitting still · standing still · sit down / stand up · arm exercises",
+          "Identity": "p01 · p02 · p03 · p04 · p05 · p06 · p07 · p08 · p09 · p10",
+          "Occupancy": "empty room · 1 person · 2 people · 3 people · 4 people · 5 people · 6 people · 7 people · 8 people · 9 people · 10 people"
+        },
+        "scenario_labels": "18 AR subsets · 4 PI subsets · 4 PC subsets · 7 rooms · LOS/NLOS · day · device · PC files omit the 1-person case because the matching PI files supply it",
+        "band": "5 GHz · channel 42 · 80 MHz",
+        "subcarriers": 242,
+        "sampling_rate_hz": "173 Hz nominal",
+        "clip_length": "40–300 s per MAT trace",
+        "scenario": "Bedroom · living room · kitchen · laboratory · office · semi-anechoic chamber · meeting room"
       }
     },
     {
@@ -1897,9 +2818,9 @@
         "band": null
       },
       "settings": {
-        "environments": null,
+        "environments": 4,
         "subjects": null,
-        "scenario": "Ambient presence and movement monitoring over multiple capture files"
+        "scenario": "Ambient presence and movement monitoring in rooms G19, G21, 260, and 128a"
       },
       "scale": {
         "size_gb": 28,
@@ -1909,8 +2830,8 @@
         "landing_page": "https://zenodo.org/records/3676058",
         "download_page": "https://zenodo.org/records/3676058",
         "access": "direct",
-        "license": "Check Zenodo record",
-        "redistribution": "unclear",
+        "license": "CC BY 4.0",
+        "redistribution": "allowed",
         "formats": [
           "Gzipped JSON CSI",
           "Gzipped CSV RSS",
@@ -1920,7 +2841,7 @@
       "standardization": {
         "status": "verified",
         "profile": "continuous-native",
-        "notes": "Verified on a 50-record official G19-10 CSI gzip byte-prefix sample. The adapter parses Zenodo JSON CSI records, preserves complex CSI, and can derive fixed-rate link-subcarrier views; full multi-GB release verification remains future work."
+        "notes": "Presence and movement use the 100 Hz time rule. Keep 30 subcarriers, 1 Tx, and 3 Rx; output is [T, S, Tx, Rx] per sample."
       },
       "sources": [
         {
@@ -1975,8 +2896,55 @@
       "conversion_example": {
         "source_path": "G19-10.csi.json.gz",
         "primary_array": "amplitude",
-        "expected_shape": "[T, L, 30]",
-        "note": "Gzip JSON Lines are streamed and r/i complex fields are preserved."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Gzip JSON Lines preserve complex CSI with 30 subcarriers and 1 Tx × 3 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Authentic interval-aligned CSI from all seven official states—Gone, Approach, Enter, Mobile, Stationary, Exit, and Departure—with the official annotations. Licensed CC BY 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 144,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 144,
+          "profile_max_length": 300,
+          "selected_window_length": 144,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 7,
+        "converted": 7,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare wifi-presence-movement --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/wifi-presence-movement/standardized/",
+          "views": "data/wifi-presence-movement/standardized/views/",
+          "manifest": "data/wifi-presence-movement/prepare-manifest.json",
+          "split": "data/wifi-presence-movement/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Intel 5300",
+        "distance": "Ambient room monitoring",
+        "subjects": "O1 · O2 occupant codes",
+        "labels": {
+          "Activity state": "gone · approach · enter · mobile · stationary · exit · departure"
+        },
+        "scenario_labels": "G19 · G21 · 260 · 128a",
+        "band": "Not reported",
+        "subcarriers": 30,
+        "sampling_rate_hz": "From packet timestamps",
+        "clip_length": "Continuous",
+        "scenario": "Presence and movement monitoring"
       }
     },
     {
@@ -1985,11 +2953,10 @@
       "year": 2025,
       "summary": "Continuous, untrimmed WiFi CSI recordings annotated with temporal boundaries for seven daily activities.",
       "tasks": [
-        "tad_tal",
-        "fall"
+        "tad_tal"
       ],
       "modalities": [
-        "WiFi CSI"
+        "processed WiFi temporal features"
       ],
       "hardware": {
         "platform": "Two laptops",
@@ -2010,17 +2977,21 @@
         "approx_seconds_per_sequence": 85
       },
       "original": {
-        "landing_page": "https://arxiv.org/abs/2412.16233",
-        "download_page": null,
-        "access": "unclear",
+        "landing_page": "https://github.com/aiotgroup/WiFiTAD",
+        "download_page": "https://drive.google.com/file/d/1gy0ppFtypVTtgBfrFzdMJUbXTb1MbPSK/view",
+        "access": "direct",
         "license": "Not stated for dataset",
         "redistribution": "unclear",
-        "formats": []
+        "formats": [
+          "NPY",
+          "CSV",
+          "JSON"
+        ]
       },
       "standardization": {
-        "status": "adapter-ready",
+        "status": "verified",
         "profile": "continuous-100hz",
-        "notes": "Official NPY orientation, amplitude normalization, and temporal annotation mapping are implemented; release access is tracked separately."
+        "notes": "Preserve the released 30-channel processed feature representation at 100 Hz and attach all temporal activity intervals; do not relabel features as raw CSI subcarriers."
       },
       "sources": [
         {
@@ -2071,17 +3042,63 @@
         "primary_array": "amplitude",
         "expected_shape": "[T, 1, 60]",
         "note": "Keep the annotations directory beside smartwifi to attach temporal activity segments."
+      },
+      "sample_plan": {
+        "sample_kind": "official-fetch-preview",
+        "sample_note": "Two authentic WiFiTAD continuous feature sequences whose official interval annotations cover all seven activities. Raw files stay local because the data license is unstated.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 8500,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 2,
+        "converted": 2,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare wifi-tad --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/wifi-tad/standardized/",
+          "views": "data/wifi-tad/standardized/views/",
+          "manifest": "data/wifi-tad/prepare-manifest.json",
+          "split": "data/wifi-tad/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Two Intel 5300 laptops",
+        "distance": "7 m × 12 m office",
+        "subjects": "3",
+        "labels": {
+          "Temporal activity": "run · walk · jump · wave · bend · stand · sit"
+        },
+        "scenario_labels": "train · validation · test sequences",
+        "band": "Not reported",
+        "subcarriers": "30 processed feature channels (not raw subcarriers)",
+        "sampling_rate_hz": 100,
+        "clip_length": "~85 s continuous",
+        "scenario": "Untrimmed activity sequences"
       }
     },
     {
       "id": "wimans",
       "name": "WiMANS",
       "year": 2024,
-      "summary": "Dual-band WiFi CSI and synchronized video for simultaneous activities, identities, locations, and occupancy from zero to five users.",
+      "summary": "Dual-band WiFi CSI and synchronized video for simultaneous activities, locations, and occupancy from zero to five users.",
       "tasks": [
         "har",
         "occupancy",
-        "identity",
         "spatial_localization",
         "multitask"
       ],
@@ -2097,8 +3114,8 @@
       },
       "settings": {
         "environments": 3,
-        "subjects": 6,
-        "scenario": "0–5 simultaneous users performing activities at labeled locations"
+        "subjects": null,
+        "scenario": "0–5 simultaneous occupants performing activities at labeled locations; user_1…user_6 are annotation slots, not identity classes"
       },
       "scale": {
         "samples": 11286,
@@ -2110,8 +3127,8 @@
         "landing_page": "https://github.com/huangshk/WiMANS",
         "download_page": "https://www.kaggle.com/datasets/shuokanghuang/wimans",
         "access": "account",
-        "license": "Academic research terms; verify release",
-        "redistribution": "restricted",
+        "license": "CC BY-NC-SA 4.0",
+        "redistribution": "allowed",
         "formats": [
           "MAT",
           "video",
@@ -2119,9 +3136,14 @@
         ]
       },
       "standardization": {
-        "status": "adapter-ready",
+        "status": "verified",
         "profile": "clip-3s-100hz",
-        "notes": "Represent packet loss explicitly; preserve dual-band identity and multi-label annotations."
+        "native_shape": {
+          "subcarriers": 30,
+          "tx_links": 3,
+          "rx_links": 3
+        },
+        "notes": "The official [T, 3 Tx, 3 Rx, 30 subcarriers] amplitude clip is transposed to [T, S, Tx, Rx]. Activity uses the 100 Hz, 3 s task view; all 30 subcarriers and all 3 × 3 antenna links stay native. The source sends at 1000 packets/s, and packet loss explains clips shorter than 3000 packets."
       },
       "sources": [
         {
@@ -2179,8 +3201,57 @@
       "conversion_example": {
         "source_path": "wifi_csi/amp/act_1_1.npy",
         "primary_array": "amplitude",
-        "expected_shape": "[T, L, S]",
-        "note": "Both official amplitude NPY and raw MAT branches are recognized."
+        "expected_shape": "[T, S, Tx, Rx] per sample",
+        "note": "Both official branches preserve 30 subcarriers and the 3 Tx × 3 Rx layout."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Fourteen authentic WiMANS CSI amplitude clips: all nine activities plus five clips selected to cover all environments, bands, occupancy counts, and locations, joined to the official annotation table. Licensed CC BY-NC-SA 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 300,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 14,
+        "converted": 14,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare wimans --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/wimans/standardized/",
+          "views": "data/wimans/standardized/views/",
+          "manifest": "data/wimans/prepare-manifest.json",
+          "split": "data/wimans/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Intel 5300 transmitter/receiver pair · 3 Tx × 3 Rx antennas",
+        "distance": "Three environments",
+        "subjects": "Six anonymized user slots; each clip contains 0–5 people",
+        "labels": {
+          "Activity": "nothing · walk · rotation · jump · wave · lie down · pick up · sit down · stand up",
+          "Occupancy": "0 people · 1 person · 2 people · 3 people · 4 people · 5 people",
+          "Location": "a · b · c · d · e"
+        },
+        "scenario_labels": "2.4 GHz · 5 GHz · classroom · meeting room · empty room",
+        "band": "2.4/5 GHz",
+        "subcarriers": 30,
+        "sampling_rate_hz": "1000 packets/s nominal · 100 Hz task view",
+        "clip_length": "3 s · 300 steps after resampling",
+        "scenario": "Multi-person, multi-label sensing"
       }
     },
     {
@@ -2197,32 +3268,39 @@
       "hardware": {
         "platform": "Two USRP X300 software-defined radios with VERT2450 antennas",
         "chipset": "USRP X300",
-        "wifi_standard": "Custom OFDM",
-        "band": null
+        "wifi_standard": "Custom GNU Radio OFDM",
+        "band": "2.4 GHz"
       },
       "settings": {
         "environments": 1,
-        "subjects": null,
-        "scenario": "Timed up-and-go trials under three simulated balance-risk conditions"
+        "subjects": 1,
+        "scenario": "One subject performs a 3 m Timed Up-and-Go path in Room 511 under three simulated balance-risk conditions"
       },
       "scale": {
         "samples": 1500,
-        "risk_classes": 3
+        "risk_classes": 3,
+        "training_per_class": 475,
+        "unseen_test_per_class": 25
       },
       "original": {
         "landing_page": "https://researchdata.gla.ac.uk/1623/",
         "download_page": "https://researchdata.gla.ac.uk/1623/",
-        "access": "direct",
-        "license": "University repository terms; verify record",
-        "redistribution": "unclear",
+        "access": "application",
+        "license": "CC BY 4.0; files supplied on request",
+        "redistribution": "allowed",
         "formats": [
           "CSV amplitude"
         ]
       },
       "standardization": {
         "status": "adapter-ready",
-        "profile": "clip-native",
-        "notes": "Keep fall-risk estimation distinct from binary fall-event detection and preserve trial/subject identifiers when available."
+        "profile": "general-sensing",
+        "native_shape": {
+          "subcarriers": 51,
+          "tx_links": 1,
+          "rx_links": 1
+        },
+        "notes": "Each official amplitude CSV becomes [T, 51, 1, 1]. Preserve all 51 subcarriers and the single USRP link. The README does not report the CSI sampling rate, so a requested 100 Hz fall-risk view is recorded as a target-grid assumption rather than a measured resampling rate. Preserve the official training versus unseen folder split."
       },
       "sources": [
         {
@@ -2240,8 +3318,14 @@
         "official_reference": "https://researchdata.gla.ac.uk/1623/1/ReadMe.docx"
       },
       "split_settings": {
-        "default": "random",
+        "default": "official_unseen",
         "settings": [
+          {
+            "id": "official_unseen",
+            "kind": "predefined",
+            "provenance": "official",
+            "description": "Use low/med/high for training and *_unseen for the held-out test set."
+          },
           {
             "id": "random",
             "kind": "random",
@@ -2251,42 +3335,42 @@
               0.15,
               0.15
             ]
-          },
-          {
-            "id": "cross_subject",
-            "kind": "group_holdout",
-            "group_by": "subject",
-            "provenance": "hub"
-          },
-          {
-            "id": "cross_location",
-            "kind": "group_holdout",
-            "group_by": "location",
-            "provenance": "paper"
-          },
-          {
-            "id": "cross_environment",
-            "kind": "group_holdout",
-            "group_by": "environment",
-            "provenance": "paper"
           }
         ]
       },
       "conversion_example": {
-        "source_path": "low_risk/trial_001.csv",
+        "source_path": "low/<official-trial>.csv",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 1, 51]",
-        "note": "The requested release is amplitude-only; keep risk/trial directories for provenance."
+        "expected_shape": "[T, 51, 1, 1] per sample",
+        "note": "Keep the six official folders intact. The amplitude-only release has 51 subcarriers and one USRP transmitter–receiver link."
+      },
+      "sample_plan": {
+        "sample_kind": "request-only-source",
+        "sample_note": "The CC BY 4.0 University of Glasgow release is supplied only through its Request Data form. After the owner sends it, keep the six official folders under data/wipe-fall/original/; WiSenseHub will prepare the real 51-subcarrier files locally.",
+        "official_source": "https://researchdata.gla.ac.uk/1623/"
+      },
+      "collection": {
+        "device": "USRP X300 transmitter and receiver · VERT2450 antennas",
+        "distance": "4 m Tx–Rx · 3 m walking path",
+        "subjects": "1",
+        "labels": {
+          "Fall risk": "low · medium · high"
+        },
+        "scenario_labels": "Room 511 · training · unseen test",
+        "band": "2.4 GHz custom OFDM",
+        "subcarriers": 51,
+        "sampling_rate_hz": "Not reported · 100 Hz task grid is optional",
+        "clip_length": "One Timed Up-and-Go trial",
+        "scenario": "Fall-risk estimation"
       }
     },
     {
       "id": "wireless-har-wifi-uwb",
       "name": "Wireless Sensing HAR (WiFi + UWB)",
       "year": 2022,
-      "summary": "Multimodal human-activity dataset combining WiFi CSI across three rooms with UWB channel impulse responses.",
+      "summary": "Human-activity release with WiFi CSI across three rooms and a separate UWB CIR branch. The website mini sample uses the WiFi branch and covers every Room 2 activity label.",
       "tasks": [
-        "har",
-        "multitask"
+        "har"
       ],
       "modalities": [
         "WiFi CSI",
@@ -2296,17 +3380,22 @@
         "platform": "WiFi CSI and commercial UWB sensing systems",
         "chipset": "Intel 5300 for WiFi subset",
         "wifi_standard": "802.11n",
-        "band": null
+        "band": null,
+        "wifi_links": "1 Tx × 3 Rx"
       },
       "settings": {
         "environments": 3,
         "subjects": null,
-        "scenario": "Human activities across three WiFi rooms and one UWB room"
+        "scenario": "Rooms 1 and 3 are continuous participant recordings; Room 2 provides per-activity WiFi clips; UWB is a separate branch"
       },
       "scale": {
         "size_gb": 7.97,
         "wifi_rooms": 3,
-        "uwb_rooms": 1
+        "uwb_rooms": 1,
+        "room2_activity_labels": 8,
+        "wifi_subcarriers": 30,
+        "wifi_tx_links": 1,
+        "wifi_rx_links": 3
       },
       "original": {
         "landing_page": "https://figshare.com/articles/dataset/20444538",
@@ -2322,7 +3411,7 @@
       "standardization": {
         "status": "adapter-ready",
         "profile": "continuous-native",
-        "notes": "Standardize WiFi independently while preserving synchronization and modality provenance when UWB is retained."
+        "notes": "The WiFi adapter reshapes the released named columns from [T,90] to [T,30,1,3], preserving all native subcarriers and receive links. The compact sample does not imply paired UWB data."
       },
       "sources": [
         {
@@ -2335,7 +3424,6 @@
         "handler": "wireless-har-wifi-uwb",
         "implementation": "schema-implemented",
         "patterns": [
-          "**/WiFi_CSI/**/*.csv",
           "**/WiFi_CSI/**/*.mat",
           "**/WiFi_CSI/**/*.h5",
           "**/WiFi_CSI/**/*.hdf5",
@@ -2378,10 +3466,57 @@
         ]
       },
       "conversion_example": {
-        "source_path": "Wireless_sensing_human_activity_recognition/WiFi_CSI/Room_1/walk_01.mat",
+        "source_path": "Wireless_sensing_human_activity_recognition/WiFi_CSI/Room_2/walk/walk_18.mat",
         "primary_array": "amplitude",
-        "expected_shape": "[T, L, S]",
-        "note": "Only files below WiFi_CSI are converted; the sibling UWB branch is intentionally excluded."
+        "expected_shape": "[T, 30, 1, 3]",
+        "note": "The Room 2 MAT table stores 90 named CSI columns as 3 Rx × 30 subcarriers. The mini sample is WiFi-only; it does not invent UWB axes."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Eight authentic Room 2 WiFi CSI recordings, one per activity in the official Figshare release, plus the official Room 1 and Room 3 activity summaries. The mini sample is WiFi-only; the full release also contains UWB CIR. Licensed CC BY 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "dataset-min-full-coverage",
+          "dataset_min_resampled_length": 7500,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 8,
+        "converted": 0,
+        "skipped": 8,
+        "failed": 0,
+        "command": "wisensehub prepare wireless-har-wifi-uwb --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/wireless-har-wifi-uwb/standardized/",
+          "views": "data/wireless-har-wifi-uwb/standardized/views/",
+          "manifest": "data/wireless-har-wifi-uwb/prepare-manifest.json",
+          "split": "data/wireless-har-wifi-uwb/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "Intel 5300 WiFi · 1 Tx × 3 Rx; separate UWB system",
+        "distance": "Three WiFi rooms",
+        "subjects": "Room 1: 8 participant recordings · Room 3: 3 participant recordings · Room 2 identity is not encoded in clip names",
+        "labels": {
+          "Activity": "kneel · lie down · pick up · sit · sit and rotate · stand · stand and rotate · walk"
+        },
+        "scenario_labels": "room 1 continuous · room 2 labeled clips · room 3 continuous",
+        "band": "Not reported",
+        "subcarriers": 30,
+        "sampling_rate_hz": "Packet rate is not supplied by the Room 2 MAT files",
+        "clip_length": "Room 2 clips contain 7,500 or 10,000 packets",
+        "scenario": "The page sample contains authentic Room 2 WiFi clips for all eight labels; the full release also contains continuous WiFi rooms and UWB CIR"
       }
     },
     {
@@ -2402,7 +3537,7 @@
         "RGB-D video"
       ],
       "hardware": {
-        "platform": "WiFi array plus consumer-device IMU simulators and Azure Kinect",
+        "platform": "WiFi receiver array plus phone, watch, earbud and glasses IMUs and Azure Kinect",
         "chipset": null,
         "wifi_standard": null,
         "band": null
@@ -2419,20 +3554,21 @@
         "test_sequences": 171
       },
       "original": {
-        "landing_page": "https://github.com/aiotgroup/XRFV2",
-        "download_page": "https://www.kaggle.com/datasets/laptype/xrf-v2/data",
+        "landing_page": "https://github.com/airslab2020/XRFV2",
+        "download_page": "https://www.kaggle.com/datasets/anonymous20251/xrfv2dataset",
         "access": "account",
-        "license": "Check repository and Kaggle release",
-        "redistribution": "unclear",
+        "license": "MIT",
+        "redistribution": "allowed",
         "formats": [
-          "NumPy",
-          "annotations"
+          "HDF5",
+          "JSON",
+          "CSV"
         ]
       },
       "standardization": {
-        "status": "adapter-ready",
-        "profile": "continuous-native",
-        "notes": "Official HDF5 WiFi adapter converts [time,3 receivers,3 channels,30 subcarriers] to [time,9 links,30 subcarriers] and preserves source labels."
+        "status": "verified",
+        "profile": "general-sensing",
+        "notes": "Preserve every continuous 50 Hz source sequence and all 34 raw temporal label intervals. The default task view resamples only time to 100 Hz and splits it into 300-step windows. Keep 30 subcarriers and both released 3-valued receiver/channel axes, represented as [T,S,Tx,Rx] with an explicit logical-axis caveat."
       },
       "sources": [
         {
@@ -2482,10 +3618,57 @@
         ]
       },
       "conversion_example": {
-        "source_path": "WiFi/sequence_001.h5",
+        "source_path": "XRFV2_processed/WWADL/wifi/0_3_3.h5",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 9, 30]",
-        "note": "Three receivers and three channels are flattened into nine documented links."
+        "expected_shape": "[T, 30, 3, 3] per sequence",
+        "note": "The authentic source [T, receiver device, channel stream, 30 subcarriers] tensor becomes canonical [T, 30, logical Tx, Rx]. Both 3-valued source axes stay explicit; the channel stream axis is not claimed to be a physical Tx antenna."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Seven authentic continuous XRF V2 WiFi sequences from the authors' release. Their raw interval tables cover all 34 original activity labels; the derived benchmark separately merges five walking destinations into one class. Licensed MIT.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "explicit-full-coverage",
+          "dataset_min_resampled_length": 5800,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 7,
+        "converted": 7,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare xrf-v2 --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/xrf-v2/standardized/",
+          "views": "data/xrf-v2/standardized/views/",
+          "manifest": "data/xrf-v2/prepare-manifest.json",
+          "split": "data/xrf-v2/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "WiFi receiver array plus IMU and Kinect",
+        "distance": "Three rooms",
+        "subjects": "16",
+        "labels": {
+          "Temporal activity": "stretching · pouring water · writing · cutting fruit · eating fruit · taking medicine · drinking water · sitting down · turning eye-protection lamp on or off · opening or closing curtains · opening or closing windows · typing · opening envelope · throwing garbage · picking fruit · picking up items · answering phone · using mouse · wiping table · writing on blackboard · washing hands · using phone · reading · watering plants · walking to bed · walking to chair · walking to cabinet · walking to window · walking to blackboard · getting out of bed · standing up · lying down · standing still · lying still"
+        },
+        "scenario_labels": "dining room · study · bedroom · 34 raw labels retained (the derived benchmark merges five walking destinations)",
+        "band": "Not reported",
+        "subcarriers": 30,
+        "sampling_rate_hz": 50,
+        "clip_length": "43–89 s continuous sequence",
+        "scenario": "Continuous multimodal activity sensing"
       }
     },
     {
@@ -2519,21 +3702,22 @@
         "activities": 55
       },
       "original": {
-        "landing_page": "https://github.com/aiotgroup/XRF55-repo",
-        "download_page": null,
-        "access": "unclear",
-        "license": "Check repository release",
-        "redistribution": "unclear",
+        "landing_page": "https://aiotgroup.github.io/XRF55/",
+        "download_page": "https://www.kaggle.com/datasets/xrfdataset/xrf55",
+        "access": "account",
+        "license": "CC BY-NC 4.0",
+        "redistribution": "allowed",
         "formats": [
-          "DAT",
-          "MAT",
-          "NumPy"
+          "NumPy",
+          "MP4",
+          "WAV",
+          "PICKLE"
         ]
       },
       "standardization": {
-        "status": "adapter-ready",
-        "profile": "clip-4s-100hz",
-        "notes": "Keep XRF55 separate from XRF V2; flatten three WiFi receivers into a documented link dimension."
+        "status": "verified",
+        "profile": "general-sensing",
+        "notes": "Preserve each complete 5-second, 200 Hz source clip as [1000,30,1,9]. The default activity view resamples only time to 100 Hz, splits the resulting 500 steps into 300-step windows, and pads only the final remainder. Keep all 30 subcarriers and all nine receiver-device/antenna streams as 1 Tx × 9 Rx."
       },
       "sources": [
         {
@@ -2546,6 +3730,7 @@
         "handler": "xrf55",
         "implementation": "reference-implemented",
         "patterns": [
+          "**/Scene*/Scene*/WiFi/*.npy",
           "**/Raw_dataset/WiFi/*.npy",
           "**/XRF_dataset/train_data/WiFi/*.npy",
           "**/XRF_dataset/test_data/WiFi/*.npy",
@@ -2590,10 +3775,58 @@
         ]
       },
       "conversion_example": {
-        "source_path": "Raw_dataset/WiFi/sample_001.npy",
+        "source_path": "Scene1/Scene1/WiFi/01_01_01.npy",
         "primary_array": "amplitude",
-        "expected_shape": "[T, 9, 30]",
-        "note": "Only the WiFi modality branch is discovered by this adapter."
+        "expected_shape": "[1000, 30, 1, 9] per source clip",
+        "note": "The authentic source [270 flattened receive-stream/subcarrier rows, 1000 time steps] becomes [T, 30 subcarriers, 1 Tx, 9 Rx]. The nine streams are three receiver devices × three receiving antennas; they are not 3 Tx × 3 Rx."
+      },
+      "sample_plan": {
+        "sample_kind": "official-mini-sample",
+        "sample_note": "Fifty-five authentic XRF55 WiFi clips from the authors' release, one for every official activity label at fixed Scene 1, subject 1, repetition 1. Licensed CC BY-NC 4.0.",
+        "profile": "general-sensing",
+        "target_rate_hz": 100.0,
+        "duration_s": null,
+        "target_length": 300,
+        "interpolation": "linear",
+        "layout": "canonical",
+        "window_mode": "segment",
+        "window_policy": {
+          "mode": "explicit-full-coverage",
+          "dataset_min_resampled_length": 500,
+          "profile_max_length": 300,
+          "selected_window_length": 300,
+          "full_source_preserved": true,
+          "remainder": "pad final window and mark padding false in valid_mask"
+        },
+        "full_source_preserved": true,
+        "split_setting": "random",
+        "split_provenance": "hub",
+        "processed": 55,
+        "converted": 55,
+        "skipped": 0,
+        "failed": 0,
+        "command": "wisensehub prepare xrf55 --data-root data --setting random --profile general-sensing",
+        "outputs": {
+          "native": "data/xrf55/standardized/",
+          "views": "data/xrf55/standardized/views/",
+          "manifest": "data/xrf55/prepare-manifest.json",
+          "split": "data/xrf55/splits/random.json"
+        }
+      },
+      "collection": {
+        "device": "WiFi transmitter with 3 receiver devices × 3 antennas",
+        "distance": "Four scenes",
+        "subjects": "39",
+        "labels": {
+          "Activity": "carrying weight · mopping the floor · using a phone · throwing something · picking something · putting something on the table · cutting something · wearing a hat · putting on clothing · blowing dry hair · combing hair · brushing teeth · drinking · eating · smoking · shaking hands · hugging · handing something to someone · kicking someone · hitting someone with something · choking someone’s neck · pushing someone · body weight squats · Tai Chi · boxing · weightlifting · hula hooping · jumping rope · jumping jack · high leg lifting · waving · clapping hands · falling on the floor · jumping · running · sitting down · standing up · turning · walking · stretching · patting on the shoulder · playing Er-Hu · playing Ukulele · playing drum · foot stamping · shaking head · nodding · drawing a circle · drawing a cross · pushing · pulling · swiping left · swiping right · swiping up · swiping down",
+          "Multimodal": "WiFi · RFID · radar · RGB-D"
+        },
+        "scenario_labels": "subject · scene · trial",
+        "band": "Not reported",
+        "subcarriers": 30,
+        "sampling_rate_hz": "200 Hz native · 100 Hz task view",
+        "clip_length": "5 s native",
+        "scenario": "Large-class indoor activity recognition"
       }
     }
   ],
@@ -2602,7 +3835,7 @@
       "id": "har",
       "name": "Human Activity Recognition",
       "description": "Classify a pre-segmented CSI clip into an activity.",
-      "dataset_count": 18
+      "dataset_count": 17
     },
     {
       "id": "tad_tal",
@@ -2614,7 +3847,7 @@
       "id": "fall",
       "name": "Fall Detection and Risk",
       "description": "Detect falls or estimate fall risk.",
-      "dataset_count": 5
+      "dataset_count": 3
     },
     {
       "id": "vital_sign",
@@ -2638,7 +3871,7 @@
       "id": "identity",
       "name": "Human Identification",
       "description": "Identify a person from gait or body-induced CSI.",
-      "dataset_count": 6
+      "dataset_count": 5
     },
     {
       "id": "spatial_localization",
@@ -2662,7 +3895,7 @@
       "id": "multitask",
       "name": "Multi-task and Multimodal",
       "description": "Joint labels or synchronized sensing modalities.",
-      "dataset_count": 12
+      "dataset_count": 11
     },
     {
       "id": "machine_sensing",
@@ -2675,6 +3908,6 @@
     "datasets": 25,
     "tasks": 12,
     "hardware_platforms": 25,
-    "open_or_direct": 13
+    "open_or_direct": 19
   }
 }

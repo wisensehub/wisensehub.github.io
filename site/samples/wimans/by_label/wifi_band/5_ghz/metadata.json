@@ -1,0 +1,22 @@
+{
+  "label": "WiFi band/5 GHz",
+  "slug": "wifi_band/5_ghz",
+  "kind": "clip",
+  "source_file": "act_67_10.npy",
+  "sample_dir": "samples/wimans/by_label/wifi_band/5_ghz",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 973.6666666666666,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

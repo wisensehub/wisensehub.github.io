@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "dataset_id": "nist-breathesmart",
+  "kind": "compact-real-sample",
+  "description": "Contiguous real signal windows selected from authentic released recordings. Values are unchanged; only the time span is capped for compact hosting.",
+  "canonical_axes": [
+    "time",
+    "subcarrier",
+    "tx_link",
+    "rx_link"
+  ],
+  "max_time_steps": 200,
+  "source": "https://data.nist.gov/od/ds/ark:/88434/mds2-2963/BreatheSmartv2.zip",
+  "license": "NIST open license",
+  "redistribution": "allowed",
+  "files": 18
+}

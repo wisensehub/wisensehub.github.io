@@ -2,10 +2,10 @@
   "id": "xrf-v2", "name": "XRF V2", "year": 2025,
   "summary": "Multimodal continuous daily-activity dataset for temporal action localization and action summarization in smart-home rooms.",
   "tasks": ["tad_tal", "multitask"], "modalities": ["WiFi CSI", "phone IMU", "watch IMU", "earbud IMU", "glasses IMU", "RGB-D video"],
-  "hardware": {"platform": "WiFi array plus consumer-device IMU simulators and Azure Kinect", "chipset": null, "wifi_standard": null, "band": null},
+  "hardware": {"platform": "WiFi receiver array plus phone, watch, earbud and glasses IMUs and Azure Kinect", "chipset": null, "wifi_standard": null, "band": null},
   "settings": {"environments": 3, "subjects": 16, "scenario": "Dining room, study room, and bedroom; 7–10 actions per sequence"},
   "scale": {"sequences": 853, "hours": 16.27, "train_sequences": 682, "test_sequences": 171},
-  "original": {"landing_page": "https://github.com/aiotgroup/XRFV2", "download_page": "https://www.kaggle.com/datasets/laptype/xrf-v2/data", "access": "account", "license": "Check repository and Kaggle release", "redistribution": "unclear", "formats": ["NumPy", "annotations"]},
-  "standardization": {"status": "adapter-ready", "profile": "continuous-native", "notes": "Official HDF5 WiFi adapter converts [time,3 receivers,3 channels,30 subcarriers] to [time,9 links,30 subcarriers] and preserves source labels."},
+  "original": {"landing_page": "https://github.com/airslab2020/XRFV2", "download_page": "https://www.kaggle.com/datasets/anonymous20251/xrfv2dataset", "access": "account", "license": "MIT", "redistribution": "allowed", "formats": ["HDF5", "JSON", "CSV"]},
+  "standardization": {"status": "verified", "profile": "general-sensing", "notes": "Preserve every continuous 50 Hz source sequence and all 34 raw temporal label intervals. The default task view resamples only time to 100 Hz and splits it into 300-step windows. Keep 30 subcarriers and both released 3-valued receiver/channel axes, represented as [T,S,Tx,Rx] with an explicit logical-axis caveat."},
   "sources": [{"type": "paper", "url": "https://arxiv.org/abs/2501.19034"}, {"type": "repository", "url": "https://github.com/aiotgroup/XRFV2"}], "verified_at": "2026-06-28"
 }

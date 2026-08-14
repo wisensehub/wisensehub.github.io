@@ -1,7 +1,7 @@
 # WiSenseHub
 
-[Live data hub](https://ysy23333.github.io/WiSenseHub/) ·
-[GitHub repository](https://github.com/ysy23333/WiSenseHub)
+[Live data hub](https://hanqingguo.github.io/WiSenseHub/) ·
+[GitHub repository](https://github.com/hanqingguo/WiSenseHub)
 
 WiSenseHub is an open, task-oriented data hub for WiFi sensing datasets. It
 indexes original releases, documents experimental settings, and provides a
@@ -31,6 +31,28 @@ python -m wifi_datahub catalog validate
 python scripts/build_site_data.py
 python -m unittest discover -s tests
 ```
+
+## Agent skill
+
+The simplest installation is to give Codex this GitHub skill link:
+
+```text
+Help me install this skill:
+https://github.com/hanqingguo/WiSenseHub/tree/main/skills/wisensehub
+```
+
+If the repository is already cloned, install it locally with one command:
+
+```bash
+python3 scripts/install_wisensehub_skill.py
+```
+
+Restart Codex, select **WiSenseHub** from the Skills UI or type `$wisensehub`,
+then ask in plain language: “Download the CSI-Bench sample and prepare it for
+me.” The agent handles setup, downloading, split selection, processing, and
+verification itself, explaining each completed step. Users do not need to know
+the CLI flags. The skill source is versioned under `skills/wisensehub/`; rerun
+the local installer with `--force` after updating the repository.
 
 ## Unified dataset workflow
 
@@ -78,7 +100,7 @@ python -m wifi_datahub prepare wifi-presence-movement \
 Derived views are written to `data/<dataset-id>/standardized/views/`. Supported
 view options are `--target-rate`, `--duration`, `--target-length`,
 `--interpolation {none,nearest,linear}`, `--layout {canonical,flat,link-subcarrier}`,
-`--links`, and `--subcarriers`. The native NPZ remains in `standardized/`; the
+`--links`, `--subcarriers`, `--tx-links`, and `--rx-links`. The native NPZ remains in `standardized/`; the
 manifest records both paths.
 
 All 25 catalog entries have a dataset-aware converter. Twenty-one adapters

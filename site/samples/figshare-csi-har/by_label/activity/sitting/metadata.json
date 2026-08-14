@@ -1,0 +1,27 @@
+{
+  "label": "Activity/sitting",
+  "slug": "activity/sitting",
+  "kind": "segment",
+  "source_file": "data.csv",
+  "sample_dir": "samples/figshare-csi-har/by_label/activity/sitting",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    114,
+    2,
+    2
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 3295.0,
+    "end_seconds": 4330.0,
+    "label": "sitting",
+    "source_label": "sitting"
+  },
+  "source_sample_index": null
+}

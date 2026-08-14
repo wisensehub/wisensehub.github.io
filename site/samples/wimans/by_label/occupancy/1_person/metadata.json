@@ -1,0 +1,22 @@
+{
+  "label": "Occupancy/1 person",
+  "slug": "occupancy/1_person",
+  "kind": "clip",
+  "source_file": "act_1_1.npy",
+  "sample_dir": "samples/wimans/by_label/occupancy/1_person",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 945.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

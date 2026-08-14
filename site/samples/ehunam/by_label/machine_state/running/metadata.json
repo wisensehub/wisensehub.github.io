@@ -1,0 +1,22 @@
+{
+  "label": "Machine state/running",
+  "slug": "machine_state/running",
+  "kind": "clip",
+  "source_file": "MC2_01_1_MR_#_#_1_R_01.mat",
+  "sample_dir": "samples/ehunam/by_label/machine_state/running",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    56,
+    1,
+    1
+  ],
+  "sample_rate_hz": 3455.7797347180167,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

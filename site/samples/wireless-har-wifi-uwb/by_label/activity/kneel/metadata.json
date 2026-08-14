@@ -1,0 +1,22 @@
+{
+  "label": "Activity/kneel",
+  "slug": "activity/kneel",
+  "kind": "clip",
+  "source_file": "kneel_7.mat",
+  "sample_dir": "samples/wireless-har-wifi-uwb/by_label/activity/kneel",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    1,
+    3
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

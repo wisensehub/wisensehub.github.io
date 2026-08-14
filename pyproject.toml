@@ -13,7 +13,7 @@ dependencies = ["numpy>=1.23"]
 
 [project.optional-dependencies]
 dev = ["jsonschema>=4.18", "scipy>=1.10", "matplotlib>=3.8"]
-data = ["scipy>=1.10", "h5py>=3.9", "zarr>=2.16"]
+data = ["scipy>=1.10", "h5py>=3.9", "zarr>=2.16", "inflate64>=1.0.4", "py7zr>=1.1.3"]
 
 [project.scripts]
 wisensehub = "wifi_datahub.cli:main"

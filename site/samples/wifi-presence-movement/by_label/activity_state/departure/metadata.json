@@ -1,0 +1,22 @@
+{
+  "label": "Activity state/Departure",
+  "slug": "activity_state/departure",
+  "kind": "clip",
+  "source_file": "260-4.csi.json.gz",
+  "sample_dir": "samples/wifi-presence-movement/by_label/activity_state/departure",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    1,
+    3
+  ],
+  "sample_rate_hz": 206.69741770155727,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

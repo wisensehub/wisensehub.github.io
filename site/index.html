@@ -6,17 +6,20 @@
   <meta name="description" content="A task-oriented catalog and standardization hub for WiFi sensing datasets.">
   <title>WiSenseHub — WiFi Sensing Data Hub</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <link rel="stylesheet" href="assets/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css?v=20260809-labelcoverage">
 </head>
 <body>
   <header class="topbar">
     <a class="brand" href="index.html"><span class="brand-mark">W</span> WiSenseHub</a>
     <nav aria-label="Primary navigation">
       <a href="#datasets">Datasets</a>
-      <a href="#standard">Standard</a>
+      <a href="guide.html">How it works</a>
       <a href="tutorial.html">Tutorial</a>
       <a href="example.html">Example</a>
-      <a href="https://github.com/ysy23333/WiSenseHub" data-repo-link>GitHub</a>
+      <a href="https://github.com/hanqingguo/WiSenseHub" data-repo-link>GitHub</a>
     </nav>
   </header>
 
@@ -25,20 +28,20 @@
       <div class="hero-copy">
         <p class="eyebrow">OPEN WIFI SENSING INFRASTRUCTURE</p>
         <h1>From fragmented CSI files to research-ready data.</h1>
-        <p class="lede">Discover original WiFi sensing datasets, compare collection settings, and reproduce a transparent standardization pipeline.</p>
+        <p class="lede">Catalog original WiFi sensing releases, standardize them to one NPZ schema, then apply explicit task-profile preprocessing so clips for the same task share rate, duration, and layout.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#datasets">Explore datasets</a>
-          <a class="button secondary" href="tutorial.html">Start tutorial</a>
+          <a class="button primary" href="#standard">See what we do</a>
+          <a class="button secondary" href="#datasets">Explore datasets</a>
         </div>
       </div>
       <div class="signal-card" aria-label="Illustration of standardized channel state information">
-        <div class="signal-label"><span>RAW CSI</span><span>CANONICAL 100 Hz</span></div>
+        <div class="signal-label"><span>Original CSI</span><span>Schema + task view</span></div>
         <svg viewBox="0 0 600 220" role="img" aria-label="Irregular signals transformed to aligned channels">
           <path class="wave faint" d="M0 60 C35 10 65 110 100 58 S165 8 200 65 S270 125 310 62 S380 5 420 60 S500 120 600 48"/>
           <path class="wave" d="M0 112 C40 60 74 170 120 110 S205 55 250 118 S325 172 370 108 S455 50 500 112 S560 160 600 105"/>
           <path class="wave accent" d="M0 170 C45 125 80 208 128 168 S210 126 260 174 S345 210 395 165 S490 122 530 170 S575 200 600 168"/>
         </svg>
-        <div class="signal-meta"><span>time → seconds</span><span>power → dB relative</span><span>missing → mask</span></div>
+        <div class="signal-meta"><span>[T, S, Tx, Rx]</span><span>task Hz · flexible T</span><span>valid_mask</span></div>
       </div>
     </section>
 
@@ -72,15 +75,24 @@
 
     <section id="standard" class="standard-section">
       <div class="section-heading light">
-        <div><p class="eyebrow">STANDARD v1</p><h2>Comparable, without erasing provenance</h2></div>
+        <div><p class="eyebrow">WHAT WISENSEHUB DOES</p><h2>Two steps: schema, then task preprocess</h2></div>
+        <p>Native files stay intact. Fixed-size model views are derived and audited.</p>
       </div>
-      <div class="standard-flow">
-        <article><span>01</span><h3>Preserve</h3><p>Keep original complex CSI, timestamps, labels, and source checksums.</p></article>
-        <article><span>02</span><h3>Align</h3><p>Normalize time to seconds, resample explicitly, and expose packet-loss masks.</p></article>
-        <article><span>03</span><h3>Calibrate honestly</h3><p>Use relative dB unless the release documents an absolute power calibration.</p></article>
-        <article><span>04</span><h3>Audit</h3><p>Store every crop, interpolation, padding choice, and adapter version.</p></article>
+      <div class="standard-jobs">
+        <article>
+          <span>01 · Schema</span>
+          <h3>Standardize structure</h3>
+          <p>Convert heterogeneous releases into one NPZ + JSON contract with explicit axes, masks, labels, and provenance.</p>
+          <div class="schema-line compact"><code>[T, S, Tx, Rx]</code><span>+</span><code>metadata.json</code><span>+</span><code>valid_mask</code></div>
+        </article>
+        <article>
+          <span>02 · Task view</span>
+          <h3>Preprocess per task profile</h3>
+          <p>Resample, crop, or pad time so clips for the same task share rate, duration, and layout—without inventing absolute calibration.</p>
+          <div class="schema-line compact"><code>profile Hz</code><span>·</span><code>duration / T</code><span>·</span><code>layout</code></div>
+        </article>
       </div>
-      <div class="schema-line"><code>[time, link, subcarrier]</code><span>+</span><code>metadata.json</code><span>+</span><code>valid_mask</code></div>
+      <p class="standard-example-link"><a href="guide.html">Read the shared schema, preprocessing, mask, and Python guide →</a></p>
     </section>
   </main>
 

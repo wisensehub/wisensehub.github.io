@@ -1,0 +1,29 @@
+{
+  "label": "Activity/sitting down",
+  "slug": "activity/sitting_down",
+  "kind": "segment",
+  "source_file": "15_1_7.h5",
+  "sample_dir": "samples/xrf-v2/by_label/activity/sitting_down",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 50.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 18.0,
+    "end_seconds": 24.0,
+    "start_index": 900,
+    "end_index": 1200,
+    "label_id": 7,
+    "label": "sitting down"
+  },
+  "source_sample_index": null
+}

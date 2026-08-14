@@ -3,9 +3,9 @@
   "summary": "Long-form antenna-wise CSI and RSS collection with annotations for detecting human presence and movement.",
   "tasks": ["occupancy", "har"], "modalities": ["WiFi CSI", "RSS"],
   "hardware": {"platform": "Intel CSI Tool capture system", "chipset": "Intel 5300", "wifi_standard": "802.11n", "band": null},
-  "settings": {"environments": null, "subjects": null, "scenario": "Ambient presence and movement monitoring over multiple capture files"},
+  "settings": {"environments": 4, "subjects": null, "scenario": "Ambient presence and movement monitoring in rooms G19, G21, 260, and 128a"},
   "scale": {"size_gb": 28, "example_csi_file_mb": 616},
-  "original": {"landing_page": "https://zenodo.org/records/3676058", "download_page": "https://zenodo.org/records/3676058", "access": "direct", "license": "Check Zenodo record", "redistribution": "unclear", "formats": ["Gzipped JSON CSI", "Gzipped CSV RSS", "CSV annotations"]},
-  "standardization": {"status": "verified", "profile": "continuous-native", "notes": "Verified on a 50-record official G19-10 CSI gzip byte-prefix sample. The adapter parses Zenodo JSON CSI records, preserves complex CSI, and can derive fixed-rate link-subcarrier views; full multi-GB release verification remains future work."},
+  "original": {"landing_page": "https://zenodo.org/records/3676058", "download_page": "https://zenodo.org/records/3676058", "access": "direct", "license": "CC BY 4.0", "redistribution": "allowed", "formats": ["Gzipped JSON CSI", "Gzipped CSV RSS", "CSV annotations"]},
+  "standardization": {"status": "verified", "profile": "continuous-native", "notes": "Presence and movement use the 100 Hz time rule. Keep 30 subcarriers, 1 Tx, and 3 Rx; output is [T, S, Tx, Rx] per sample."},
   "sources": [{"type": "data", "url": "https://zenodo.org/records/3676058"}], "verified_at": "2026-07-07"
 }

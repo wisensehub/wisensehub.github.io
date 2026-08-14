@@ -1,0 +1,22 @@
+{
+  "label": "Activity/sit down",
+  "slug": "activity/sit_down",
+  "kind": "clip",
+  "source_file": "act_1_8.npy",
+  "sample_dir": "samples/wimans/by_label/activity/sit_down",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 919.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

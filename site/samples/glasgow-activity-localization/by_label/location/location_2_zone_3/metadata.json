@@ -1,0 +1,22 @@
+{
+  "label": "Location/location 2, zone 3",
+  "slug": "location/location_2_zone_3",
+  "kind": "clip",
+  "source_file": "LeaningL2Z3_99.csv",
+  "sample_dir": "samples/glasgow-activity-localization/by_label/location/location_2_zone_3",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    51,
+    1,
+    1
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

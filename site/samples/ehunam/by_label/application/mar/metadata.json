@@ -1,0 +1,22 @@
+{
+  "label": "Application/MAR",
+  "slug": "application/mar",
+  "kind": "clip",
+  "source_file": "MC3_01A_1_MAR_#_#_5_O_01.mat",
+  "sample_dir": "samples/ehunam/by_label/application/mar",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    56,
+    1,
+    1
+  ],
+  "sample_rate_hz": 326.0689588724254,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

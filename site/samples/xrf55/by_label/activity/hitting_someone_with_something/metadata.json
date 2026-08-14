@@ -1,0 +1,22 @@
+{
+  "label": "Activity/hitting someone with something",
+  "slug": "activity/hitting_someone_with_something",
+  "kind": "clip",
+  "source_file": "01_20_01.npy",
+  "sample_dir": "samples/xrf55/by_label/activity/hitting_someone_with_something",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    1,
+    9
+  ],
+  "sample_rate_hz": 200.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

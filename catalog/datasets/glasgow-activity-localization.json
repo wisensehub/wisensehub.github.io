@@ -5,8 +5,7 @@
   "hardware": {"platform": "Two USRP X300/X310 radios with VERT2450 antennas", "chipset": "USRP", "wifi_standard": "Custom OFDM", "band": "3.75 GHz"},
   "settings": {"environments": 1, "subjects": null, "scenario": "Empty, leaning, sitting, standing, and walking with zone labels in a 3×3 grid"},
   "scale": {"zones": 9, "subcarriers": 64, "approx_seconds_per_sample": 3},
-  "original": {"landing_page": "https://researchdata.gla.ac.uk/1283/", "download_page": "https://researchdata.gla.ac.uk/1283/", "access": "direct", "license": "University repository terms; verify record", "redistribution": "unclear", "formats": ["CSV amplitude"]},
+  "original": {"landing_page": "https://researchdata.gla.ac.uk/1283/", "download_page": "https://researchdata.gla.ac.uk/1283/", "access": "direct", "license": "CC BY 4.0", "redistribution": "allowed", "formats": ["CSV amplitude"]},
   "standardization": {"status": "adapter-ready", "profile": "clip-3s-native", "notes": "Preserve both activity and spatial-zone labels for joint and single-task protocols."},
   "sources": [{"type": "data", "url": "https://researchdata.gla.ac.uk/1283/"}], "verified_at": "2026-07-01"
 }
-

@@ -5,8 +5,7 @@
   "hardware": {"platform": "WiFi transmitter and three receivers plus RF sensors", "chipset": "Intel 5300", "wifi_standard": "802.11n", "band": null},
   "settings": {"environments": 4, "subjects": 39, "scenario": "Segmented indoor actions across people and scenes"},
   "scale": {"samples": 42900, "activities": 55},
-  "original": {"landing_page": "https://github.com/aiotgroup/XRF55-repo", "download_page": null, "access": "unclear", "license": "Check repository release", "redistribution": "unclear", "formats": ["DAT", "MAT", "NumPy"]},
-  "standardization": {"status": "adapter-ready", "profile": "clip-4s-100hz", "notes": "Keep XRF55 separate from XRF V2; flatten three WiFi receivers into a documented link dimension."},
+  "original": {"landing_page": "https://aiotgroup.github.io/XRF55/", "download_page": "https://www.kaggle.com/datasets/xrfdataset/xrf55", "access": "account", "license": "CC BY-NC 4.0", "redistribution": "allowed", "formats": ["NumPy", "MP4", "WAV", "PICKLE"]},
+  "standardization": {"status": "verified", "profile": "general-sensing", "notes": "Preserve each complete 5-second, 200 Hz source clip as [1000,30,1,9]. The default activity view resamples only time to 100 Hz, splits the resulting 500 steps into 300-step windows, and pads only the final remainder. Keep all 30 subcarriers and all nine receiver-device/antenna streams as 1 Tx × 9 Rx."},
   "sources": [{"type": "repository", "url": "https://github.com/aiotgroup/XRF55-repo"}], "verified_at": "2026-06-28"
 }
-

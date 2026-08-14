@@ -1,0 +1,22 @@
+{
+  "label": "Room/room 0",
+  "slug": "room/room_0",
+  "kind": "clip",
+  "source_file": "csi_data_amp",
+  "sample_dir": "samples/csida/by_label/room/room_0",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    114,
+    1,
+    3
+  ],
+  "sample_rate_hz": 1000.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": 0
+}

@@ -38,10 +38,10 @@ function renderDatasets() {
 }
 
 async function init() {
-  const response = await fetch("data/catalog.json");
+  const response = await fetch(`data/catalog.json?t=${Date.now()}`, { cache: "no-store" });
   state.catalog = await response.json();
   try {
-    const samples = await (await fetch("data/samples.json")).json();
+    const samples = await (await fetch(`data/samples.json?t=${Date.now()}`, { cache: "no-store" })).json();
     state.samples = samples.datasets || {};
   } catch { /* samples.json is optional */ }
   document.querySelector("#stat-datasets").textContent = state.catalog.stats.datasets;

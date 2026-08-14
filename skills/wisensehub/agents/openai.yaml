@@ -1,0 +1,4 @@
+interface:
+  display_name: "WiSenseHub"
+  short_description: "Guided WiFi dataset download and processing"
+  default_prompt: "Use $wisensehub to download the CSI-Bench sample, prepare it with sensible defaults, and explain each completed step."

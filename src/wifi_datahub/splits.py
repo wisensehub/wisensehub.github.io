@@ -51,6 +51,14 @@ def infer_metadata(source: str) -> Dict[str, str]:
         if re.search(pattern, text):
             metadata["predefined_split"] = split
             break
+    wipe_fall_folder = re.search(
+        r"(?:^|/)(low|med|high)(_unseen)?(?:/|$)", text, flags=re.IGNORECASE,
+    )
+    if wipe_fall_folder:
+        metadata["activity"] = {
+            "low": "low", "med": "medium", "high": "high",
+        }[wipe_fall_folder.group(1).lower()]
+        metadata["predefined_split"] = "test" if wipe_fall_folder.group(2) else "train"
     if "los" in text and "nlos" not in text:
         metadata["scenario"] = "los"
     elif "nlos" in text or "through-wall" in text or "through_wall" in text:

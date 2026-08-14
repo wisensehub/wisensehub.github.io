@@ -58,9 +58,11 @@ def build_parser() -> argparse.ArgumentParser:
     prepare.add_argument("--target-length", type=int, help="Generate a derived view with this exact time length")
     prepare.add_argument("--interpolation", choices=["none", "nearest", "linear"], default="linear")
     prepare.add_argument("--layout", choices=["canonical", "flat", "link-subcarrier"], default="canonical",
-                         help="Derived-view tensor layout; canonical keeps [N,]T,L,S, flat/link-subcarrier flatten non-time signal axes")
-    prepare.add_argument("--links", type=int, help="Optional: force/validate link count (default: keep native)")
-    prepare.add_argument("--subcarriers", type=int, help="Optional: force/validate subcarrier count (default: keep native)")
+                         help="Derived-view tensor layout; canonical keeps named signal axes, flat/link-subcarrier flattens non-time axes")
+    prepare.add_argument("--links", type=int, help="Legacy datasets: choose combined link count (default: keep native)")
+    prepare.add_argument("--subcarriers", type=int, help="Choose subcarrier count (default: keep native)")
+    prepare.add_argument("--tx-links", type=int, help="Choose Tx link count when the dataset has a tx_link axis (default: keep native)")
+    prepare.add_argument("--rx-links", type=int, help="Choose Rx link count when the dataset has an rx_link axis (default: keep native)")
     return parser
 
 
@@ -118,6 +120,8 @@ def main(argv=None) -> int:
                     layout=args.layout,
                     links=args.links,
                     subcarriers=args.subcarriers,
+                    tx_links=args.tx_links,
+                    rx_links=args.rx_links,
                 ),
             )
         except (ValueError, FileNotFoundError, RuntimeError) as exc:
@@ -130,6 +134,12 @@ def main(argv=None) -> int:
             print(
                 f"View profile={view.get('profile')} rate={view.get('target_rate_hz')} Hz "
                 f"duration={view.get('duration_s')} s length={view.get('target_length')}"
+            )
+        window = summary.get("window_policy") or {}
+        if window:
+            print(
+                f"Windows mode={window.get('mode')} length={window.get('selected_window_length')} "
+                f"full_source_preserved={window.get('full_source_preserved')}"
             )
         print(f"Split {summary['split']['setting']} ({summary['split']['provenance']}): {counts}")
         return 0

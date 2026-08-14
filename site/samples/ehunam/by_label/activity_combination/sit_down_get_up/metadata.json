@@ -1,0 +1,22 @@
+{
+  "label": "Activity combination/sit down / get up",
+  "slug": "activity_combination/sit_down_get_up",
+  "kind": "clip",
+  "source_file": "MC1_06_4_HAR_g_G_#_#_01.mat",
+  "sample_dir": "samples/ehunam/by_label/activity_combination/sit_down_get_up",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    241,
+    1,
+    1
+  ],
+  "sample_rate_hz": 52.759151868238696,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

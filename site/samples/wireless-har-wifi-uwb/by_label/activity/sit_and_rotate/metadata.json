@@ -1,0 +1,22 @@
+{
+  "label": "Activity/sit and rotate",
+  "slug": "activity/sit_and_rotate",
+  "kind": "clip",
+  "source_file": "sitrotate_21.mat",
+  "sample_dir": "samples/wireless-har-wifi-uwb/by_label/activity/sit_and_rotate",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    1,
+    3
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

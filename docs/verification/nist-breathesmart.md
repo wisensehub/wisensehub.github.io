@@ -45,9 +45,9 @@ wisensehub prepare nist-breathesmart \
 Observed native standardized result:
 
 ```text
-csi_real      (600, 9, 114)  float32
-csi_imag      (600, 9, 114)  float32
-amplitude     (600, 9, 114)  float32
+csi_real      (600, 56, 2, 3)  float32
+csi_imag      (600, 56, 2, 3)  float32
+amplitude     (600, 56, 2, 3)  float32
 timestamp_s   (600,)         float64
 packet_index  (600,)         int32
 valid_mask    (600,)         bool
@@ -57,16 +57,19 @@ config_*      scalar strings copied from config0001.csv
 Observed derived-view result:
 
 ```text
-csi_real      (80, 1026)  float32
-csi_imag      (80, 1026)  float32
-amplitude     (80, 1026)  float32
+csi_real      (80, 336)  float32
+csi_imag      (80, 336)  float32
+amplitude     (80, 336)  float32
 timestamp_s   (80,)       float64
 packet_index  (80,)       int32
 valid_mask    (80,)       bool
 split          train=1, val=0, test=0
 ```
 
-The 1026 feature channels come from flattening 9 links × 114 subcarriers. This
-verification confirms the official real/imaginary CSV pairing, reshape logic,
+The CSV reserves 9 × 114 storage slots, but only 2 Tx × 3 Rx × 56 subcarriers
+contain measurements. The adapter discards the 58 all-zero carrier slots and
+three all-zero link slots, records both source masks, and exposes 336 measured
+feature channels in a flat derived view. This verification confirms the
+official real/imaginary CSV pairing, zero-slot removal, antenna mapping,
 configuration metadata preservation, and derived-view path for one official
 BreatheSmart experiment member.

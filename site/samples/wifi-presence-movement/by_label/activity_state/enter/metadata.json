@@ -1,0 +1,22 @@
+{
+  "label": "Activity state/Enter",
+  "slug": "activity_state/enter",
+  "kind": "clip",
+  "source_file": "260-4.csi.json.gz",
+  "sample_dir": "samples/wifi-presence-movement/by_label/activity_state/enter",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    1,
+    3
+  ],
+  "sample_rate_hz": 207.8137046028836,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

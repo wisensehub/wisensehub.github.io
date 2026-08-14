@@ -4,6 +4,7 @@ import ast
 import csv
 import hashlib
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Iterable, Tuple
@@ -77,6 +78,18 @@ def convert_wallhack_csv(input_path: Path, output_path: Path, include_ht_ltf: bo
         subcarrier_index=indices,
     )
     class_name = WALLHACK_CLASS_NAMES.get(labels[0], labels[0]) if labels else None
+    path_setting = next((part for part in input_path.parts if part in {"LOS", "NLOS"}), None)
+    antenna = next((part for part in input_path.parts if part in {"BQ", "PIFA"}), None)
+    room_match = re.search(r"(\d+)$", input_path.stem)
+    label_sets = {}
+    if class_name:
+        label_sets["Activity"] = [class_name.replace("_", " ")]
+    if path_setting:
+        label_sets["Path"] = [path_setting]
+    if antenna:
+        label_sets["Antenna"] = [antenna]
+    if path_setting == "NLOS" and room_match:
+        label_sets["Room"] = [f"room {room_match.group(1)}"]
     sidecar = {
         "schema_version": "1.0", "dataset_id": "wallhack18k",
         "source_file": input_path.name,
@@ -91,6 +104,7 @@ def convert_wallhack_csv(input_path: Path, output_path: Path, include_ht_ltf: bo
             "activity": class_name,
             "vocabulary": WALLHACK_CLASS_NAMES,
         },
+        "label_sets": label_sets,
         "transformations": ["parse interleaved imaginary/real", "select documented L-LTF/HT-LTF subcarriers", "relative-power conversion"],
         "created_at": datetime.now(timezone.utc).isoformat(), "tool": "wisensehub-0.6.0"
     }

@@ -1,0 +1,29 @@
+{
+  "label": "Activity/walking to blackboard",
+  "slug": "activity/walking_to_blackboard",
+  "kind": "segment",
+  "source_file": "0_2_20.h5",
+  "sample_dir": "samples/xrf-v2/by_label/activity/walking_to_blackboard",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 50.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 14.02,
+    "end_seconds": 19.04,
+    "start_index": 701,
+    "end_index": 952,
+    "label_id": 28,
+    "label": "walking to blackboard"
+  },
+  "source_sample_index": null
+}

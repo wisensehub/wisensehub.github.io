@@ -1,12 +1,11 @@
 {
   "id": "widar3", "name": "Widar3.0", "year": 2021,
   "summary": "Large cross-domain gesture dataset with raw CSI and body-coordinate velocity profile representations across users, rooms, positions, and orientations.",
-  "tasks": ["gesture", "har"], "modalities": ["WiFi CSI", "body-coordinate velocity profile"],
+  "tasks": ["gesture"], "modalities": ["WiFi CSI", "body-coordinate velocity profile"],
   "hardware": {"platform": "One transmitter and six receivers", "chipset": "Intel 5300", "wifi_standard": "802.11n", "band": "5 GHz"},
-  "settings": {"environments": 3, "subjects": 16, "scenario": "Gestures at multiple positions and orientations"},
-  "scale": {"samples_reported_by_csi_bench": 271100, "processed_gesture_samples_in_sensefi": 43652, "gesture_classes": 22},
-  "original": {"landing_page": "https://tns.thss.tsinghua.edu.cn/widar3.0/", "download_page": "https://tns.thss.tsinghua.edu.cn/widar3.0/", "access": "direct", "license": "Research use; verify project terms", "redistribution": "restricted", "formats": ["DAT", "MAT", "BVP"]},
-  "standardization": {"status": "adapter-ready", "profile": "clip-4s-100hz", "notes": "Expose raw CSI and BVP as separate representations; never label BVP as raw CSI."},
-  "sources": [{"type": "project", "url": "https://tns.thss.tsinghua.edu.cn/widar3.0/"}, {"type": "repository", "url": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark"}], "verified_at": "2026-06-28"
+  "settings": {"environments": 3, "subjects": 16, "scenario": "Cross-domain gestures across 3 rooms, 15 locations, 5 orientations, and 16 users"},
+  "scale": {"processed_gesture_samples_in_sensefi": 43652, "sensefi_gesture_classes": 22, "paper_core_gestures": 15, "paper_users": 16, "paper_locations": 15, "paper_orientations": 5},
+  "original": {"landing_page": "https://tns.thss.tsinghua.edu.cn/widar3.0/", "download_page": "https://tns.thss.tsinghua.edu.cn/widar3.0/", "access": "direct", "license": "CC BY 4.0", "redistribution": "allowed", "formats": ["DAT", "MAT", "BVP"]},
+  "standardization": {"status": "verified", "profile": "semantic-bvp", "native_shape": {"time_bins": 22, "velocity_x_bins": 20, "velocity_y_bins": 20}, "notes": "This sample is processed BVP, not raw CSI. Reshape the released SenseFi CSV from [22 time bins, 400 flattened velocity bins] to [22 time bins, 20 x-velocity bins, 20 y-velocity bins]. Preserve the released BVP, add SenseFi's fixed normalized companion, and do not invent a packet rate, subcarrier axis, or Tx/Rx axes."},
+  "sources": [{"type": "project", "url": "https://tns.thss.tsinghua.edu.cn/widar3.0/"}, {"type": "data", "url": "https://doi.org/10.21227/jzp9-2a29"}, {"type": "repository", "url": "https://github.com/xyanchen/WiFi-CSI-Sensing-Benchmark"}], "verified_at": "2026-08-11"
 }
-

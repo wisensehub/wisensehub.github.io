@@ -1,0 +1,22 @@
+{
+  "label": "Position/position 2",
+  "slug": "position/position_2",
+  "kind": "clip",
+  "source_file": "csi_data_amp",
+  "sample_dir": "samples/csida/by_label/position/position_2",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    114,
+    1,
+    3
+  ],
+  "sample_rate_hz": 1000.0,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": 2
+}

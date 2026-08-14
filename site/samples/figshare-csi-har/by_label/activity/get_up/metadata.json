@@ -1,0 +1,27 @@
+{
+  "label": "Activity/get up",
+  "slug": "activity/get_up",
+  "kind": "segment",
+  "source_file": "data.csv",
+  "sample_dir": "samples/figshare-csi-har/by_label/activity/get_up",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    135,
+    114,
+    2,
+    2
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 2735.0,
+    "end_seconds": 2870.0,
+    "label": "get_up",
+    "source_label": "get_up"
+  },
+  "source_sample_index": null
+}

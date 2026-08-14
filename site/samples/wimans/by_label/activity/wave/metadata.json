@@ -1,0 +1,22 @@
+{
+  "label": "Activity/wave",
+  "slug": "activity/wave",
+  "kind": "clip",
+  "source_file": "act_1_5.npy",
+  "sample_dir": "samples/wimans/by_label/activity/wave",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    200,
+    30,
+    3,
+    3
+  ],
+  "sample_rate_hz": 917.6666666666666,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": null,
+  "source_sample_index": null
+}

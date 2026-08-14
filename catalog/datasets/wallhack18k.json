@@ -21,7 +21,6 @@
   },
   "scale": {"samples": 1806, "classes": 3, "nominal_sample_rate_hz": 100, "window_seconds": 4},
   "original": {"landing_page": "https://zenodo.org/records/8188999", "download_page": "https://zenodo.org/records/8188999", "access": "direct", "license": "Open Zenodo record; verify file license metadata", "redistribution": "unclear", "formats": ["CSV raw I/Q", "PNG spectrogram", "CSV labels"]},
-  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "Task profile: 100 Hz, 3 s. Parse interleaved imaginary/real values, select documented L-LTF or HT-LTF subcarriers, and retain scenario/antenna labels. Keep native link/subcarrier counts."},
+  "standardization": {"status": "adapter-ready", "profile": "general-sensing", "notes": "Activity uses the 100 Hz time rule. Keep 52 subcarriers, 1 Tx, and 1 Rx; output is [T, S, Tx, Rx] per sample."},
   "sources": [{"type": "data", "url": "https://zenodo.org/records/8188999"}], "verified_at": "2026-06-28"
 }
-

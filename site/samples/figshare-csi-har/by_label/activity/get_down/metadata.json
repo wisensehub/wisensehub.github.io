@@ -1,0 +1,27 @@
+{
+  "label": "Activity/get down",
+  "slug": "activity/get_down",
+  "kind": "segment",
+  "source_file": "data.csv",
+  "sample_dir": "samples/figshare-csi-har/by_label/activity/get_down",
+  "files": [
+    "standardized.npz"
+  ],
+  "tensor_shape": [
+    120,
+    114,
+    2,
+    2
+  ],
+  "sample_rate_hz": null,
+  "compact_real_window": true,
+  "max_time_steps": 200,
+  "values_unchanged": true,
+  "segment": {
+    "start_seconds": 1990.0,
+    "end_seconds": 2110.0,
+    "label": "get_down",
+    "source_label": "get_down"
+  },
+  "source_sample_index": null
+}

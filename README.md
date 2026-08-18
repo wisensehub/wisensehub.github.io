@@ -1,7 +1,7 @@
 # WiSenseHub
 
-[Live data hub](https://hanqingguo.github.io/WiSenseHub/) ·
-[GitHub repository](https://github.com/hanqingguo/WiSenseHub)
+[Live data hub](https://wisensehub.github.io/) ·
+[GitHub repository](https://github.com/wisensehub/wisensehub.github.io)
 
 WiSenseHub is an open, task-oriented data hub for WiFi sensing datasets. It
 indexes original releases, documents experimental settings, and provides a
@@ -38,7 +38,7 @@ The simplest installation is to give Codex this GitHub skill link:
 
 ```text
 Help me install this skill:
-https://github.com/hanqingguo/WiSenseHub/tree/main/skills/wisensehub
+https://github.com/wisensehub/wisensehub.github.io/tree/main/skills/wisensehub
 ```
 
 If the repository is already cloned, install it locally with one command:

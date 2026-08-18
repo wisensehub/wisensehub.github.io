@@ -63,7 +63,7 @@ Tell the user what you will do in one short sentence.
 
 Locate a WiSenseHub repository by checking for `pyproject.toml`, `catalog/`, and
 `src/wifi_datahub/`. If absent, clone
-`https://github.com/hanqingguo/WiSenseHub.git` into a suitable workspace after
+`https://github.com/wisensehub/wisensehub.github.io.git` into a suitable workspace after
 obtaining any required network approval. Create `.venv`, install `.[data]`, and
 validate the catalog. Reuse a healthy existing environment.
 

@@ -13,7 +13,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 
-SAMPLE_BASE = "https://hanqingguo.github.io/WiSenseHub/samples"
+SAMPLE_BASE = "https://wisensehub.github.io/samples"
 
 
 def obtain_archive(source: str, temporary: Path) -> Path:

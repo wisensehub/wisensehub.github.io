@@ -18,7 +18,7 @@
       <a href="index.html#datasets">Datasets</a>
       <a href="guide.html">How it works</a>
       <a href="example.html">Examples</a>
-      <a href="https://github.com/hanqingguo/WiSenseHub">GitHub</a>
+      <a href="https://github.com/wisensehub/wisensehub.github.io">GitHub</a>
     </nav>
   </header>
 
@@ -39,7 +39,7 @@
       <div class="section-heading"><div><p class="eyebrow">RECOMMENDED</p><h2>Let the WiSenseHub skill do the work</h2></div><p>You describe the result you want. The agent installs tools, downloads data, processes it, checks the output, and explains what happened.</p></div>
       <div class="tutorial-choice">
         <article><h3>1. Install from GitHub</h3><p>Send this message to Codex:</p><pre><code>Help me install this skill:
-https://github.com/hanqingguo/WiSenseHub/tree/main/skills/wisensehub</code></pre><p>After installation, restart Codex so the new skill is loaded.</p></article>
+https://github.com/wisensehub/wisensehub.github.io/tree/main/skills/wisensehub</code></pre><p>After installation, restart Codex so the new skill is loaded.</p></article>
         <article><h3>2. Call the skill</h3><p>Select <strong>WiSenseHub</strong> from the Skills UI or type <code>$wisensehub</code>, then ask:</p><pre><code>Download the CSI-Bench sample and prepare it for me.</code></pre><p>The user does not need to run commands or choose technical flags.</p></article>
       </div>
       <div class="honesty-note"><strong>What the agent explains</strong><p>After setup, download, processing, and validation, it tells you what changed, why that step was needed, and where the files were saved. It asks only when a dataset login or an important processing choice is required.</p></div>
@@ -59,7 +59,7 @@ Explain why my conversions failed.</code></pre></details>
 
     <section id="install" class="tutorial-step">
       <div class="section-heading"><div><p class="eyebrow">STEP 1</p><h2>Open WiSenseHub and install it</h2></div><p>Run these commands from a terminal. If you already cloned the project, start at <code>cd WiSenseHub</code>.</p></div>
-      <pre><code>git clone https://github.com/hanqingguo/WiSenseHub.git
+      <pre><code>git clone https://github.com/wisensehub/wisensehub.github.io.git
 cd WiSenseHub
 
 python3 -m venv .venv
@@ -72,7 +72,7 @@ pip install -e ".[data]"</code></pre>
       <div class="section-heading"><div><p class="eyebrow">STEP 2</p><h2>Download the small CSI-Bench sample</h2></div><p>The ZIP may stay in <code>data/csi-bench/</code>. The extracted task folders must go inside <code>data/csi-bench/original/</code>.</p></div>
       <pre><code>mkdir -p data/csi-bench/original
 
-curl -L https://hanqingguo.github.io/WiSenseHub/samples/csi-bench-original-subset.zip \
+curl -L https://wisensehub.github.io/samples/csi-bench-original-subset.zip \
   -o data/csi-bench/csi-bench-sample.zip
 
 unzip -q data/csi-bench/csi-bench-sample.zip \

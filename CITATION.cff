@@ -5,6 +5,8 @@ type: software
 version: 0.5.0
 date-released: 2026-07-08
 license: MIT
+repository-code: "https://github.com/wisensehub/wisensehub.github.io"
+url: "https://wisensehub.github.io/"
 authors:
   - family-names: "Your surname"
     given-names: "Your given name"

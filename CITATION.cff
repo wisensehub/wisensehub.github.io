@@ -8,5 +8,4 @@ license: MIT
 repository-code: "https://github.com/wisensehub/wisensehub.github.io"
 url: "https://wisensehub.github.io/"
 authors:
-  - family-names: "Your surname"
-    given-names: "Your given name"
+  - name: "WiSenseHub"

@@ -302,6 +302,19 @@ h1 {
 .standard-example-link a { color: #93c5fd; font-weight: 600; text-decoration: none; }
 .standard-example-link a:hover { text-decoration: underline; }
 
+.cite-section { padding: 88px max(5vw, 24px); background: var(--paper); }
+.citation-card {
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--white);
+}
+.citation-card p { margin: 0; color: var(--muted); font-size: 14px; }
+.citation-card p + p { margin-top: 10px; }
+.citation-card strong { color: var(--ink); font-weight: 650; }
+.citation-card a { color: var(--accent); font-weight: 600; overflow-wrap: anywhere; text-decoration: none; }
+.citation-card a:hover { text-decoration: underline; }
+
 footer {
   display: flex;
   justify-content: space-between;

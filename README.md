@@ -1,12 +1,18 @@
 # WiSenseHub
 
 [Live data hub](https://wisensehub.github.io/) ·
+[Agent skill](https://github.com/wisensehub/wisensehub.github.io/tree/main/skills/wisensehub) ·
 [GitHub repository](https://github.com/wisensehub/wisensehub.github.io)
 
 WiSenseHub is an open, task-oriented data hub for WiFi sensing datasets. It
 indexes original releases, documents experimental settings, and provides a
 reproducible pipeline for converting heterogeneous CSI recordings into a
 common representation.
+
+> **Agent-ready.** Coding agents can operate the documented CLI end to end.
+> Codex can also install the bundled [WiSenseHub skill](skills/wisensehub/) to
+> handle setup, downloads, standardization, split selection, inspection, and
+> verification from plain-language requests.
 
 ## What this repository provides
 
@@ -20,6 +26,7 @@ common representation.
 - A static website deployable directly to GitHub Pages.
 - A public quickstart tutorial plus a companion Jupyter notebook for
   interactive inspection.
+- A repository-owned agent skill for guided dataset preparation and validation.
 
 ## Quick start
 
@@ -32,7 +39,11 @@ python scripts/build_site_data.py
 python -m unittest discover -s tests
 ```
 
-## Agent skill
+## Agent-ready workflow
+
+Any coding agent can use the documented CLI to validate the catalog, download
+supported releases, standardize files, create splits, and inspect outputs.
+Codex can use the bundled skill to make that workflow dataset-aware and guided.
 
 The simplest installation is to give Codex this GitHub skill link:
 

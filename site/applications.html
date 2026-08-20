@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Beginner-friendly introduction to WiFi sensing, CSI, applications, and learning resources.">
-  <title>Applications & Basics — WiSenseHub</title>
+  <meta name="description" content="A practical introduction to WiFi sensing, real CSI signals, applications, and first steps with WiSenseHub.">
+  <title>WiFi Sensing Basics | WiSenseHub</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css?v=20260820-applications">
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=Instrument+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css?v=20260820-applications-v9">
 </head>
 <body>
   <header class="topbar">
@@ -23,125 +23,265 @@
     </nav>
   </header>
 
-  <main class="detail-shell tutorial-shell applications-shell">
-    <a class="back-link" href="index.html">← Home</a>
-    <section class="detail-hero applications-hero">
-      <p class="eyebrow">FOR NEWCOMERS AND DOWNSTREAM USERS</p>
-      <h1>WiFi sensing, explained before the code.</h1>
-      <p>WiSenseHub is useful for WiFi sensing researchers, but it can also help clinicians, smart-home researchers, educators, and students who collected wireless data and want a first path into analysis.</p>
+  <main class="detail-shell applications-shell">
+    <a class="back-link" href="index.html">&larr; Home</a>
+
+    <section class="applications-hero">
+      <p class="applications-kicker">For health, home, and education</p>
+      <h1>What WiFi sensing measures</h1>
+      <p class="applications-lede">Channel State Information (CSI) records how people and objects alter WiFi paths for research on motion, presence, location, and breathing.</p>
       <div class="hero-actions">
-        <a class="button primary" href="#basics">Start with basics</a>
-        <a class="button secondary" href="#applications">See applications</a>
-        <a class="button secondary" href="#learn">Learning resources</a>
+        <a class="button primary" href="#basics">See a real signal</a>
+        <a class="button secondary" href="#choose-path">I already have data</a>
       </div>
     </section>
 
-    <nav class="guide-index applications-index" aria-label="Applications guide sections">
-      <a href="#basics"><span>01</span>What is CSI?</a>
-      <a href="#applications"><span>02</span>Where is it useful?</a>
-      <a href="#workflow"><span>03</span>From room to data</a>
-      <a href="#education"><span>04</span>Education path</a>
-      <a href="#learn"><span>05</span>Read next</a>
+    <nav class="applications-jump" aria-label="On this page">
+      <span>On this page</span>
+      <a href="#basics">See a signal</a>
+      <a href="#applications">Find a use case</a>
+      <a href="#workflow">Use WiSenseHub</a>
+      <a href="#learn">Read further</a>
     </nav>
 
-    <section id="basics" class="tutorial-step">
-      <div class="section-heading"><div><p class="eyebrow">BEGINNER IDEA</p><h2>A WiFi signal is also a weak sensor</h2></div><p>WiFi devices send radio waves. People, furniture, walls, and motion change how those waves travel before they reach another device.</p></div>
-      <div class="applications-split">
-        <div class="applications-figure" aria-label="Conceptual WiFi sensing diagram">
-          <svg viewBox="0 0 720 420" role="img">
-            <defs>
-              <marker id="app-arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                <path d="M0,0 L9,3 L0,6 Z" fill="#2563eb"></path>
-              </marker>
-              <marker id="app-arrow-muted" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
-                <path d="M0,0 L9,3 L0,6 Z" fill="#a1a1aa"></path>
-              </marker>
-            </defs>
-            <rect x="40" y="52" width="640" height="300" rx="10" fill="#fff" stroke="#e4e4e7"></rect>
-            <rect x="78" y="248" width="118" height="54" rx="6" fill="#eff6ff" stroke="#bfdbfe"></rect>
-            <text x="137" y="281" text-anchor="middle" font-size="18" font-weight="700" fill="#111113">WiFi Tx</text>
-            <rect x="524" y="248" width="118" height="54" rx="6" fill="#eff6ff" stroke="#bfdbfe"></rect>
-            <text x="583" y="281" text-anchor="middle" font-size="18" font-weight="700" fill="#111113">WiFi Rx</text>
-            <circle cx="358" cy="188" r="34" fill="#f4f4f5" stroke="#d4d4d8"></circle>
-            <line x1="358" y1="222" x2="358" y2="286" stroke="#111113" stroke-width="7" stroke-linecap="round"></line>
-            <line x1="358" y1="244" x2="316" y2="262" stroke="#111113" stroke-width="7" stroke-linecap="round"></line>
-            <line x1="358" y1="244" x2="404" y2="260" stroke="#111113" stroke-width="7" stroke-linecap="round"></line>
-            <line x1="358" y1="286" x2="325" y2="330" stroke="#111113" stroke-width="7" stroke-linecap="round"></line>
-            <line x1="358" y1="286" x2="396" y2="328" stroke="#111113" stroke-width="7" stroke-linecap="round"></line>
-            <path d="M196 266 C288 176, 424 176, 524 266" fill="none" stroke="#2563eb" stroke-width="4" marker-end="url(#app-arrow)"></path>
-            <path d="M196 266 C286 88, 432 88, 524 266" fill="none" stroke="#a1a1aa" stroke-width="2.5" stroke-dasharray="8 8" marker-end="url(#app-arrow-muted)"></path>
-            <path d="M196 266 C310 320, 426 330, 524 266" fill="none" stroke="#a1a1aa" stroke-width="2.5" stroke-dasharray="8 8" marker-end="url(#app-arrow-muted)"></path>
-            <text x="360" y="74" text-anchor="middle" font-size="17" font-weight="700" fill="#111113">Direct path + reflected paths</text>
-            <text x="360" y="100" text-anchor="middle" font-size="14" fill="#71717a">Motion changes the channel over time</text>
-            <text x="360" y="374" text-anchor="middle" font-size="13" fill="#71717a">Original explanatory diagram. Not copied from any cited paper.</text>
-          </svg>
+    <section id="basics" class="learning-chapter">
+      <header class="chapter-heading">
+        <span class="chapter-number">01</span>
+        <div>
+          <h2>From a room to a pattern</h2>
+          <p>See how movement changes a WiFi link, then compare a quiet room with walking.</p>
         </div>
-        <div class="beginner-card">
-          <h3>Channel State Information, in plain language</h3>
-          <p><strong>CSI</strong> is a detailed measurement of how a WiFi channel changes a known signal as it travels from transmitter to receiver. It is usually recorded across many subcarriers and antenna links.</p>
-          <p>For sensing, we look for patterns in CSI amplitude and phase over time. Breathing, walking, falls, gestures, or room occupancy can leave different patterns in the wireless channel.</p>
+      </header>
+
+      <figure class="csi-explainer">
+        <div class="csi-explainer-visual">
+          <div class="csi-photo-stage">
+            <img src="assets/scenarios/csi-room.jpg" alt="Person walking through a living room between a WiFi transmitter and receiver" loading="eager">
+            <svg class="csi-photo-paths" viewBox="0 0 1536 1024" preserveAspectRatio="none" aria-hidden="true">
+              <path class="csi-photo-path csi-photo-path-static" d="M105 397C420 175 1010 186 1230 634"></path>
+              <path class="csi-photo-path csi-photo-path-direct" d="M105 397C470 444 916 547 1230 634"></path>
+              <path class="csi-photo-path csi-photo-path-dynamic" d="M105 397C482 693 920 760 1230 634"></path>
+              <circle class="csi-photo-node" cx="105" cy="397" r="9"></circle>
+              <circle class="csi-photo-node" cx="1230" cy="634" r="9"></circle>
+            </svg>
+            <span class="csi-endpoint csi-endpoint-tx">TX</span>
+            <span class="csi-endpoint csi-endpoint-rx">RX</span>
+            <div class="csi-photo-readout" aria-label="Illustrative CSI traces recorded at the receiver">
+              <small>CSI at the receiver</small>
+              <div>
+                <span>Amplitude</span>
+                <svg viewBox="0 0 180 24" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 12H180" class="csi-trace-axis"></path>
+                  <polyline points="0,13 14,12 28,14 42,9 56,16 70,7 84,18 98,6 112,15 126,10 140,17 154,8 168,13 180,11" class="csi-trace-amplitude"></polyline>
+                </svg>
+              </div>
+              <div>
+                <span>Phase</span>
+                <svg viewBox="0 0 180 24" preserveAspectRatio="none" aria-hidden="true">
+                  <path d="M0 12H180" class="csi-trace-axis"></path>
+                  <polyline points="0,17 14,16 28,13 42,8 56,7 70,11 84,17 98,18 112,14 126,8 140,6 154,10 168,16 180,18" class="csi-trace-phase"></polyline>
+                </svg>
+              </div>
+            </div>
+          </div>
         </div>
+        <figcaption>
+          <span>One WiFi link</span>
+          <h3>Movement changes what arrives at the receiver.</h3>
+          <p>CSI records how the room and a moving person change a known signal across WiFi subcarriers.</p>
+          <dl>
+            <div><dt>Amplitude</dt><dd>How strongly each subcarrier arrived</dd></div>
+            <div><dt>Phase</dt><dd>How much each subcarrier shifted</dd></div>
+          </dl>
+        </figcaption>
+      </figure>
+
+      <figure class="signal-pair">
+        <div>
+          <img src="assets/previews/exposing-csi/label_activity__empty_room.png" alt="CSI amplitude plot recorded in an empty room" loading="eager">
+          <p><strong>Empty room.</strong> The bands remain relatively steady over time.</p>
+        </div>
+        <div>
+          <img src="assets/previews/exposing-csi/label_activity__walk.png" alt="CSI amplitude plot recorded while a person walks" loading="eager">
+          <p><strong>Walking.</strong> Motion disturbs the pattern across time and receiver links.</p>
+        </div>
+        <figcaption>WiSenseHub previews from <a href="dataset.html?id=exposing-csi">Exposing the CSI</a> (CC BY-SA 4.0). Color shows CSI amplitude.</figcaption>
+      </figure>
+
+      <div class="signal-reading" aria-label="How to read a CSI plot">
+        <h3>How to read it</h3>
+        <p><strong>Time</strong><span>left to right</span></p>
+        <p><strong>Subcarriers</strong><span>frequency slices</span></p>
+        <p><strong>Color</strong><span>CSI amplitude</span></p>
       </div>
-      <div class="beginner-glossary">
-        <article><span>CSI</span><p>Fine-grained channel measurements, richer than one signal-strength number.</p></article>
-        <article><span>Subcarrier</span><p>One small frequency slice inside a WiFi channel. A recording can track many slices at once.</p></article>
-        <article><span>Amplitude</span><p>How strong the channel response is at a moment, subcarrier, and antenna link.</p></article>
-        <article><span>Phase</span><p>The signal shift. Useful, but often needs careful calibration or cleaning.</p></article>
+
+      <details class="term-details">
+        <summary>Four terms you will see in WiFi sensing papers</summary>
+        <dl>
+          <div><dt>CSI</dt><dd>Fine-grained channel measurements across time, frequency, and antenna links.</dd></div>
+          <div><dt>Subcarrier</dt><dd>One small frequency slice inside a WiFi channel.</dd></div>
+          <div><dt>Amplitude</dt><dd>The strength of the measured channel response.</dd></div>
+          <div><dt>Phase</dt><dd>The signal shift, which often needs calibration before analysis.</dd></div>
+        </dl>
+      </details>
+    </section>
+
+    <section id="applications" class="learning-chapter">
+      <header class="chapter-heading">
+        <span class="chapter-number">02</span>
+        <div>
+          <h2>Begin with your question</h2>
+          <p>Choose the question closest to your work, then inspect datasets collected for it.</p>
+        </div>
+      </header>
+
+      <div class="application-list">
+        <article>
+          <div><span>Presence and care</span><h3>Is someone present, moving, or at risk of falling?</h3></div>
+          <p>Separate empty-room, routine movement, and fall-like events. Health results remain experimental.</p>
+          <a href="dataset.html?id=wipe-fall">See a fall dataset &rarr;</a>
+        </article>
+        <article>
+          <div><span>Activity and interaction</span><h3>How is a person moving?</h3></div>
+          <p>Learn labeled patterns for walking, sitting, and gestures.</p>
+          <a href="dataset.html?id=exposing-csi">See activity data &rarr;</a>
+        </article>
+        <article>
+          <div><span>Location and home context</span><h3>Where is activity happening?</h3></div>
+          <p>Compare receivers or locations for presence and indoor localization.</p>
+          <a href="dataset.html?id=glasgow-activity-localization">See localization data &rarr;</a>
+        </article>
+        <article>
+          <div><span>Repeated small motion</span><h3>Can the signal track a breathing pattern?</h3></div>
+          <p>Track subtle periodic motion in controlled recordings.</p>
+          <a href="dataset.html?id=nist-breathesmart">See NIST BreatheSmart &rarr;</a>
+        </article>
+      </div>
+
+      <div class="scenario-intro">
+        <h3>Picture the use case</h3>
+        <p>Every study starts with a person, setting, and label.</p>
+      </div>
+
+      <div class="scenario-gallery">
+        <figure class="scenario-figure scenario-figure--mobility">
+          <div class="scenario-visual">
+            <img src="assets/scenarios/mobility-home.jpg" alt="Older adult walking with a cane inside a furnished home" loading="lazy">
+            <div class="scenario-readout" aria-label="Illustrative mobility labels">
+              <small>Illustrative labels</small>
+              <div><span>Walking</span><b><i style="width: 84%"></i></b></div>
+              <div><span>Sit to stand</span><b><i style="width: 38%"></i></b></div>
+            </div>
+          </div>
+          <figcaption>
+            <strong>Mobility &amp; safety</strong>
+            <p>Walking, sit-to-stand, and controlled fall-like events.</p>
+            <a href="dataset.html?id=wipe-fall">Explore mobility data &rarr;</a>
+            <small>Photo by <a href="https://www.pexels.com/photo/elderly-man-in-a-denim-shirt-walking-with-a-walking-stick-11688380/">Mehmet Turgut Kirkgoz</a> via Pexels.</small>
+          </figcaption>
+        </figure>
+
+        <figure class="scenario-figure scenario-figure--breathing">
+          <div class="scenario-visual">
+            <img src="assets/scenarios/breathing-home.jpg" alt="Person sleeping in a quiet bedroom" loading="lazy">
+            <div class="scenario-readout" aria-label="Illustrative breathing labels">
+              <small>Illustrative labels</small>
+              <div><span>Quiet breathing</span><b><i style="width: 79%"></i></b></div>
+              <div><span>Body movement</span><b><i style="width: 22%"></i></b></div>
+            </div>
+          </div>
+          <figcaption>
+            <strong>Breathing &amp; sleep</strong>
+            <p>Subtle repeated motion during sleep or rest.</p>
+            <a href="dataset.html?id=nist-breathesmart">Explore breathing data &rarr;</a>
+            <small>Photo by <a href="https://www.pexels.com/photo/a-person-sleeping-on-the-bed-10061449/">cottonbro studio</a> via Pexels.</small>
+          </figcaption>
+        </figure>
+
+        <figure class="scenario-figure scenario-figure--activity">
+          <div class="scenario-visual">
+            <img src="assets/scenarios/activity-home.jpg" alt="Person performing a squat exercise in a living room" loading="lazy">
+            <div class="scenario-readout" aria-label="Illustrative activity labels">
+              <small>Illustrative labels</small>
+              <div><span>Stand</span><b><i style="width: 31%"></i></b></div>
+              <div><span>Squat</span><b><i style="width: 88%"></i></b></div>
+            </div>
+          </div>
+          <figcaption>
+            <strong>Activity &amp; interaction</strong>
+            <p>Gestures and actions such as standing or squatting.</p>
+            <a href="dataset.html?id=exposing-csi">Explore activity data &rarr;</a>
+            <small>Photo by <a href="https://www.pexels.com/photo/a-woman-doing-squats-7900681/">Ron Lach</a> via Pexels.</small>
+          </figcaption>
+        </figure>
+      </div>
+
+      <aside class="applications-boundary">
+        <strong>Research boundary</strong>
+        <p>CSI depends on hardware, room layout, interference, and data quality. WiSenseHub standardizes research data; it does not certify products or clinical decisions.</p>
+      </aside>
+    </section>
+
+    <section id="workflow" class="learning-chapter">
+      <header class="chapter-heading">
+        <span class="chapter-number">03</span>
+        <div>
+          <h2>What WiSenseHub does with the data</h2>
+          <p>Turn varied files, axes, and labels into a consistent research view.</p>
+        </div>
+      </header>
+
+      <ol class="workflow-list">
+        <li><span>1</span><h3>Choose</h3><p>Match task, setting, and hardware.</p></li>
+        <li><span>2</span><h3>Standardize</h3><p>Create named arrays, labels, masks, and provenance.</p></li>
+        <li><span>3</span><h3>Inspect</h3><p>Check shape, time, missing values, and coverage.</p></li>
+        <li><span>4</span><h3>Analyze</h3><p>Build task views and reproducible splits.</p></li>
+      </ol>
+
+      <div id="choose-path" class="start-options">
+        <h3>Choose a starting point</h3>
+        <a href="index.html#datasets"><strong>I want to explore public data</strong><b>Browse datasets &rarr;</b></a>
+        <a href="guide.html"><strong>I have wireless files</strong><b>Read how it works &rarr;</b></a>
+        <a href="tutorial.html"><strong>I want a guided example</strong><b>Open the tutorial &rarr;</b></a>
       </div>
     </section>
 
-    <section id="applications" class="tutorial-step">
-      <div class="section-heading"><div><p class="eyebrow">APPLICATION MAP</p><h2>From lab benchmarks to downstream scenarios</h2></div><p>WiSenseHub can serve domain experts who know the sensing problem, even if they are not wireless researchers.</p></div>
-      <div class="application-grid">
-        <article><span>Clinical and care settings</span><h3>Vitals, falls, mobility</h3><p>Explore breathing, fall detection, gait, and activity patterns as non-contact signals. Treat outputs as research data, not clinical decisions.</p></article>
-        <article><span>Smart home</span><h3>Presence and routines</h3><p>Study occupancy, motion, daily activities, and context changes using existing wireless infrastructure.</p></article>
-        <article><span>Human-computer interaction</span><h3>Gestures and behavior</h3><p>Analyze gestures, body motion, and device-free interaction without cameras or wearables.</p></article>
-        <article><span>Security and safety</span><h3>Intrusion and anomaly cues</h3><p>Investigate coarse motion, through-obstacle changes, and environment-aware monitoring.</p></article>
-        <article><span>Education</span><h3>Signal + data literacy</h3><p>Let students collect simple wireless traces, see tensors, plot signals, and compare preprocessing choices.</p></article>
-        <article><span>Benchmarking</span><h3>Reusable research data</h3><p>Use shared schemas and splits so results are easier to compare across datasets and tasks.</p></article>
-      </div>
-      <div class="honesty-note"><strong>Important boundary</strong><p>WiFi sensing is promising, but deployment remains sensitive to hardware, room layout, people, privacy expectations, and data quality. WiSenseHub helps organize and inspect data; it does not certify a medical, safety, or consumer product.</p></div>
-    </section>
-
-    <section id="workflow" class="tutorial-step">
-      <div class="section-heading"><div><p class="eyebrow">FROM ROOM TO DATA</p><h2>What WiSenseHub adds to a downstream project</h2></div><p>The page a beginner needs is not just a command list. It is a mental model for what happens between a room and an analyzable dataset.</p></div>
-      <div class="workflow-ribbon" aria-label="WiFi sensing analysis workflow">
-        <div><span>01</span><strong>Collect</strong><small>WiFi devices record CSI or related wireless traces.</small></div>
-        <b>→</b>
-        <div><span>02</span><strong>Standardize</strong><small>WiSenseHub names axes, arrays, labels, and provenance.</small></div>
-        <b>→</b>
-        <div><span>03</span><strong>Inspect</strong><small>Plots and reports reveal shape, missing data, and value ranges.</small></div>
-        <b>→</b>
-        <div><span>04</span><strong>Analyze</strong><small>Use task-specific views for learning, statistics, or education.</small></div>
-      </div>
-      <div class="tutorial-choice">
-        <article><h3>If you already collected wireless data</h3><p>Start by identifying file format, sampling rate, task labels, antenna links, and the split you want to evaluate. Then compare your layout to an existing dataset adapter.</p></article>
-        <article><h3>If you are new to sensing</h3><p>Start with hosted samples and the tutorial. Look at one CSI tensor before training a model; the shape and masks explain what the data really contains.</p><a class="button secondary" href="tutorial.html">Open tutorial</a></article>
+    <section id="education" class="learning-chapter education-chapter">
+      <header class="chapter-heading">
+        <span class="chapter-number">04</span>
+        <div>
+          <h2>A classroom route</h2>
+          <p>Use the signal comparison as a short lab or outreach activity.</p>
+        </div>
+      </header>
+      <div class="education-route">
+        <p>Start with two labeled traces; introduce CSI structure after students describe what changed.</p>
+        <ol>
+          <li><strong>Observe</strong><span>Compare empty-room and movement traces.</span></li>
+          <li><strong>Describe</strong><span>Name the time, subcarrier, and receiver axes.</span></li>
+          <li><strong>Test</strong><span>Standardize a sample and compare labels.</span></li>
+        </ol>
       </div>
     </section>
 
-    <section id="education" class="tutorial-step">
-      <div class="section-heading"><div><p class="eyebrow">EDUCATION USE</p><h2>A gentler path for students</h2></div><p>The same infrastructure can become a learning module for undergraduate research, high-school outreach, or interdisciplinary data science.</p></div>
-      <div class="education-ladder">
-        <article><span>Beginner</span><h3>See a signal</h3><p>Plot amplitude over time and ask: what changed when a person moved?</p></article>
-        <article><span>Intermediate</span><h3>Compare tasks</h3><p>Use the same schema to inspect breathing, activity, location, and fall datasets.</p></article>
-        <article><span>Advanced</span><h3>Build a model</h3><p>Train with explicit splits and report what generalizes across subjects, rooms, or devices.</p></article>
-      </div>
-    </section>
+    <section id="learn" class="learning-chapter">
+      <header class="chapter-heading">
+        <span class="chapter-number">05</span>
+        <div>
+          <h2>Read further</h2>
+        </div>
+      </header>
 
-    <section id="learn" class="tutorial-step">
-      <div class="section-heading"><div><p class="eyebrow">READ NEXT</p><h2>External resources behind this beginner page</h2></div><p>These links are useful starting points for definitions, applications, and survey-level context.</p></div>
-      <div class="resource-list">
-        <article><h3>General WiFi CSI applications survey</h3><p>Surveys activity recognition, gesture recognition, vital signs, localization, presence, identity, and preprocessing methods.</p><a href="https://www.sciencedirect.com/science/article/abs/pii/S0140366424002214">Wireless sensing applications with Wi-Fi CSI</a></article>
-        <article><h3>Human activity sensing overview</h3><p>Open-access survey covering wireless sensing tasks, preprocessing, activity segmentation, feature extraction, and open-dataset needs.</p><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7071003/">Human Activity Sensing with Wireless Signals</a></article>
-        <article><h3>Healthcare and vital signs</h3><p>Focused review on WiFi CSI for respiration, heart rate, eHealth, and patient remote monitoring.</p><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9375645/">Vital signs monitoring based on Wi-Fi CSI data</a></article>
-        <article><h3>Smart-home context</h3><p>Survey on WiFi sensing for health monitoring, gesture recognition, contextual information, and authentication in smart homes.</p><a href="https://doi.org/10.1109/ACCESS.2018.2812887">Smart Home Based on WiFi Sensing</a></article>
-        <article><h3>Example CSI plots</h3><p>DICHASUS shows real channel state information amplitude and phase plots across subcarriers.</p><a href="https://dichasus.inue.uni-stuttgart.de/datasets/data/dichasus-dxxx-reduced/">DICHASUS dataset details</a></article>
-        <article><h3>Project-level visual example</h3><p>A university WiFiSense project page illustrates how CSI observations can feed sensing and visualization workflows.</p><a href="https://en.cs.uni-paderborn.de/ceg/teaching/student-projects/project-groups/wifisense">University of Paderborn WiFiSense</a></article>
-      </div>
+      <ol class="reading-list">
+        <li><span>Overview</span><strong>Human Activity Sensing with Wireless Signals</strong><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC7071003/">Open article &rarr;</a></li>
+        <li><span>CSI basics</span><strong>WiFi Sensing with Channel State Information</strong><a href="https://www.cs.wm.edu/~yma/files/WiFiSensing_YongsenMa_authorversion.pdf">Open PDF &rarr;</a></li>
+        <li><span>Health</span><strong>Vital Signs Monitoring Based on WiFi CSI Data</strong><a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC9375645/">Open article &rarr;</a></li>
+        <li><span>Real plots</span><strong>DICHASUS dataset details</strong><a href="https://dichasus.inue.uni-stuttgart.de/datasets/data/dichasus-dxxx-reduced/">View plots &rarr;</a></li>
+        <li><span>Limits</span><strong>Exposing the CSI</strong><a href="https://arxiv.org/abs/2302.00992">Open paper &rarr;</a></li>
+      </ol>
     </section>
   </main>
 
-  <footer><p>Beginner material is educational and research-oriented; dataset ownership remains with original creators.</p><p><a href="guide.html">Open the technical guide</a></p></footer>
+  <footer><p>Educational research resource. Dataset ownership remains with original creators.</p><p><a href="guide.html">Technical guide</a></p></footer>
 </body>
 </html>

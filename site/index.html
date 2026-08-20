@@ -3,13 +3,13 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="A task-oriented catalog and standardization hub for WiFi sensing datasets.">
+  <meta name="description" content="An agent-ready catalog and standardization toolkit for WiFi sensing datasets.">
   <title>WiSenseHub — WiFi Sensing Data Hub</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css?v=20260809-labelcoverage">
+  <link rel="stylesheet" href="assets/style.css?v=20260820-agent-ready-v2">
 </head>
 <body>
   <header class="topbar">
@@ -27,22 +27,21 @@
   <main>
     <section class="hero">
       <div class="hero-copy">
-        <p class="eyebrow">OPEN WIFI SENSING INFRASTRUCTURE</p>
-        <h1>From fragmented CSI files to research-ready data.</h1>
-        <p class="lede">Catalog original WiFi sensing releases, standardize them to one NPZ schema, then apply explicit task-profile preprocessing so clips for the same task share rate, duration, and layout.</p>
+        <p class="eyebrow">AGENT-READY WIFI SENSING DATA</p>
+        <h1>WiFi sensing data, ready to use.</h1>
+        <p class="lede">Find a dataset, ask an agent to prepare it, or follow the guided workflow yourself. WiSenseHub handles the format differences and checks the result.</p>
         <div class="hero-actions">
-          <a class="button primary" href="#standard">See what we do</a>
-          <a class="button secondary" href="#datasets">Explore datasets</a>
+          <a class="button primary" href="#agent">Prepare with an agent</a>
+          <a class="button secondary" href="#datasets">Browse datasets</a>
         </div>
       </div>
-      <div class="signal-card" aria-label="Illustration of standardized channel state information">
-        <div class="signal-label"><span>Original CSI</span><span>Schema + task view</span></div>
-        <svg viewBox="0 0 600 220" role="img" aria-label="Irregular signals transformed to aligned channels">
-          <path class="wave faint" d="M0 60 C35 10 65 110 100 58 S165 8 200 65 S270 125 310 62 S380 5 420 60 S500 120 600 48"/>
-          <path class="wave" d="M0 112 C40 60 74 170 120 110 S205 55 250 118 S325 172 370 108 S455 50 500 112 S560 160 600 105"/>
-          <path class="wave accent" d="M0 170 C45 125 80 208 128 168 S210 126 260 174 S345 210 395 165 S490 122 530 170 S575 200 600 168"/>
-        </svg>
-        <div class="signal-meta"><span>[T, S, Tx, Rx]</span><span>task Hz · flexible T</span><span>valid_mask</span></div>
+      <div class="hero-usecase">
+        <img src="assets/scenarios/csi-room.jpg" alt="Person walking through a furnished room between two WiFi devices">
+        <div class="hero-ready-panel">
+          <small>Ask in plain language</small>
+          <strong>“Prepare this WiFi sensing activity dataset.”</strong>
+          <div><span>Downloaded</span><span>Organized</span><span>Checked</span></div>
+        </div>
       </div>
     </section>
 
@@ -51,6 +50,22 @@
       <div><strong id="stat-tasks">—</strong><span>task categories</span></div>
       <div><strong id="stat-hardware">—</strong><span>hardware settings</span></div>
       <div><strong id="stat-open">—</strong><span>direct-access releases</span></div>
+    </section>
+
+    <section id="agent" class="agent-section">
+      <div>
+        <p class="eyebrow">AGENT-READY</p>
+        <h2>Prepare WiFi sensing data in plain language.</h2>
+        <p>Coding agents can operate the documented CLI. The bundled WiSenseHub skill adds guided setup, downloads, standardization, split selection, inspection, and verification.</p>
+      </div>
+      <div class="agent-prompt">
+        <span>Try with the WiSenseHub skill</span>
+        <blockquote>“Download the CSI-Bench sample and prepare it for me.”</blockquote>
+        <div>
+          <a class="button primary" href="https://github.com/wisensehub/wisensehub.github.io/tree/main/skills/wisensehub">Install agent skill</a>
+          <a class="button secondary" href="guide.html">Use the CLI</a>
+        </div>
+      </div>
     </section>
 
     <section class="beginner-section">

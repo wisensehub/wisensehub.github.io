@@ -54,4 +54,34 @@ async function init() {
   renderTasks(); renderDatasets();
 }
 
+function initAgentPrompt() {
+  const button = document.querySelector("#copy-agent-prompt");
+  const prompt = document.querySelector("#agent-install-prompt");
+  if (!button || !prompt) return;
+
+  button.addEventListener("click", async () => {
+    const text = prompt.textContent.trim();
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand("copy");
+        textarea.remove();
+      }
+      button.textContent = "Copied";
+      window.setTimeout(() => { button.textContent = "Copy prompt"; }, 1800);
+    } catch {
+      button.textContent = "Copy failed";
+      window.setTimeout(() => { button.textContent = "Copy prompt"; }, 1800);
+    }
+  });
+}
+
+initAgentPrompt();
 init().catch(error => { document.querySelector("#dataset-grid").innerHTML = `<p>Catalog could not be loaded: ${escapeHtml(error.message)}</p>`; });

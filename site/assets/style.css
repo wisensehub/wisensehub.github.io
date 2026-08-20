@@ -181,9 +181,24 @@ h1 {
 }
 .agent-section > div:first-child > p:last-child { max-width: 650px; margin: 14px 0 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
 .agent-prompt { min-width: 0; padding-left: 40px; border-left: 1px solid var(--line); }
-.agent-prompt > span { color: var(--accent); font-size: 12px; font-weight: 650; }
-.agent-prompt blockquote { max-width: 620px; margin: 9px 0 16px; font-size: 20px; line-height: 1.4; font-weight: 580; }
-.agent-prompt > div { display: flex; gap: 10px; }
+.agent-prompt > span,
+.agent-examples > span { color: var(--accent); font-size: 11px; font-weight: 650; }
+.agent-instruction { margin: 7px 0 9px; font-size: 14px; }
+.agent-copy-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 13px 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+.agent-copy-row code { overflow-wrap: anywhere; font: 500 12px/1.55 var(--mono); }
+.agent-copy { min-width: 94px; border: 0; cursor: pointer; font-family: var(--sans); white-space: nowrap; }
+.agent-followup { margin: 9px 0 0; color: var(--muted); font-size: 12px; }
+.agent-examples { margin-top: 17px; }
+.agent-examples ul { margin: 7px 0 0; padding: 0; border-top: 1px solid var(--line); list-style: none; }
+.agent-examples li { padding: 7px 0; border-bottom: 1px solid var(--line); font-size: 13px; line-height: 1.45; }
 
 .catalog-section { padding: 88px max(5vw, 24px) 100px; }
 .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 30px; margin-bottom: 32px; }
@@ -1641,8 +1656,8 @@ footer p { margin: 0; }
   .agent-section h2 { font-size: 30px; }
   .agent-section > div:first-child > p:last-child { font-size: 14px; }
   .agent-prompt { padding-top: 20px; }
-  .agent-prompt blockquote { font-size: 18px; }
-  .agent-prompt > div { align-items: stretch; flex-direction: column; }
+  .agent-copy-row { grid-template-columns: 1fr; gap: 10px; }
+  .agent-copy { width: 100%; }
   .hero-actions, .controls, .notebook-toolbar { flex-direction: column; align-items: flex-start; }
   .controls select { width: 100%; }
   .stats { grid-template-columns: repeat(2, 1fr); gap: 16px; }

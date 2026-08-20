@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/style.css?v=20260820-agent-ready-v2">
+  <link rel="stylesheet" href="assets/style.css?v=20260820-agent-install-v3">
 </head>
 <body>
   <header class="topbar">
@@ -54,16 +54,25 @@
 
     <section id="agent" class="agent-section">
       <div>
-        <p class="eyebrow">AGENT-READY</p>
-        <h2>Prepare WiFi sensing data in plain language.</h2>
-        <p>Coding agents can operate the documented CLI. The bundled WiSenseHub skill adds guided setup, downloads, standardization, split selection, inspection, and verification.</p>
+        <p class="eyebrow">USE WITH YOUR AGENT</p>
+        <h2>Install once. Ask in plain language.</h2>
+        <p>The open WiSenseHub Agent Skill works with Codex, Claude Code, Cursor, and other Agent Skills-compatible tools.</p>
       </div>
       <div class="agent-prompt">
-        <span>Try with the WiSenseHub skill</span>
-        <blockquote>“Download the CSI-Bench sample and prepare it for me.”</blockquote>
-        <div>
-          <a class="button primary" href="https://github.com/wisensehub/wisensehub.github.io/tree/main/skills/wisensehub">Install agent skill</a>
-          <a class="button secondary" href="guide.html">Use the CLI</a>
+        <span>ONE LINE TO START</span>
+        <p class="agent-instruction">Paste this into your coding agent:</p>
+        <div class="agent-copy-row">
+          <code id="agent-install-prompt">Install the WiSenseHub skill by running npx skills add wisensehub/wisensehub.github.io --skill wisensehub -g, then help me prepare WiFi sensing data.</code>
+          <button id="copy-agent-prompt" class="button primary agent-copy" type="button" aria-describedby="agent-install-prompt" aria-live="polite">Copy prompt</button>
+        </div>
+        <p class="agent-followup">Once installed, describe the dataset and result you want.</p>
+        <div class="agent-examples">
+          <span>TRY ASKING</span>
+          <ul>
+            <li>“Download the CSI-Bench sample, standardize it, and show me what changed.”</li>
+            <li>“Prepare an activity-recognition split and summarize the labels.”</li>
+            <li>“Inspect my CSI files, fix format problems, and visualize one sample.”</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -138,6 +147,6 @@
   </main>
 
   <footer><p>WiSenseHub catalogs data; ownership remains with original dataset creators.</p><p>Verified <span id="verified-date">—</span></p></footer>
-  <script src="assets/app.js" defer></script>
+  <script src="assets/app.js?v=20260820-agent-install-v3" defer></script>
 </body>
 </html>

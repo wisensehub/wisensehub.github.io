@@ -1,7 +1,6 @@
 # WiSenseHub
 
 [Live data hub](https://wisensehub.github.io/) ·
-[Agent skill](https://github.com/wisensehub/wisensehub.github.io/tree/main/skills/wisensehub) ·
 [GitHub repository](https://github.com/wisensehub/wisensehub.github.io)
 
 WiSenseHub is an open, task-oriented data hub for WiFi sensing datasets. It
@@ -9,10 +8,9 @@ indexes original releases, documents experimental settings, and provides a
 reproducible pipeline for converting heterogeneous CSI recordings into a
 common representation.
 
-> **Agent-ready.** Coding agents can operate the documented CLI end to end.
-> Codex can also install the bundled [WiSenseHub skill](skills/wisensehub/) to
-> handle setup, downloads, standardization, split selection, inspection, and
-> verification from plain-language requests.
+> **Agent-ready.** Install the open WiSenseHub Agent Skill in Codex, Claude
+> Code, Cursor, or another compatible agent, then prepare datasets with
+> plain-language requests.
 
 ## What this repository provides
 
@@ -41,29 +39,21 @@ python -m unittest discover -s tests
 
 ## Agent-ready workflow
 
-Any coding agent can use the documented CLI to validate the catalog, download
-supported releases, standardize files, create splits, and inspect outputs.
-Codex can use the bundled skill to make that workflow dataset-aware and guided.
-
-The simplest installation is to give Codex this GitHub skill link:
+Paste this one line into Codex, Claude Code, Cursor, or another Agent
+Skills-compatible coding agent:
 
 ```text
-Help me install this skill:
-https://github.com/wisensehub/wisensehub.github.io/tree/main/skills/wisensehub
+Install the WiSenseHub skill by running npx skills add wisensehub/wisensehub.github.io --skill wisensehub -g, then help me prepare WiFi sensing data.
 ```
 
-If the repository is already cloned, install it locally with one command:
+After installation, ask for the outcome you need:
 
-```bash
-python3 scripts/install_wisensehub_skill.py
-```
+- “Download the CSI-Bench sample, standardize it, and show me what changed.”
+- “Prepare an activity-recognition split and summarize the labels.”
+- “Inspect my CSI files, fix format problems, and visualize one sample.”
 
-Restart Codex, select **WiSenseHub** from the Skills UI or type `$wisensehub`,
-then ask in plain language: “Download the CSI-Bench sample and prepare it for
-me.” The agent handles setup, downloading, split selection, processing, and
-verification itself, explaining each completed step. Users do not need to know
-the CLI flags. The skill source is versioned under `skills/wisensehub/`; rerun
-the local installer with `--force` after updating the repository.
+The agent handles setup, processing, and verification, then explains the result
+in plain language.
 
 ## Unified dataset workflow
 
